@@ -28,7 +28,6 @@ public class TestBench extends JFrame {
 	}
 	
 	private void showClass() {
-		//String sClass = "C:\\Users\\cjohnson\\Documents\\Class Documents\\Spring 10\\CSE361\\Assignment1\\cInstructionHelper";
 		String sClass = "MutationTool";
 		try {
 			ArrayList<JavaClass> alClasses = new ArrayList<JavaClass>();
