@@ -1,10 +1,6 @@
 package controls;
 
-import java.io.File;
 import java.util.ArrayList;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -24,17 +20,29 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	public MutableTree() {
 		oMutableModel = new DefaultTreeModel(null);
 		oMutableRenderer = new DefaultTreeCellRenderer();
+		this.alMutableClasses = new ArrayList<JavaClass>();
 	}
 	
+	public void addMutableClass(JavaClass oJavaClass) {
+		JavaClass oClassToAdd = oJavaClass.copy();
+		this.alMutableClasses.add(oClassToAdd);
+		drawMutableObjects();
+	}
+	/*
 	public void setMutableObjects(ArrayList<JavaClass> alObjects) {
 		this.alMutableClasses = alObjects;
 		drawMutableObjects();
+	}*/
+	
+	private void clearTree() {
+		oMutableModel = new DefaultTreeModel(null);
+		oMutableRenderer = new DefaultTreeCellRenderer();
 	}
 	
 	private void drawMutableObjects() {
 		MutableNode mutableClassNode;
-		MutableNode mutableMethodNode;
 		Method[] arMethods;
+		clearTree();
 		
 		for (int i=0; i<alMutableClasses.size(); i++) {
 			mutableClassNode = new MutableNode(alMutableClasses.get(i));
