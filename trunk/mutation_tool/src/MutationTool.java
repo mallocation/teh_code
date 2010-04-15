@@ -51,19 +51,26 @@ public class MutationTool extends JFrame implements ActionListener
 	
 		JMenuBar menuBar = new JMenuBar();
 		
-		JMenu menu = new JMenu("File");
-		JMenu subMenu = new JMenu("Open");
-		subMenu.setMnemonic(KeyEvent.VK_S);
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem fileMenuOpen = new JMenuItem("Open");
+		JMenuItem fileMenuExit = new JMenuItem("Exit");
+		//subMenu.setMnemonic(KeyEvent.VK_S);
 
-		JMenuItem menuItem = new JMenuItem("SubMenu Item");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
-		subMenu.add(menuItem);
+		//JMenuItem menuItem = new JMenuItem("SubMenu Item");
+		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		//subMenu.add(menuItem);
 
-		JMenuItem menuItem2 = new JMenuItem("SubMenu Item 2");
-		subMenu.add(menuItem2);
+		//JMenuItem menuItem2 = new JMenuItem("SubMenu Item 2");
+		//subMenu.add(menuItem2);
 
-		menu.add(subMenu);
-		menuBar.add(menu);
+		//add action listeners
+		fileMenuOpen.addActionListener(this);
+		fileMenuExit.addActionListener(this);
+		
+		//add items to menu and menu bar
+		fileMenu.add(fileMenuOpen);
+		fileMenu.add(fileMenuExit);
+		menuBar.add(fileMenu);
 
 		this.setJMenuBar(menuBar);
 	}
@@ -71,29 +78,45 @@ public class MutationTool extends JFrame implements ActionListener
 	public void createFrames(){
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		panel.add(new Label("Welcome!"));
+		panel.add(new Label("Jar, Class, Method Select Panel"));
 		panel.setPreferredSize(new Dimension(250,800));
 		
 		JPanel panel2 = new JPanel();
-		panel2.add(new Label("Bienvenido!"));
+		panel2.add(new Label("Mutation Table Panel"));
 		panel2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		panel2.setPreferredSize(new Dimension(500,800));
 		
 		JPanel panel3 = new JPanel();
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		panel3.add(new Label("Bonjour!"));
+		panel3.add(new Label("Selected Mutations Panel"));
 		panel3.setPreferredSize(new Dimension(250,800));
 				
-		GridLayout gridLayout = new GridLayout(0,3);
+		BorderLayout borderLayout = new BorderLayout();
 		
-		this.getContentPane().setLayout(gridLayout);	
-		this.getContentPane().add(panel);
-		this.getContentPane().add(panel2);
-		this.getContentPane().add(panel3);
+		this.getContentPane().setLayout(borderLayout);	
+		this.getContentPane().add(panel, BorderLayout.WEST);
+		this.getContentPane().add(panel2, BorderLayout.CENTER);
+		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
 	
 	public void actionPerformed(ActionEvent e){
-	
+		// Make sure the event was done through the menu
+		if (e.getSource() instanceof JMenuItem)
+		{
+			// Set the string the event is handling
+			String eventName = ((JMenuItem) e.getSource()).getText();
+			if (eventName.equals("Open"))
+			{
+				//TODO - implement
+			}
+			
+			
+			if (eventName.equals("Exit"))
+			{
+				// The user wants to exit (quit)
+				System.exit(0);
+			}
+		}
 	}
 	
 	public static void main(String[] args){
