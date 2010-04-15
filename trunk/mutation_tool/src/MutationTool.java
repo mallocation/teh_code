@@ -15,6 +15,9 @@
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+
+import controls.MutableTree;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.*;
@@ -48,8 +51,8 @@ public class MutationTool extends JFrame implements ActionListener
 	
 		JMenuBar menuBar = new JMenuBar();
 		
-		JMenu menu = new JMenu("Main");
-		JMenu subMenu = new JMenu("SubMenu");
+		JMenu menu = new JMenu("File");
+		JMenu subMenu = new JMenu("Open");
 		subMenu.setMnemonic(KeyEvent.VK_S);
 
 		JMenuItem menuItem = new JMenuItem("SubMenu Item");
