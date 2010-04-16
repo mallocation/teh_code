@@ -11,15 +11,22 @@ public class GenerateXML {
 	private DocumentBuilderFactory docFact;
 	private DocumentBuilder docBuild;
 	private Document xmlDoc;
-	
+	private Element mutation;
 	
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
-        oXML.createXML();
-        oXML.createOutput("test.xml");
+        oXML.createXMLRoot();
+      //could have included here...but what if I want to make many and want to loops!
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.outputToFile("test.xml");
     }
 
-    public void createOutput(String outputFile){
+    public void outputToFile(String outputFile){
     	FileOutputStream oOutput;
     	PrintStream oStream;
     	try{
@@ -51,13 +58,11 @@ public class GenerateXML {
     }
     
     //create root node of the tree
-    public void createXML(){
+    public void createXMLRoot(){
     	try{
     		//Create root element and add it to the tree
-            Element root = xmlDoc.createElement("mutation");
-            xmlDoc.appendChild(root);
-            //could have included here...but what if I want to make many and want to loops!
-            createMutantEntry(root, "hierarchy level", "mutant Name", "old Op", "new Op");
+            mutation = xmlDoc.createElement("mutation");
+            xmlDoc.appendChild(mutation);
 
     	} catch (Exception e) {
             System.out.println(e);
@@ -65,28 +70,16 @@ public class GenerateXML {
     }
     
     //create remaining elements
-    public void createMutantEntry(Element parent, String level, String mutantName, String opOld, String opNew){
+    public void createXMLEntry(String level, String mutantName, String opOld, String opNew){
     	try{
-    		//create child element, add an attribute, and add to root
+    		//create child element of mutation, add attributes
             Element mutant = xmlDoc.createElement("mutant");
             mutant.setAttribute("level", level);
-            parent.appendChild(mutant);
-            
-            Element name = xmlDoc.createElement("name");
-            mutant.appendChild(name);
-            Text nameText = xmlDoc.createTextNode(mutantName);
-            name.appendChild(nameText);
-            
-            Element oldOperator = xmlDoc.createElement("old_operator");
-            mutant.appendChild(oldOperator);
-            Text oldOptext = xmlDoc.createTextNode(opOld);
-            oldOperator.appendChild(oldOptext);
-            
-            Element newOperator = xmlDoc.createElement("new_operator");
-            mutant.appendChild(newOperator);
-            Text newOpText = xmlDoc.createTextNode(opNew);
-            newOperator.appendChild(newOpText);
-            
+            mutant.setAttribute("name", mutantName);
+            mutant.setAttribute("old_operator", opOld);
+            mutant.setAttribute("new_operator", opNew);
+            mutation.appendChild(mutant);
+                        
 
     	} catch (Exception e) {
             System.out.println(e);
