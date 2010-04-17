@@ -25,7 +25,7 @@ public class MutationTable extends JPanel implements ActionListener {
 		//panel2.setMinimumSize(new Dimension(400, 50));
 		//panel2.setPreferredSize(new Dimension(400, 50));
 		//panel2.setMaximumSize(new Dimension(400, 50));
-		for (int i=0; i<50000; i++) {
+		for (int i=0; i<5000; i++) {
 			if (i%2 == 0) {
 				MutationRow oRow = new MutationRow("Name", false, "ARITHMETIC", "*", "/", "CLASS", false, this);
 				this.add(oRow);
