@@ -15,17 +15,31 @@ public class GenerateXML {
 	
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
-        oXML.createXMLRoot();
+ 
       //could have included here...but what if I want to make many and want to loops!
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
-        oXML.createXMLEntry("hierarchy level", "mutant Name", "old Op", "new Op");
+        oXML.createXMLEntry("a level", "mutant a", "a r l", "old Op", "new Op");
+        oXML.createXMLEntry("b level", "mutant b", "a r l", "old Op", "new Op");
+        oXML.createXMLEntry("c level", "mutant c", "a r l", "old Op", "new Op");
+        oXML.createXMLEntry("d level", "mutant d", "a r l", "old Op", "new Op");
+        oXML.createXMLEntry("e level", "mutant e", "a r l", "old Op", "new Op");
+        oXML.createXMLEntry("f level", "mutant f", "a r l", "old Op", "new Op");
         oXML.outputToFile("test.xml");
     }
 
+    //construct it 
+    public GenerateXML() {
+        try {
+        	//DOM to make a blank document
+        	docFact = DocumentBuilderFactory.newInstance();
+        	docBuild = docFact.newDocumentBuilder();
+            xmlDoc = docBuild.newDocument();
+            createXMLRoot();
+            
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
     public void outputToFile(String outputFile){
     	FileOutputStream oOutput;
     	PrintStream oStream;
@@ -70,12 +84,13 @@ public class GenerateXML {
     }
     
     //create remaining elements
-    public void createXMLEntry(String level, String mutantName, String opOld, String opNew){
+    public void createXMLEntry(String level, String mutantName, String mutationType, String opOld, String opNew){
     	try{
     		//create child element of mutation, add attributes
             Element mutant = xmlDoc.createElement("mutant");
             mutant.setAttribute("level", level);
             mutant.setAttribute("name", mutantName);
+            mutant.setAttribute("type", mutationType);
             mutant.setAttribute("old_operator", opOld);
             mutant.setAttribute("new_operator", opNew);
             mutation.appendChild(mutant);
@@ -87,19 +102,5 @@ public class GenerateXML {
     	
     }
     
-    
-    //construct it 
-    public GenerateXML() {
-        try {
-        	//DOM to make a blank document
-        	docFact = DocumentBuilderFactory.newInstance();
-        	docBuild = docFact.newDocumentBuilder();
-            xmlDoc = docBuild.newDocument();
-
-            
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+   
 }
