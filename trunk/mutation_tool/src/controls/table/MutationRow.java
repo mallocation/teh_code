@@ -10,16 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 
 
 
-public class MutationRow extends JPanel implements ActionListener, FocusListener {
+public class MutationRow extends JPanel implements MouseListener {
 	
 	JLabel lblMutationName;
 	JCheckBox chkCreateMutation;	
@@ -55,6 +58,7 @@ public class MutationRow extends JPanel implements ActionListener, FocusListener
 		rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
 		
 		chkCreateMutation.addActionListener(oTableListener);
+		this.addMouseListener(this);
 		
 		drawMutantRow();
 	}
@@ -86,23 +90,31 @@ public class MutationRow extends JPanel implements ActionListener, FocusListener
 	public boolean isSelected() {
 		return this.chkCreateMutation.isSelected();
 	}
-	
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void mouseClicked(MouseEvent e) {
+		//do nothing		
 	}
 
 	@Override
-	public void focusGained(FocusEvent arg0) {
-		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
+	public void mouseEntered(MouseEvent e) {
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));	
 	}
 
 	@Override
-	public void focusLost(FocusEvent arg0) {
+	public void mouseExited(MouseEvent e) {
 		this.setBorder(null);		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		//do nothing
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		//do nothing		
 	}
 	
 }
