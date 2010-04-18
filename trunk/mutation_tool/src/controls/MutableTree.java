@@ -75,7 +75,7 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);		
 	}
 
-	@Override
+//	@Override
 	/**
 	 * This method is called when a new tree node is selected.
 	 */
