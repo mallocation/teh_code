@@ -8,15 +8,18 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
 
-public class MutationRow extends JPanel implements ActionListener {
+public class MutationRow extends JPanel implements ActionListener, FocusListener {
 	
 	JLabel lblMutationName;
 	JCheckBox chkCreateMutation;	
@@ -89,6 +92,17 @@ public class MutationRow extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		this.setBorder(null);		
 	}
 	
 }
