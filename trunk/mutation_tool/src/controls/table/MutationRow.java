@@ -58,6 +58,7 @@ public class MutationRow extends JPanel implements MouseListener {
 		rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
 		
 		chkCreateMutation.addActionListener(oTableListener);
+		chkCreateMutation.addMouseListener(this);
 		this.addMouseListener(this);
 		
 		drawMutantRow();
@@ -98,7 +99,7 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));	
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
 	@Override
