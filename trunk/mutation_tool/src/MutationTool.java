@@ -17,6 +17,7 @@ import java.util.*;
 import javax.swing.*;
 
 import controls.MutableTree;
+import controls.table.MutationTable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -33,6 +34,8 @@ public class MutationTool extends JFrame implements ActionListener
 	//------------------------------------------
 	// GUI declarations
 	//------------------------------------------
+	MutableTree oMutableTree;
+	MutationTable oMutationTable;
 	
 	public MutationTool(){
 		createMenu();
@@ -76,15 +79,22 @@ public class MutationTool extends JFrame implements ActionListener
 	}
 	
 	public void createFrames(){
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		panel.add(new Label("Jar, Class, Method Select Panel"));
-		panel.setPreferredSize(new Dimension(250,800));
+		oMutableTree = new MutableTree();
+		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+		oMutableTree.setPreferredSize(new Dimension(250,800));
+//		JPanel panel = new JPanel();
+//		panel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+//		panel.add(new Label("Jar, Class, Method Select Panel"));
+//		panel.setPreferredSize(new Dimension(250,800));
 		
-		JPanel panel2 = new JPanel();
-		panel2.add(new Label("Mutation Table Panel"));
-		panel2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		panel2.setPreferredSize(new Dimension(500,800));
+		
+		oMutationTable = new MutationTable();
+		oMutationTable.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+		oMutationTable.setPreferredSize(new Dimension(400, 800));
+		//JPanel panel2 = new JPanel();
+		//panel2.add(new Label("Mutation Table Panel"));
+		//panel2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+		//panel2.setPreferredSize(new Dimension(500,800));
 		
 		JPanel panel3 = new JPanel();
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
@@ -94,8 +104,13 @@ public class MutationTool extends JFrame implements ActionListener
 		BorderLayout borderLayout = new BorderLayout();
 		
 		this.getContentPane().setLayout(borderLayout);	
-		this.getContentPane().add(panel, BorderLayout.WEST);
-		this.getContentPane().add(panel2, BorderLayout.CENTER);
+		//this.getContentPane().add(panel, BorderLayout.WEST);
+		this.getContentPane().add(oMutableTree, BorderLayout.WEST);
+		//this.getContentPane().add(panel2, BorderLayout.CENTER);
+		JScrollPane oTableScrollPane = new JScrollPane(oMutationTable);
+		oTableScrollPane.getVerticalScrollBar().setUnitIncrement(100);
+		this.getContentPane().add(oTableScrollPane, BorderLayout.CENTER);
+		
 		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
 	
