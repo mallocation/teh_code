@@ -4,7 +4,6 @@ import java.util.*;
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import java.io.*;
 /**
  * ChangeOp is a program that will perform dynamic operator mutations on a specific
  * class file.  All instances of an arithmetic operator will be changed to the new operator

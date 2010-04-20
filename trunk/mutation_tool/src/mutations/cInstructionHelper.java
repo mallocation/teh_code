@@ -5,7 +5,6 @@ import org.apache.bcel.generic.Instruction;
 import org.apache.bcel.generic.ArithmeticInstruction;
 import org.apache.bcel.generic.InstructionFactory;
 import org.apache.bcel.generic.BranchInstruction;
-import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.Constants;
 
 /**
