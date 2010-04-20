@@ -1,7 +1,5 @@
 package utilities;
 
-import java.io.IOException;
-
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 
@@ -23,10 +21,26 @@ public class ClassLoader {
 	public static JavaClass loadClassFromPath(String sFileName) {
 		try {
 			ClassParser oClassParser = new ClassParser(sFileName);			
-			return oClassParser.parse();			
-		} catch (IOException e) {
+			JavaClass oClassToReturn = oClassParser.parse();
+			return oClassToReturn;
+		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Call this method to determine if a file at a specific path is a
+	 * valid class file.
+	 * 
+	 * @param sFileName path of file to check
+	 * @return <code>true</code> if the file is a valid class file
+	 * 		   <code>false</code> if the file is not a valid class file
+	 */
+	public static boolean isClassFile(String sFileName) {
+		if (loadClassFromPath(sFileName) != null)
+			return true;
+		else
+			return false;
 	}
 
 }
