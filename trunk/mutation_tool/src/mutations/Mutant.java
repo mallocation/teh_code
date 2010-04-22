@@ -1,11 +1,24 @@
 package mutations;
 
+import org.apache.bcel.classfile.JavaClass;
+
 import interfaces.IMutableObject;
 
 public class Mutant implements IMutableObject {
 	
 	private eMutantLevel mutantLevel;
 	private eMutantType mutantType;	
+	private JavaClass oMutableClass;
+	
+	@Override
+	public JavaClass getMutableClass() {
+		return this.oMutableClass;
+	}
+
+	@Override
+	public void setMutableClass(JavaClass oMutableClass) {
+		this.oMutableClass = oMutableClass;		
+	}
 
 	@Override
 	public void setMutantLevel(eMutantLevel oMutantLevel) {
@@ -37,7 +50,7 @@ public class Mutant implements IMutableObject {
 		return mutantTypeToString(this.mutantType);
 	}	
 	
-	private String mutantLevelToString(eMutantLevel oMutantLevel) {
+	public static String mutantLevelToString(eMutantLevel oMutantLevel) {
 		if (oMutantLevel == eMutantLevel.PACKAGE)
 			return "PACKAGE";
 		else if (oMutantLevel == eMutantLevel.CLASS)
@@ -48,7 +61,7 @@ public class Mutant implements IMutableObject {
 			return null;		
 	}
 	
-	private String mutantTypeToString(eMutantType oMutantType) {
+	public static String mutantTypeToString(eMutantType oMutantType) {
 		if (oMutantType == eMutantType.ARITHMETIC)
 			return "ARITHMETIC";
 		else if (oMutantType == eMutantType.LOGICAL)
@@ -58,6 +71,8 @@ public class Mutant implements IMutableObject {
 		else
 			return null;		
 	}
+
+
 	
 //	private eMutantLevel stringToMutantLevel(String sMutantLevel) {
 //		sMutantLevel = sMutantLevel.trim().toUpperCase();
