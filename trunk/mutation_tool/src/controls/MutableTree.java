@@ -88,11 +88,8 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 //		this.oMutableRenderer.setClosedIcon(imgMethod);
 //		this.oMutableRenderer.setLeafIcon(imgMethod);
 		this.setCellRenderer(oMutableRenderer);
-		System.out.println("Set mutable renderer");
 		this.setModel(oMutableModel);
-		System.out.println("set mutable model");
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		System.out.println("Set selectio mode");
 	}
 
 //	@Override
