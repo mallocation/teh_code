@@ -34,10 +34,6 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	private DefaultTreeCellRenderer oMutableRenderer;
 	private DefaultMutableTreeNode oTreeRootNode;
 	
-	public void addMutableNodeSelectionListener(IMutableTreeListener oNewListener) {
-		alTreeSelectionListeners.add(oNewListener);
-	}
-	
 	public MutableTree() {
 		oMutableModel = new DefaultTreeModel(null);
 		oMutableRenderer = new DefaultTreeCellRenderer();
@@ -91,6 +87,15 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		this.setModel(oMutableModel);
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
+	
+	/**
+	 * Add a MutableNodeSelectionListener to the tree, which will be called when a new node is selected.
+	 * 
+	 * @param oNewListener Listener to register
+	 */
+	public void addMutableNodeSelectionListener(IMutableTreeListener oNewListener) {
+		alTreeSelectionListeners.add(oNewListener); //Add to the list
+	}
 
 //	@Override
 	/**
@@ -98,19 +103,12 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
 		MutableNode oSelectedNode = (MutableNode)this.getLastSelectedPathComponent();
-		
+
+		// go through each listener, and fire it off, sending the newly selected node
 		for (int i=0; i<alTreeSelectionListeners.size(); i++) {
 			alTreeSelectionListeners.get(i).mutableNodeSelectionChanged(oSelectedNode);
 		}
-		
-		
-		/*
-		if (oSelectedNode.getMutableMethod() == null) {
-			
-			System.out.println("Selected: " + oSelectedNode.getMutableClass().getClassName());
-		} else {
-			System.out.println("Selected: " + oSelectedNode.getMutableClass().getClassName() + "." + oSelectedNode.getMutableMethod().getName());
-		}*/	
+
 	}
 
 }
