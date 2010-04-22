@@ -1,5 +1,9 @@
 import java.io.*;
+
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
@@ -10,37 +14,69 @@ public class GenerateXML {
 	private String xmlOutput;
 	private DocumentBuilderFactory docFact;
 	private DocumentBuilder docBuild;
-	private Document xmlDoc;
+	private Document mutationXMLDoc;
+	private Document classXMLDoc;
+	private Document inputXMLDoc;
 	private Element mutation;
+	private Element classes;
 	
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
  
       //could have included here...but what if I want to make many and want to loops!
-        oXML.createXMLEntry("a level", "mutant a", "a r l", "old Op", "new Op");
-        oXML.createXMLEntry("b level", "mutant b", "a r l", "old Op", "new Op");
-        oXML.createXMLEntry("c level", "mutant c", "a r l", "old Op", "new Op");
-        oXML.createXMLEntry("d level", "mutant d", "a r l", "old Op", "new Op");
-        oXML.createXMLEntry("e level", "mutant e", "a r l", "old Op", "new Op");
-        oXML.createXMLEntry("f level", "mutant f", "a r l", "old Op", "new Op");
-        oXML.outputToFile("test.xml");
+      
+
+
+        oXML.createXMLRoot("", "classes");
+     	oXML.createClassesXMLEntry(oXML.classXMLDoc, "/a/b", "1233");
+     	oXML.outputToFile("test.xml", oXML.classXMLDoc);
+     	oXML.getXMLFile("test.xml");
+     	oXML.createClassesXMLEntry(oXML.inputXMLDoc, "classPath", "classID");
+     	oXML.outputToFile("test.xml", oXML.classXMLDoc);
+     
+     	
     }
 
+    
     //construct it 
     public GenerateXML() {
         try {
         	//DOM to make a blank document
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
-            xmlDoc = docBuild.newDocument();
-            createXMLRoot();
-            
+        	classXMLDoc = docBuild.newDocument();
+        	mutationXMLDoc = docBuild.newDocument();
 
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-    public void outputToFile(String outputFile){
+    
+    
+	public void getXMLFile(String inputFileName){
+		try{
+			File xmlFile = new File(inputFileName);
+			inputXMLDoc = docBuild.parse(xmlFile);
+		} catch(FileNotFoundException e){
+			System.out.println("File not found!");
+			System.exit(0);
+		}catch(SAXParseException e) {
+			System.out.println("Error: "+e.getMessage()+" at line " + e.getLineNumber() + ", column " + e.getColumnNumber());
+			System.exit(0);
+		}catch (SAXException e) {
+			e.printStackTrace();
+			System.exit(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+
+	}
+    
+    
+    
+    public void outputToFile(String outputFile, Document outputDoc){
     	FileOutputStream oOutput;
     	PrintStream oStream;
     	try{
@@ -57,7 +93,7 @@ public class GenerateXML {
             //create String from xml tree
             StringWriter sw = new StringWriter();
             StreamResult result = new StreamResult(sw);
-            DOMSource source = new DOMSource(xmlDoc);
+            DOMSource source = new DOMSource(outputDoc);
             trans.transform(source, result);
             xmlOutput = sw.toString();
 
@@ -72,22 +108,51 @@ public class GenerateXML {
     }
     
     //create root node of the tree
-    public void createXMLRoot(){
-    	try{
-    		//Create root element and add it to the tree
-            mutation = xmlDoc.createElement("mutation");
-            xmlDoc.appendChild(mutation);
+    public void createXMLRoot(String filePath, String outputType){
+    	try{        	 	
+     
+    		if(outputType.equals("mutations")){
+    			//Create root element and add it to the tree
+    			mutation = mutationXMLDoc.createElement(outputType);
+    			mutationXMLDoc.appendChild(mutation);
+    			if(!filePath.equals("")){
+    				mutation.setAttribute("path", filePath);
+    			}
+    		}else if (outputType.equals("classes")){
+    			classes = classXMLDoc.createElement(outputType);
+    			classXMLDoc.appendChild(classes);
+    		}else
+    			System.out.println(outputType);
 
     	} catch (Exception e) {
             System.out.println(e);
         }   	
     }
     
+    public void createClassesXMLEntry(Document xmlDoc, String classPath, String classID){
+    	try{
+    		//create child element of mutation, add attributes
+  
+            Element Class = classXMLDoc.createElement("class");
+            classes.appendChild(Class);
+            Element path = classXMLDoc.createElement("path");
+            path.setTextContent(classPath);
+            Class.appendChild(path);
+            Element id = classXMLDoc.createElement("id");
+            id.setTextContent(classID);
+            Class.appendChild(id);
+                        
+    	} catch (Exception e) {
+            System.out.println(e);
+        }   
+    	
+    }
+    
     //create remaining elements
     public void createXMLEntry(String level, String mutantName, String mutationType, String opOld, String opNew){
     	try{
     		//create child element of mutation, add attributes
-            Element mutant = xmlDoc.createElement("mutant");
+            Element mutant = mutationXMLDoc.createElement("mutant");
             mutant.setAttribute("level", level);
             mutant.setAttribute("name", mutantName);
             mutant.setAttribute("type", mutationType);
