@@ -151,7 +151,7 @@ public class MutationTool extends JFrame implements ActionListener
 	}
 	
 	public static void main(String[] args){
-		MutationTool mTool = new MutationTool();
+		new MutationTool();
 	}
 	//
 	
