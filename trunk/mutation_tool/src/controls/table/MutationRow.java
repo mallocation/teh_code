@@ -1,15 +1,10 @@
 package controls.table;
 
-import interfaces.IMutableObject;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -18,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
 
 
@@ -36,6 +30,8 @@ public class MutationRow extends JPanel implements MouseListener {
 	Dimension oMutationNameDim, oPropertiesDim, oRowDimension;
 	
 	Color rowBgColor;
+	
+	boolean bRowIsSelected;
 	
 	
 
@@ -60,6 +56,8 @@ public class MutationRow extends JPanel implements MouseListener {
 		chkCreateMutation.addActionListener(oTableListener);
 		chkCreateMutation.addMouseListener(this);
 		this.addMouseListener(this);
+		
+		this.bRowIsSelected = false;
 		
 		drawMutantRow();
 	}
@@ -94,7 +92,15 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//do nothing		
+//		if (this.bRowIsSelected)
+//			this.bRowIsSelected = false;
+//		else
+//			this.bRowIsSelected = true;
+//		
+//		if (this.bRowIsSelected)
+//			this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 10));
+//		else
+//			this.setBorder(BorderFactory.createEmptyBorder());
 	}
 
 	@Override
@@ -103,8 +109,8 @@ public class MutationRow extends JPanel implements MouseListener {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		this.setBorder(null);		
+	public void mouseExited(MouseEvent e) {		
+		this.setBorder(BorderFactory.createEmptyBorder());		
 	}
 
 	@Override
