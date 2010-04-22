@@ -12,6 +12,8 @@
 // Import Statements
 //------------------------------------------
 
+import interfaces.IMutableTreeListener;
+
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -38,6 +40,7 @@ public class MutationTool extends JFrame implements ActionListener
 	//------------------------------------------
 	MutableTree oMutableTree;
 	MutationTable oMutationTable;
+	IMutableTreeListener oTreeListener = new MutableTreeListenerExample();
 	
 	public MutationTool(){
 		createMenu();
@@ -84,6 +87,7 @@ public class MutationTool extends JFrame implements ActionListener
 		oMutableTree = new MutableTree();
 		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		oMutableTree.setPreferredSize(new Dimension(250,800));
+		oMutableTree.addMutableNodeSelectionListener(oTreeListener);
 //		JPanel panel = new JPanel();
 //		panel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 //		panel.add(new Label("Jar, Class, Method Select Panel"));
