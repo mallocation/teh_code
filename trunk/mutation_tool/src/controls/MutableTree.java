@@ -1,6 +1,10 @@
 package controls;
 
+import interfaces.IMutableTreeListener;
+
 import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -11,6 +15,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+
+import utilities.JavaClassSort;
 
 /**
  * MutableTree is used in the Graphical User Interface portion of the mutation tool.
@@ -23,26 +29,37 @@ import org.apache.bcel.classfile.Method;
 public class MutableTree extends JTree implements TreeSelectionListener {
 	
 	private ArrayList<JavaClass> alMutableClasses;
+	private ArrayList<IMutableTreeListener> alTreeSelectionListeners;
 	private DefaultTreeModel oMutableModel;
 	private DefaultTreeCellRenderer oMutableRenderer;
 	private DefaultMutableTreeNode oTreeRootNode;
 	
+	public void addMutableNodeSelectionListener(IMutableTreeListener oNewListener) {
+		alTreeSelectionListeners.add(oNewListener);
+	}
+	
 	public MutableTree() {
 		oMutableModel = new DefaultTreeModel(null);
 		oMutableRenderer = new DefaultTreeCellRenderer();
+		alTreeSelectionListeners = new ArrayList<IMutableTreeListener>();
 		this.alMutableClasses = new ArrayList<JavaClass>();
 		this.oTreeRootNode = new DefaultMutableTreeNode("No classes loaded.");
 		this.addTreeSelectionListener(this);
+		drawMutableObjects();
 	}
 	
 	public void addMutableClassToTree(JavaClass oJavaClass) {
 		JavaClass oClassToAdd = oJavaClass.copy();
 		this.alMutableClasses.add(oClassToAdd);
+		sortMutableClasses();
 		drawMutableObjects();
 	}
 	
+	private void sortMutableClasses() {
+		Collections.sort(alMutableClasses, new JavaClassSort());
+	}
+	
 	private void clearTree() {
-		//oMutableModel = new DefaultTreeModel(null);
 		oMutableModel = new DefaultTreeModel(oTreeRootNode);
 		oMutableRenderer = new DefaultTreeCellRenderer();
 		oTreeRootNode.removeAllChildren();
@@ -71,8 +88,11 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 //		this.oMutableRenderer.setClosedIcon(imgMethod);
 //		this.oMutableRenderer.setLeafIcon(imgMethod);
 		this.setCellRenderer(oMutableRenderer);
+		System.out.println("Set mutable renderer");
 		this.setModel(oMutableModel);
-		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);		
+		System.out.println("set mutable model");
+		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		System.out.println("Set selectio mode");
 	}
 
 //	@Override
@@ -80,12 +100,20 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	 * This method is called when a new tree node is selected.
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
-		MutableNode oSelectedNode = (MutableNode)this.getLastSelectedPathComponent();		
+		MutableNode oSelectedNode = (MutableNode)this.getLastSelectedPathComponent();
+		
+		for (int i=0; i<alTreeSelectionListeners.size(); i++) {
+			alTreeSelectionListeners.get(i).mutableNodeSelectionChanged(oSelectedNode);
+		}
+		
+		
+		/*
 		if (oSelectedNode.getMutableMethod() == null) {
+			
 			System.out.println("Selected: " + oSelectedNode.getMutableClass().getClassName());
 		} else {
 			System.out.println("Selected: " + oSelectedNode.getMutableClass().getClassName() + "." + oSelectedNode.getMutableMethod().getName());
-		}		
+		}*/	
 	}
 
 }
