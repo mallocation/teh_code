@@ -1,6 +1,7 @@
 package mutations;
 
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
 
 import interfaces.IMutableObject;
 
@@ -9,6 +10,7 @@ public class Mutant implements IMutableObject {
 	private eMutantLevel mutantLevel;
 	private eMutantType mutantType;	
 	private JavaClass oMutableClass;
+	private Method oMutableMethod;
 	
 	@Override
 	public JavaClass getMutableClass() {
@@ -70,6 +72,16 @@ public class Mutant implements IMutableObject {
 			return "RELATIONAL";
 		else
 			return null;		
+	}
+
+	@Override
+	public Method getMutableMethod() {
+		return this.oMutableMethod;
+	}
+
+	@Override
+	public void setMutableMethod(Method oMutableMethod) {
+		this.oMutableMethod = oMutableMethod;
 	}
 
 

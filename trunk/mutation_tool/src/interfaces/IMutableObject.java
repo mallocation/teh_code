@@ -1,12 +1,17 @@
 package interfaces;
 
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
 
 public interface IMutableObject {
 	
 	public void setMutableClass(JavaClass oMutableClass);
 	
+	public void setMutableMethod(Method oMutableMethod);
+	
 	public JavaClass getMutableClass();
+	
+	public Method getMutableMethod();
 	
 	public void setMutantType(eMutantType oMutantType);
 	
