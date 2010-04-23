@@ -8,9 +8,9 @@ import org.apache.bcel.generic.BranchInstruction;
 import org.apache.bcel.Constants;
 
 /**
- * cInstructionHelper is a helper class for the ChangeOp program.
- * This class handles all operator/instruction verification.
- *
+ * cInstructionHelper is a helper class for the Mutator class.
+ * This class handles all operator/instruction verification, and
+ * changing of operators.
  * @author teh_code
  * @version 1.0
  */
@@ -175,7 +175,7 @@ public class cInstructionHelper {
 		else if (sOperator.equals("*")) { return "mul"; }
 		else if (sOperator.equals("/")) { return "div"; }
 		else if (sOperator.equals("%")) { return "rem"; }
-		else if (sOperator.equals("==")) { return "ne"; }
+		else if (sOperator.equals("==")) { return "ne"; }		//These instructions are opposite 
 		else if (sOperator.equals("!=")) { return "eq"; }
 		else if (sOperator.equals(">") ) { return "le"; }
 		else if (sOperator.equals(">=")) { return "lt"; }
