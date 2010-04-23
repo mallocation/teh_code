@@ -16,24 +16,21 @@ public class GenerateXML {
 	private DocumentBuilder docBuild;
 	private Document mutationXMLDoc;
 	private Document classXMLDoc;
-	private Document inputXMLDoc;
+	private Document appendedXMLDoc;
 	private Element mutation;
 	private Element classes;
 	
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
  
-      //could have included here...but what if I want to make many and want to loops!
-      
-
-
         oXML.createXMLRoot("", "classes");
-     	oXML.createClassesXMLEntry(oXML.classXMLDoc, "/a/b", "1233");
-     	oXML.outputToFile("test.xml", oXML.classXMLDoc);
-     	oXML.getXMLFile("test.xml");
-     	oXML.createClassesXMLEntry(oXML.inputXMLDoc, "classPath", "classID");
-     	oXML.outputToFile("test.xml", oXML.classXMLDoc);
-     
+     	oXML.createClassesXMLEntry("/a/b", "1233");
+     	oXML.createClassesXMLEntry("classPath", "classID");
+     	//oXML.outputToFile("test.xml", oXML.classXMLDoc);
+     	oXML.appendToXMLFile("test.xml");
+
+     	oXML.outputToFile("test.xml", oXML.appendedXMLDoc);
+     	
      	
     }
 
@@ -52,11 +49,20 @@ public class GenerateXML {
         }
     }
     
-    
-	public void getXMLFile(String inputFileName){
+    //add contents of XML file to current XML file
+	public void appendToXMLFile(String inputFileName){
 		try{
 			File xmlFile = new File(inputFileName);
-			inputXMLDoc = docBuild.parse(xmlFile);
+			appendedXMLDoc = docBuild.parse(xmlFile);
+			NodeList listOfClasses = appendedXMLDoc.getElementsByTagName("class");
+			Element newElement;
+			Node elementCopy; 
+			int numberOfClasses = listOfClasses.getLength();
+			for(int i = 0; i < numberOfClasses; i++){
+				newElement = (Element)listOfClasses.item(i);
+				elementCopy = appendedXMLDoc.importNode(newElement,true);
+				appendedXMLDoc.getDocumentElement().appendChild(elementCopy);
+			}
 		} catch(FileNotFoundException e){
 			System.out.println("File not found!");
 			System.exit(0);
@@ -70,8 +76,7 @@ public class GenerateXML {
 			e.printStackTrace();
 			System.exit(0);
 		}
-
-
+			
 	}
     
     
@@ -129,7 +134,7 @@ public class GenerateXML {
         }   	
     }
     
-    public void createClassesXMLEntry(Document xmlDoc, String classPath, String classID){
+    public void createClassesXMLEntry(String classPath, String classID){
     	try{
     		//create child element of mutation, add attributes
   
