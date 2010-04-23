@@ -25,6 +25,22 @@ public interface IMutableObject {
 	
 	public String getMutantLevelAsString();	
 	
+	public void setOldOperator(String oldOp);
+	
+	public void setNewOperator(String newOp);
+	
+	public void setMethodName(String methodName);
+	
+	public String getOldOperator();
+	
+	public String getNewOperator();
+	
+	public String getMethodName();
+	
+	public eMutantLevel stringToMutantLevel(String sMutantLevel);
+	
+	public eMutantType stringToMutantType(String sMutantType);
+	
 	public enum eMutantType {
 		ARITHMETIC,
 		LOGICAL,

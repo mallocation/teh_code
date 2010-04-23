@@ -23,13 +23,17 @@ public class GenerateXML {
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
  
-        oXML.createXMLRoot("", "classes");
-     	oXML.createClassesXMLEntry("/a/b", "1233");
-     	oXML.createClassesXMLEntry("classPath", "classID");
-     	//oXML.outputToFile("test.xml", oXML.classXMLDoc);
-     	oXML.appendToXMLFile("test.xml");
+        oXML.createXMLRoot("", "mutations");
+        oXML.createXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
+        oXML.createXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
+        oXML.createXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
+        oXML.createXMLEntry("method", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
+     	//oXML.createClassesXMLEntry("/a/b", "1233");
+     	//oXML.createClassesXMLEntry("classPath", "classID");
+     	oXML.outputToFile("test.xml", oXML.mutationXMLDoc);
+     	//oXML.appendToXMLFile("test.xml");
 
-     	oXML.outputToFile("test.xml", oXML.appendedXMLDoc);
+     	//oXML.outputToFile("test.xml", oXML.appendedXMLDoc);
      	
      	
     }
@@ -161,8 +165,8 @@ public class GenerateXML {
             mutant.setAttribute("level", level);
             mutant.setAttribute("name", mutantName);
             mutant.setAttribute("type", mutationType);
-            mutant.setAttribute("old_operator", opOld);
-            mutant.setAttribute("new_operator", opNew);
+            mutant.setAttribute("oldOp", opOld);
+            mutant.setAttribute("newOp", opNew);
             mutation.appendChild(mutant);
                         
 

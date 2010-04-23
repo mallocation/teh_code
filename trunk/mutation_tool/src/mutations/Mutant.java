@@ -11,6 +11,9 @@ public class Mutant implements IMutableObject {
 	private eMutantType mutantType;	
 	private JavaClass oMutableClass;
 	private Method oMutableMethod;
+	private String oldOp;
+	private String newOp;
+	private String methodName;
 	
 	@Override
 	public JavaClass getMutableClass() {
@@ -84,18 +87,62 @@ public class Mutant implements IMutableObject {
 		this.oMutableMethod = oMutableMethod;
 	}
 
+	@Override
+	public void setOldOperator(String oldOp){
+		this.oldOp = oldOp;
+	}
+	
+	@Override
+	public void setNewOperator(String newOp){
+		this.newOp = newOp;
+	}
+	
+	@Override
+	public void setMethodName(String methodName){
+		this.methodName = methodName;
+	}
+	
+	@Override
+	public String getOldOperator(){
+		return this.oldOp;
+	}
+	
+	@Override
+	public String getNewOperator(){
+		return this.newOp;
+	}
+
+	@Override
+	public String getMethodName(){
+		return this.methodName;
+	}
+	
 
 	
-//	private eMutantLevel stringToMutantLevel(String sMutantLevel) {
-//		sMutantLevel = sMutantLevel.trim().toUpperCase();
-//		
-//		if (sMutantLevel.equals("PACKAGE"))
-//			return eMutantLevel.PACKAGE;
-//		else if (sMutantLevel.equals("CLASS"))
-//			return eMutantLevel.CLASS;
-//		else if (sMutantLevel.equals("METHOD"))
-//			return eMutantLevel.METHOD;
-//		else
-//			return null;
-//	}
+	public eMutantLevel stringToMutantLevel(String sMutantLevel) {
+		sMutantLevel = sMutantLevel.trim().toUpperCase();
+		
+		if (sMutantLevel.equals("PACKAGE"))
+			return eMutantLevel.PACKAGE;
+		else if (sMutantLevel.equals("CLASS"))
+			return eMutantLevel.CLASS;
+		else if (sMutantLevel.equals("METHOD"))
+			return eMutantLevel.METHOD;
+		else
+			return null;
+	}
+	
+	public eMutantType stringToMutantType(String sMutantType) {
+		sMutantType = sMutantType.trim().toUpperCase();
+		
+		if (sMutantType.equals("ARITHMETIC"))
+			return eMutantType.ARITHMETIC;
+		else if (sMutantType.equals("LOGICAL"))
+			return eMutantType.LOGICAL;
+		else if (sMutantType.equals("RELATIONAL"))
+			return eMutantType.RELATIONAL;
+		else
+			return null;
+	}
+	
 }

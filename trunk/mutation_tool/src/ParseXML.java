@@ -1,4 +1,8 @@
+import interfaces.IMutableObject;
+
 import java.io.*;
+import java.util.ArrayList;
+
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
@@ -10,39 +14,39 @@ public class ParseXML {
 	private DocumentBuilderFactory docFact;
 	private DocumentBuilder docBuild;
 	private Document xmlDoc;
-	private int numberOfMutants;
 	private NodeList listOfMutants;
+	private NodeList listOfClasses;
+	public IMutableObject tempMutant;
+	public ArrayList<IMutableObject> mutationsList;
+
 	
-	//number of attributes for each mutant
-	private static int numberOfAttributes = 5;
+
 	//replace with the actual enum take and in an array list so not replaced
 	private Element mutant;
+
 	
 	public static void main(String[] args) {
-		new ParseXML();
-
+		ParseXML oXMLParse = new ParseXML();
+        oXMLParse.getXMLFile("test.xml");
+        oXMLParse.getMutantAttributes();
+        
 	}
 
 	public ParseXML(){
-		
         try {
         	//DOM to make a blank document
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
-            getXMLFile();
-            getNumberOfMutants();
-            //Redo with the fancy enum type Mutant
-            for(int i = 0; i < numberOfMutants; i++){
-            	getMutantAttributes(i);
-            }
+    
         } catch (Exception e) {
+
             System.out.println(e);
         }
 	}
 	
-	public void getXMLFile(){
+	public void getXMLFile(String inputFileName){
 		try{
-			File xmlFile = new File("test.xml");
+			File xmlFile = new File(inputFileName);
 			xmlDoc = docBuild.parse(xmlFile);
 		} catch(FileNotFoundException e){
 			System.out.println("File not found!");
@@ -59,37 +63,61 @@ public class ParseXML {
 		}
 	}
 	
-	public void getNumberOfMutants(){
+	public int getNumberOfMutants(){
 		//list of nodes with element name of mutant
 		listOfMutants = xmlDoc.getElementsByTagName("mutant");
-		numberOfMutants = listOfMutants.getLength();
+		System.out.println(listOfMutants.getLength());
+		return listOfMutants.getLength();
+	}
+	//I need??
+	public int getNumberOfClasses(){
+		//list of nodes with element name of mutant
+		listOfClasses = xmlDoc.getElementsByTagName("class");
+		return listOfClasses.getLength();
 	}
 	
-	public void getMutantAttributes(int mutantNumber){
-		
-		mutant = (Element) listOfMutants.item(mutantNumber);
-		NamedNodeMap mutantAtrributes = mutant.getAttributes();
-		//Missing or too many attributes in xml file
-		if(numberOfAttributes > mutantAtrributes.getLength()){
-			System.out.println("Too many attributes for mutant "+mutantNumber);
-			System.exit(0);
-		}else if(numberOfAttributes < mutantAtrributes.getLength()){
-			System.out.println("Not enough attributes for mutant "+mutantNumber);
-			System.exit(0);
-		}
-		
-		for(int i = 0; i < numberOfAttributes; i++){
-			Attr mutantAttribute = (Attr)mutantAtrributes.item(i);
+	public void getMutantAttributes(){
+		int numberOfAttributes;
+		String tempAttribute;
+
+        //Redo with the fancy enum type Mutant
+        for(int i = 0; i < getNumberOfMutants(); i++){
+        	System.out.println(i);
+			mutant = (Element) listOfMutants.item(i);
+			NamedNodeMap mutantAtrributes = mutant.getAttributes();
+        	numberOfAttributes = mutantAtrributes.getLength();
 			
-			//!!Wrong attribute in xml expand so accept only valid operators, names, level, types, etc
-			if(mutantAttribute.getNodeValue() == ""){
-				System.out.println("Missing attribute for: " +mutantAttribute.getNodeName());
-				System.exit(0);
+			for(int j = 0; j < numberOfAttributes; j++){
+				Attr mutantAttribute = (Attr)mutantAtrributes.item(j);
+				tempAttribute = mutantAttribute.getNodeName();
+				
+				if(tempAttribute.equals("level")){
+					tempMutant.setMutantLevel(tempMutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
+					
+				}
+				else if(tempAttribute.equals("name")){
+					tempMutant.setMethodName(mutantAttribute.getNodeValue());
+				}
+				else if(tempAttribute.equals("type")){
+					tempMutant.setMutantType(tempMutant.stringToMutantType(mutantAttribute.getNodeValue()));
+				}
+				else if(tempAttribute.equals("oldOp")){
+					tempMutant.setOldOperator(mutantAttribute.getNodeValue());
+				}
+				else if(tempAttribute.equals("newOp")){
+					tempMutant.setNewOperator(mutantAttribute.getNodeValue());
+				}
+				else{
+					System.out.println("Unkown attribute in file");
+					System.exit(0);
+				}
+				//PUT IT IN THE MUTANT ARRAY LIST!!
+				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
+				
 			}
-			//PUT IT IN THE MUTANT ARRAY LIST!!
-			System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
+			mutationsList.add(tempMutant);
+			System.out.println();
 		}
-		System.out.println();
 	}
 	
 }
