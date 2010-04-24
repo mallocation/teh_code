@@ -4,6 +4,7 @@ import java.util.*;
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
+import interfaces.IMutableObject;;
 /**
  * Mutator performs dynamic operator mutations on a specific
  * class package, class file, or method in a class.  Its purpose is to change
@@ -79,9 +80,9 @@ public class Mutator {
 	 *
 	 * @param args command line arguments of main method containing class file and operators
 	 */
-	public Mutator(String args[]) {
+	public Mutator(IMutableObject oMutableObject) {
 		//parse the arguments (class file, operators) and create an instruction helper
-		parseArguments(args);
+		parseArguments(oMutableObject);
 		oInstHelper = new cInstructionHelper();
 	}
 	
@@ -164,10 +165,10 @@ public class Mutator {
 	 *
 	 * @param args program execution command line arguments
 	 */
-	private void parseArguments(String[] args) {
+	private void parseArguments(IMutableObject oMutableObject) {
 		//Get the class file
 		try {
-			oClass = Repository.lookupClass(args[0]);
+			oClass = Repository.lookupClass(oMutableObject.getMutableClass().getClassName());
 			oClassGen = new ClassGen(oClass);
 		} catch (Exception e) {
 			showError("Please specify a valid class file.");
@@ -176,8 +177,8 @@ public class Mutator {
 		//Get the operators
 		try {
 			//Store the operators, and trim any single quotes (needed to pass *, <, >, etc. as an argument)
-			sOldOperator = args[1].replace("'", "");
-			sNewOperator = args[2].replace("'", "");
+			sOldOperator = oMutableObject.getOldOperator();			//.replace("'", "");
+			sNewOperator = oMutableObject.getNewOperator();
 			//Having sOldOperator equal '*' and sNewOperator equal '>' is an example of type mismatch,
 			//or an unacceptable combination of operators. 
 			boolean operatorTypesMismatch = true;								
@@ -225,6 +226,40 @@ public class Mutator {
 		printUsage();
 		System.exit(1);
 	}
+	
+	/**
+	 * Finds the number of mutations in a class (for now, implemented
+	 * later for method-level)
+	 */
+	public int getMutationCount() {
+		int nMutations = 0;
+		
+		oConstantPoolGen = oClassGen.getConstantPool();
+		arMethods = oClassGen.getMethods();
+		
+		for (int i=0; i<arMethods.length; i++) {
+			// mutation process
+			// 1. Go through all instructions in a method
+			// 2. If an instruction is an arithmetic instruction, see if it matches the old operator
+			// 3. If it matches the old operator, change the instruction to match the new operator, and set the isntruction
+			// 4. otherwise, don't worry about it and move on!
+			
+			MethodGen oMethodGen = new MethodGen(arMethods[i], oClass.getClassName(), oConstantPoolGen);
+			InstructionList il = oMethodGen.getInstructionList();
+			InstructionHandle ih;
+			for (ih = il.getStart(); ih != null; ih = ih.getNext()) {
+				Instruction oInstruction = ih.getInstruction();
+				if (oInstHelper.isArithmeticInstruction(oInstruction) || oInstHelper.isBranchInstruction(oInstruction)) {
+					if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
+						//convert to the new instruction			
+						nMutations++;
+					}					
+				}
+			}
+			il.dispose();
+		}		
+		return nMutations;
+	}	
 	
 	/**
 	 * Changes all instances of the old operator to the new operator
@@ -291,10 +326,10 @@ public class Mutator {
 	 * a call to changeOperators and dumpClass should be made.
 	 *
 	 * @param args command line arguments
-	 */
+	 *
 	public static void main(String args[]) {
 		Mutator oMutator = new Mutator(args);
 		oMutator.changeOperators();
 		oMutator.dumpClass();
-	}
+	}*/
 }
