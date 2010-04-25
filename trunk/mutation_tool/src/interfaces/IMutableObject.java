@@ -41,6 +41,8 @@ public interface IMutableObject {
 	
 	public eMutantType stringToMutantType(String sMutantType);
 	
+	public void printMutableObjectProperties();
+	
 	public enum eMutantType {
 		ARITHMETIC,
 		LOGICAL,

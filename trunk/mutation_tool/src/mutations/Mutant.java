@@ -117,7 +117,18 @@ public class Mutant implements IMutableObject {
 		return this.methodName;
 	}
 	
-
+	@Override
+	public void printMutableObjectProperties(){
+		System.out.println("Class Name: " +getMutableClass().getClassName());
+		System.out.println("Old Operator: " + getOldOperator());
+		System.out.println("New Operator: " + getNewOperator());
+		System.out.println("Mutant Type: " + getMutantTypeAsString());
+		System.out.println("Mutant Level: " + getMutantLevelAsString());
+		if(getMutantLevelAsString().equals("METHOD")){
+			System.out.println("Method Name: " + getMethodName());
+		}
+		
+	}
 	
 	public eMutantLevel stringToMutantLevel(String sMutantLevel) {
 		sMutantLevel = sMutantLevel.trim().toUpperCase();

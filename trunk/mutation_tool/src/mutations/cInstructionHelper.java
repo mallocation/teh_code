@@ -175,7 +175,7 @@ public class cInstructionHelper {
 		else if (sOperator.equals("*")) { return "mul"; }
 		else if (sOperator.equals("/")) { return "div"; }
 		else if (sOperator.equals("%")) { return "rem"; }
-		else if (sOperator.equals("==")) { return "ne"; }		//These instructions are opposite 
+		else if (sOperator.equals("==")) { return "ne"; }		//Ask Pavel why these instructions are opposite 
 		else if (sOperator.equals("!=")) { return "eq"; }
 		else if (sOperator.equals(">") ) { return "le"; }
 		else if (sOperator.equals(">=")) { return "lt"; }

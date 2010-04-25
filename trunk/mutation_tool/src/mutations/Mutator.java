@@ -12,7 +12,7 @@ import interfaces.IMutableObject;;
  * operator of the proper corresponding kind (i.e., arithmetic-arithmetic). It is used
  * in conjunction with the cInstructionHelper class.
  * 
- * specified at runtime (for now -> Needs to be passed an object to work with mutation_tool
+ * specified at runtime
  *
  * @author teh_code
  * @version 1.0
@@ -167,43 +167,37 @@ public class Mutator {
 	 */
 	private void parseArguments(IMutableObject oMutableObject) {
 		//Get the class file
-		try {
-			oClass = Repository.lookupClass(oMutableObject.getMutableClass().getClassName());
-			oClassGen = new ClassGen(oClass);
-		} catch (Exception e) {
-			showError("Please specify a valid class file.");
+	
+		oClass = oMutableObject.getMutableClass();
+		oClassGen = new ClassGen(oClass);
+
+
+		//Store the operators, and trim any single quotes (needed to pass *, <, >, etc. as an argument)
+		sOldOperator = oMutableObject.getOldOperator();			//.replace("'", "");
+		sNewOperator = oMutableObject.getNewOperator();
+		//Having sOldOperator equal '*' and sNewOperator equal '>' is an example of type mismatch,
+		//or an unacceptable combination of operators.
+		boolean operatorTypesMismatch = true;
+
+		if (!isValidOperator(alValidOperators(), sOldOperator) || !isValidOperator(alValidOperators(), sNewOperator)) {
+			showError("Invalid operator(s) specified.");
 		}
-		
-		//Get the operators
-		try {
-			//Store the operators, and trim any single quotes (needed to pass *, <, >, etc. as an argument)
-			sOldOperator = oMutableObject.getOldOperator();			//.replace("'", "");
-			sNewOperator = oMutableObject.getNewOperator();
-			//Having sOldOperator equal '*' and sNewOperator equal '>' is an example of type mismatch,
-			//or an unacceptable combination of operators. 
-			boolean operatorTypesMismatch = true;								
-			
-			if (!isValidOperator(alValidOperators(), sOldOperator) || !isValidOperator(alValidOperators(), sNewOperator)) {
-				showError("Invalid operator(s) specified.");
-			}
-			else if (sOldOperator.equals(sNewOperator)) {
-				showError("Old and New operators cannot be the same operator.");
-			}
-			else if ( isValidOperator(alArithmeticOperators(), sOldOperator) && isValidOperator(alArithmeticOperators(), sNewOperator)) {
-				operatorTypesMismatch = false;
-			}
-			else if ( isValidOperator(alBooleanOperators(), sOldOperator) && isValidOperator(alBooleanOperators(), sNewOperator)){
-				operatorTypesMismatch = false;
-			}
-			else if ( isValidOperator(alRelationalOperators(), sOldOperator) && isValidOperator(alRelationalOperators(), sNewOperator)){
-				operatorTypesMismatch = false;
-			}
-			if (operatorTypesMismatch){
-				showError("Operators type mismatch. Refer to manual for possible operator combinations.");
-			}
-		} catch (Exception e) {
-			showError("Please specify an old operator and a new operator.");
+		else if (sOldOperator.equals(sNewOperator)) {
+			showError("Old and New operators cannot be the same operator.");
 		}
+		else if ( isValidOperator(alArithmeticOperators(), sOldOperator) && isValidOperator(alArithmeticOperators(), sNewOperator)) {
+			operatorTypesMismatch = false;
+		}
+		else if ( isValidOperator(alBooleanOperators(), sOldOperator) && isValidOperator(alBooleanOperators(), sNewOperator)){
+			operatorTypesMismatch = false;
+		}
+		else if ( isValidOperator(alRelationalOperators(), sOldOperator) && isValidOperator(alRelationalOperators(), sNewOperator)){
+			operatorTypesMismatch = false;
+		}
+		if (operatorTypesMismatch){
+			showError("Operators type mismatch. Refer to manual for possible operator combinations.");
+		}
+
 	}
 	
 	/**
@@ -265,7 +259,7 @@ public class Mutator {
 	 * Changes all instances of the old operator to the new operator
 	 * within a specific class file.
 	 */
-	public void changeOperators() {
+	public void performMutation() {
 		int nMutations = 0;
 		System.out.println("Changing all instances of \"" + sOldOperator + "\" to \"" + sNewOperator + "\" in " + oClass.getClassName());
 		
@@ -308,6 +302,7 @@ public class Mutator {
 			il.dispose();
 		}		
 		System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");	
+		dumpClass();
 	}	
 	
 	/**
@@ -315,7 +310,7 @@ public class Mutator {
 	 */
 	public void dumpClass() {
 		try {
-			oClassGen.getJavaClass().dump(oClass.getClassName() + ".class");
+			oClassGen.getJavaClass().dump("/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/" + oClass.getClassName() + ".class");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
