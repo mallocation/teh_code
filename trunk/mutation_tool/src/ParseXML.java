@@ -19,10 +19,6 @@ public class ParseXML {
 	private NodeList listOfClasses;
 	private IMutableObject tempMutant;
 	public ArrayList<IMutableObject> mutationsList;
-
-	
-
-	//replace with the actual enum take and in an array list so not replaced
 	private Element mutant;
 
 	
@@ -68,7 +64,6 @@ public class ParseXML {
 	public int getNumberOfMutants(){
 		//list of nodes with element name of mutant
 		listOfMutants = xmlDoc.getElementsByTagName("mutant");
-		System.out.println(listOfMutants.getLength());
 		return listOfMutants.getLength();
 	}
 	//I need??
@@ -84,7 +79,6 @@ public class ParseXML {
 
         //Redo with the fancy enum type Mutant
         for(int i = 0; i < getNumberOfMutants(); i++){
-        	System.out.println(i);
 			mutant = (Element) listOfMutants.item(i);
 			NamedNodeMap mutantAtrributes = mutant.getAttributes();
         	numberOfAttributes = mutantAtrributes.getLength();
