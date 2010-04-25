@@ -55,28 +55,6 @@ public class Mutant implements IMutableObject {
 		return mutantTypeToString(this.mutantType);
 	}	
 	
-	public static String mutantLevelToString(eMutantLevel oMutantLevel) {
-		if (oMutantLevel == eMutantLevel.PACKAGE)
-			return "PACKAGE";
-		else if (oMutantLevel == eMutantLevel.CLASS)
-			return "CLASS";
-		else if (oMutantLevel == eMutantLevel.METHOD)
-			return "METHOD";
-		else
-			return null;		
-	}
-	
-	public static String mutantTypeToString(eMutantType oMutantType) {
-		if (oMutantType == eMutantType.ARITHMETIC)
-			return "ARITHMETIC";
-		else if (oMutantType == eMutantType.LOGICAL)
-			return "LOGICAL";
-		else if (oMutantType == eMutantType.RELATIONAL)
-			return "RELATIONAL";
-		else
-			return null;		
-	}
-
 	@Override
 	public Method getMutableMethod() {
 		return this.oMutableMethod;
@@ -130,7 +108,29 @@ public class Mutant implements IMutableObject {
 		
 	}
 	
-	public eMutantLevel stringToMutantLevel(String sMutantLevel) {
+	public static String mutantLevelToString(eMutantLevel oMutantLevel) {
+		if (oMutantLevel == eMutantLevel.PACKAGE)
+			return "PACKAGE";
+		else if (oMutantLevel == eMutantLevel.CLASS)
+			return "CLASS";
+		else if (oMutantLevel == eMutantLevel.METHOD)
+			return "METHOD";
+		else
+			return null;		
+	}
+	
+	public static String mutantTypeToString(eMutantType oMutantType) {
+		if (oMutantType == eMutantType.ARITHMETIC)
+			return "ARITHMETIC";
+		else if (oMutantType == eMutantType.LOGICAL)
+			return "LOGICAL";
+		else if (oMutantType == eMutantType.RELATIONAL)
+			return "RELATIONAL";
+		else
+			return null;		
+	}
+	
+	public static eMutantLevel stringToMutantLevel(String sMutantLevel) {
 		sMutantLevel = sMutantLevel.trim().toUpperCase();
 		
 		if (sMutantLevel.equals("PACKAGE"))
@@ -143,7 +143,7 @@ public class Mutant implements IMutableObject {
 			return null;
 	}
 	
-	public eMutantType stringToMutantType(String sMutantType) {
+	public static eMutantType stringToMutantType(String sMutantType) {
 		sMutantType = sMutantType.trim().toUpperCase();
 		
 		if (sMutantType.equals("ARITHMETIC"))
@@ -156,4 +156,7 @@ public class Mutant implements IMutableObject {
 			return null;
 	}
 	
+	public static String[] getAllMutantTypesAsString() {
+		return new String[] {mutantTypeToString(eMutantType.ARITHMETIC), mutantTypeToString(eMutantType.LOGICAL), mutantTypeToString(eMutantType.RELATIONAL)};
+	}	
 }
