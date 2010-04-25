@@ -184,6 +184,7 @@ public class cInstructionHelper {
 		else { return ""; }
 	}
 	
+
 	/**
 	 * Searches for an instruction in the specified array by a subset of the
 	 * instruction's name.
