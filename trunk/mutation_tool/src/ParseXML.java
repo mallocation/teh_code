@@ -17,7 +17,7 @@ public class ParseXML {
 	private Document xmlDoc;
 	private NodeList listOfMutants;
 	private NodeList listOfClasses;
-	public IMutableObject tempMutant;
+	private IMutableObject tempMutant;
 	public ArrayList<IMutableObject> mutationsList;
 
 	
@@ -38,7 +38,7 @@ public class ParseXML {
         	//DOM to make a blank document
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
-    
+        	tempMutant = new Mutant();
         } catch (Exception e) {
 
             System.out.println(e);
@@ -116,7 +116,8 @@ public class ParseXML {
 				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
 				
 			}
-			mutationsList.add(tempMutant);
+			
+			//mutationsList.add(tempMutant);
 			System.out.println();
 		}
 	}
