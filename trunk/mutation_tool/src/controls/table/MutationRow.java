@@ -32,6 +32,7 @@ public class MutationRow extends JPanel implements MouseListener {
 	Color rowBgColor;
 	
 	boolean bRowIsSelected;
+	boolean bIsHighlighted;
 	
 	
 
@@ -39,6 +40,7 @@ public class MutationRow extends JPanel implements MouseListener {
 					   	String newOperator, String mutationLevel, boolean bAltRow, ActionListener oTableListener) {
 		lblMutationName = new JLabel(mutationName);
 		chkCreateMutation = new JCheckBox();
+		chkCreateMutation.setOpaque(true);
 		chkCreateMutation.setSelected(bCreateMutation);
 		lblMutationType = new JLabel("Type: " + mutationType);
 		lblMutationOps = new JLabel("Mutates: " + oldOperator + " to " + newOperator);
@@ -47,9 +49,9 @@ public class MutationRow extends JPanel implements MouseListener {
 		oMutationNameFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 		oPropertiesFont = new Font(Font.SANS_SERIF, Font.ITALIC, 10);
 		
-		oMutationNameDim = new Dimension(360, 20);
+		oMutationNameDim = new Dimension(500, 20);
 		oPropertiesDim = new Dimension(150,20);
-		oRowDimension = new Dimension(400, 50);
+		oRowDimension = new Dimension(600, 50);
 		
 		rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
 		
@@ -75,7 +77,6 @@ public class MutationRow extends JPanel implements MouseListener {
 		lblMutationLevel.setFont(oPropertiesFont);
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.setBackground(rowBgColor);
 		
 		this.add(lblMutationName);
 		this.add(chkCreateMutation);
@@ -83,7 +84,16 @@ public class MutationRow extends JPanel implements MouseListener {
 		this.add(lblMutationOps);
 		this.add(lblMutationLevel);
 		
+		this.setBackground(rowBgColor);
+		chkCreateMutation.setBackground(rowBgColor);
+		
+
+		
 		this.setPreferredSize(oRowDimension);
+		this.setMinimumSize(oRowDimension);
+		this.setMaximumSize(oRowDimension);
+		
+		bIsHighlighted = false;
 	}
 	
 	public boolean isSelected() {
@@ -92,15 +102,13 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		if (this.bRowIsSelected)
-//			this.bRowIsSelected = false;
-//		else
-//			this.bRowIsSelected = true;
-//		
-//		if (this.bRowIsSelected)
-//			this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 10));
-//		else
-//			this.setBorder(BorderFactory.createEmptyBorder());
+		if (this.bIsHighlighted) {
+			this.setBackground(rowBgColor);
+			this.bIsHighlighted = false;
+		} else {
+			this.setBackground(Color.BLUE);
+			this.bIsHighlighted = true;
+		}
 	}
 
 	@Override
@@ -115,8 +123,7 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		//do nothing
-		
+		//do nothing		
 	}
 
 	@Override
