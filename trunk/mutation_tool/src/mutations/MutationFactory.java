@@ -3,6 +3,7 @@ package mutations;
 import java.util.*;
 import org.apache.bcel.classfile.JavaClass;
 import interfaces.IMutableObject;
+import mutations.Mutant;
 
 public class MutationFactory{
 	
@@ -12,7 +13,7 @@ public class MutationFactory{
 	 * Creates permutations.
 	 * @return
 	 */
-	public ArrayList<IMutableObject> createIMutableObjects(JavaClass oClass){
+	public static ArrayList<IMutableObject> createIMutableObjects(JavaClass oClass){
 		String arithmeticOps[] = {"+", "-", "*", "/", "%"};
 		String relationalOps[] = {"==", "!=", "<", "<=", ">", ">="};
 		String booleanOps[] = {"&&", "||"};
@@ -25,8 +26,8 @@ public class MutationFactory{
 					IMutableObject oMutant = new Mutant();
 					oMutant.setOldOperator(arithmeticOps[i]);
 					oMutant.setNewOperator(arithmeticOps[j]);
-					oMutant.setMutantType(oMutant.stringToMutantType("ARITHMETIC"));
-					oMutant.setMutantLevel(oMutant.stringToMutantLevel("CLASS"));
+					oMutant.setMutantType(Mutant.eMutantType.ARITHMETIC);
+					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
 					Mutator oMutator = new Mutator(oMutant);
 					if(oMutator.getMutationCount() != 0){
@@ -44,8 +45,8 @@ public class MutationFactory{
 					IMutableObject oMutant = new Mutant();
 					oMutant.setOldOperator(relationalOps[i]);
 					oMutant.setNewOperator(relationalOps[j]);
-					oMutant.setMutantType(oMutant.stringToMutantType("RELATIONAL"));
-					oMutant.setMutantLevel(oMutant.stringToMutantLevel("CLASS"));
+					oMutant.setMutantType(Mutant.eMutantType.RELATIONAL);
+					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
 					Mutator oMutator = new Mutator(oMutant);
 					if(oMutator.getMutationCount() != 0){
@@ -62,8 +63,8 @@ public class MutationFactory{
 					IMutableObject oMutant = new Mutant();
 					oMutant.setOldOperator(relationalOps[i]);
 					oMutant.setNewOperator(relationalOps[j]);
-					oMutant.setMutantType(oMutant.stringToMutantType("BOOLEAN"));
-					oMutant.setMutantLevel(oMutant.stringToMutantLevel("CLASS"));
+					oMutant.setMutantType(Mutant.eMutantType.LOGICAL);
+					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
 					Mutator oMutator = new Mutator(oMutant);
 					if(oMutator.getMutationCount() != 0){
