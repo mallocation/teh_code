@@ -46,12 +46,10 @@ public class testsDriver{
 		oMutant.setMutableClass(oClass);
 		oMutant.setOldOperator(oldOp);
 		oMutant.setNewOperator(newOp);
-		Mutator oMutator = new Mutator(oMutant);
-		System.out.println("" + oMutator.getMutationCount());
-		oMutator.performMutation();
-		MutationFactory oFactory = new MutationFactory();
-		ArrayList<IMutableObject> mutableObjectsList = oFactory.createIMutableObjects(oClass);
-		Iterator iterator = mutableObjectsList.iterator();
+		System.out.println("" + Mutator.getMutationCount(oMutant));
+		Mutator.performMutation(oMutant);
+		ArrayList<IMutableObject> mutableObjectsList = MutationFactory.createIMutableObjects(oClass);
+		Iterator<IMutableObject> iterator = mutableObjectsList.iterator();
 		
 		while(iterator.hasNext()){
 			((IMutableObject) iterator.next()).printMutableObjectProperties();

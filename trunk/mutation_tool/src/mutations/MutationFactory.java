@@ -29,8 +29,7 @@ public class MutationFactory{
 					oMutant.setMutantType(Mutant.eMutantType.ARITHMETIC);
 					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
-					Mutator oMutator = new Mutator(oMutant);
-					if(oMutator.getMutationCount() != 0){
+					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.add(oMutant);
 					}
 					
@@ -48,8 +47,7 @@ public class MutationFactory{
 					oMutant.setMutantType(Mutant.eMutantType.RELATIONAL);
 					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
-					Mutator oMutator = new Mutator(oMutant);
-					if(oMutator.getMutationCount() != 0){
+					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.add(oMutant);
 					}
 				}
@@ -66,8 +64,7 @@ public class MutationFactory{
 					oMutant.setMutantType(Mutant.eMutantType.LOGICAL);
 					oMutant.setMutantLevel(Mutant.eMutantLevel.CLASS);
 					oMutant.setMutableClass(oClass);
-					Mutator oMutator = new Mutator(oMutant);
-					if(oMutator.getMutationCount() != 0){
+					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.add(oMutant);
 					}
 					

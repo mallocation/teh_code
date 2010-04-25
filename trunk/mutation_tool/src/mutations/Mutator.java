@@ -1,7 +1,6 @@
 package mutations;
 
 import java.util.*;
-import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import interfaces.IMutableObject;;
@@ -28,53 +27,53 @@ public class Mutator {
 	/**
 	 * List of arithmetic operators.
 	 */
-	private ArrayList<String> _alArithmeticOperators;
+	private static ArrayList<String> _alArithmeticOperators;
 	
 	/**
 	 * List of relational operators
 	 */
-	private ArrayList<String> _alRelationalOperators;
+	private static ArrayList<String> _alRelationalOperators;
 	
 	/**
 	 * List of boolean operators
 	 */
-	private ArrayList<String> _alBooleanOperators;
+	private static ArrayList<String> _alBooleanOperators;
 	
 	/**
 	 * Class to be mutated.  Specified at runtime.
 	 */
-	private JavaClass oClass;
+	private static JavaClass oClass;
 	
 	/**
 	 * ClassGen object used to generate the mutated class.
 	 */
-	private ClassGen oClassGen;
+	private static ClassGen oClassGen;
 	
 	/**
 	 * ConstantPoolGen used in generating the mutated class.
 	 */
-	private ConstantPoolGen oConstantPoolGen;
+	private static ConstantPoolGen oConstantPoolGen;
 	
 	/**
 	 * Array of methods within the mutated class.
 	 */
-	private Method[] arMethods;
+	private static Method[] arMethods;
 	
 	/**
 	 * The operator to be mutated.
 	 */
-	private String sOldOperator;
+	private static String sOldOperator;
 	
 	/**
 	 * The new operator resulting from mutation.
 	 */
-	private String sNewOperator;
+	private static String sNewOperator;
 	
 	/**
 	 * The instruction helper used for generating mutated instructions.
 	 */
-	private cInstructionHelper oInstHelper;
-	
+	private static cInstructionHelper oInstHelper;
+		
 	/**
 	 * This will create an instance of the Mutator program.
 	 *
@@ -92,7 +91,7 @@ public class Mutator {
 	 *
 	 * @return <code>ArrayList</code> containing all operators available for modification.
 	 */
-	private ArrayList<String> alValidOperators() {
+	private static ArrayList<String> alValidOperators() {
 		//if the list is null, initialize it
 		if (_alValidOperators == null) {
 			_alValidOperators = new ArrayList<String>();
@@ -108,7 +107,7 @@ public class Mutator {
 	 * This list contains all valid boolean operators that may be mutated in a class.
 	 * @return <code>ArrayList</code> containing all boolean operators available for mutations.
 	 */
-	private ArrayList<String> alBooleanOperators(){
+	private static ArrayList<String> alBooleanOperators(){
 		if(_alBooleanOperators == null){
 			_alBooleanOperators = new ArrayList<String>();
 			_alBooleanOperators.add("&&");_alBooleanOperators.add("||");
@@ -120,7 +119,7 @@ public class Mutator {
 	 * This list contains all valid relational operators that may be mutated in a class.
 	 * @return <code>ArrayList</code> containing all relational operators available for mutations.
 	 */
-	private ArrayList<String> alRelationalOperators(){
+	private static ArrayList<String> alRelationalOperators(){
 		if(_alRelationalOperators == null){
 			_alRelationalOperators = new ArrayList<String>();
 			_alRelationalOperators.add("==");_alRelationalOperators.add("!=");_alRelationalOperators.add("<=");
@@ -133,7 +132,7 @@ public class Mutator {
 	 * This list contains all valid arithmetic operators that may be mutated in a class.
 	 * @return <code>ArrayList</code> containing all arithmetic operators available for mutations.
 	 */
-	private ArrayList<String> alArithmeticOperators(){
+	private static ArrayList<String> alArithmeticOperators(){
 		if(_alArithmeticOperators == null){
 			_alArithmeticOperators = new ArrayList<String>();
 			_alArithmeticOperators.add("+");_alArithmeticOperators.add("-");_alArithmeticOperators.add("*");_alArithmeticOperators.add("/");_alArithmeticOperators.add("%");
@@ -149,7 +148,7 @@ public class Mutator {
 	 * @return <code> true </code> if the operator is in the valid operators list 'alOperatorsList'
 	 * 		   <code> false </code> otherwise
 	 */
-	private boolean isValidOperator(ArrayList<String> alOperatorsList, String sOperator){
+	private static boolean isValidOperator(ArrayList<String> alOperatorsList, String sOperator){
 		if(alOperatorsList.indexOf(sOperator) != -1){
 			return true;
 		}
@@ -165,7 +164,7 @@ public class Mutator {
 	 *
 	 * @param args program execution command line arguments
 	 */
-	private void parseArguments(IMutableObject oMutableObject) {
+	private static void parseArguments(IMutableObject oMutableObject) {
 		//Get the class file
 	
 		oClass = oMutableObject.getMutableClass();
@@ -203,7 +202,7 @@ public class Mutator {
 	/**
 	 * Prints the usage specifications of the program.
 	 */
-	private void printUsage() {
+	private static void printUsage() {
 		System.out.println("<Usage> java Mutator <class-file> <oldOp> <newOp>");
 		System.out.println("<class-file>: without extension");
 		System.out.println("<oldOp>: See Manual for Details");
@@ -215,7 +214,7 @@ public class Mutator {
 	 * 
 	 * @param sError the error to display to the user
 	 */
-	private void showError(String sError) {
+	private static void showError(String sError) {
 		System.out.println(sError);
 		printUsage();
 		System.exit(1);
@@ -225,7 +224,9 @@ public class Mutator {
 	 * Finds the number of mutations in a class (for now, implemented
 	 * later for method-level)
 	 */
-	public int getMutationCount() {
+	public static int getMutationCount(IMutableObject oMutableObject) {
+		oInstHelper = new cInstructionHelper();
+		parseArguments(oMutableObject);
 		int nMutations = 0;
 		
 		oConstantPoolGen = oClassGen.getConstantPool();
@@ -259,13 +260,14 @@ public class Mutator {
 	 * Changes all instances of the old operator to the new operator
 	 * within a specific class file.
 	 */
-	public void performMutation() {
+	public static void performMutation(IMutableObject oMutableObject) {
 		int nMutations = 0;
+		parseArguments(oMutableObject);
+		oInstHelper = new cInstructionHelper();
 		System.out.println("Changing all instances of \"" + sOldOperator + "\" to \"" + sNewOperator + "\" in " + oClass.getClassName());
 		
 		oConstantPoolGen = oClassGen.getConstantPool();
 		arMethods = oClassGen.getMethods();
-		
 		for (int i=0; i<arMethods.length; i++) {
 			// mutation process
 			// 1. Go through all instructions in a method
@@ -276,6 +278,7 @@ public class Mutator {
 			MethodGen oMethodGen = new MethodGen(arMethods[i], oClass.getClassName(), oConstantPoolGen);
 			InstructionList il = oMethodGen.getInstructionList();
 			InstructionHandle ih;
+
 			for (ih = il.getStart(); ih != null; ih = ih.getNext()) {
 				Instruction oInstruction = ih.getInstruction();
 				
@@ -295,6 +298,7 @@ public class Mutator {
 						nMutations++;
 					}
 				}
+
 			}
 			il.setPositions();
 			oMethodGen.setInstructionList(il);
@@ -308,23 +312,11 @@ public class Mutator {
 	/**
 	 * Dumps the modified class to the program directory.
 	 */
-	public void dumpClass() {
+	public static void dumpClass() {
 		try {
 			oClassGen.getJavaClass().dump("/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/" + oClass.getClassName() + ".class");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-	
-	/**
-	 * Offers the main method of program execution.  This is where
-	 * a call to changeOperators and dumpClass should be made.
-	 *
-	 * @param args command line arguments
-	 *
-	public static void main(String args[]) {
-		Mutator oMutator = new Mutator(args);
-		oMutator.changeOperators();
-		oMutator.dumpClass();
-	}*/
 }
