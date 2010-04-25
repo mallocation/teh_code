@@ -2,43 +2,32 @@ package controls.table;
 
 import interfaces.IMutableObject;
 import interfaces.IMutableTreeListener;
+import interfaces.IMutationFilterListener;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
+import javax.swing.JScrollPane;
 
 import utilities.ClassLoader;
 
-import mutations.Mutant;
 import mutations.MutationFactory;
 
 import controls.MutableNode;
 
-public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener {
+public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener, IMutationFilterListener {
 
 	private ArrayList<MutationRow> alMutableRows;
 	
 	public MutationTable() {
 		this.alMutableRows = new ArrayList<MutationRow>();
-		this.setSize(400, 100);
-		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		loadTableWithClass();
-		
-		
+		loadTableWithClass();		
 	}
 	
 	private void showAllMutableRows() {
@@ -73,8 +62,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		for (int i=0; i<alMutableObjects.size(); i++) {
 			IMutableObject oMutableObject = alMutableObjects.get(i);
 			boolean bAltRow = (i%2 == 0) ? false : true;
-			alMutableRows.add(new MutationRow(oMutableObject.getMutableClass().getClassName(), false, oMutableObject.getMutantTypeAsString(), oMutableObject.getOldOperator(),
-												oMutableObject.getNewOperator(), oMutableObject.getMutantLevelAsString(), bAltRow , this));
+			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
 		}
 		showAllMutableRows();
 	}
@@ -86,9 +74,54 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		for (int i=0; i<alMutableObjects.size(); i++) {
 			IMutableObject oMutableObject = alMutableObjects.get(i);
 			boolean bAltRow = (i%2 == 0) ? false : true;
-			alMutableRows.add(new MutationRow(oMutableObject.getMutableClass().getClassName(), false, oMutableObject.getMutantTypeAsString(), oMutableObject.getOldOperator(),
-												oMutableObject.getNewOperator(), oMutableObject.getMutantTypeAsString(), bAltRow , this));
+			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
 		}
+	}
+
+	@Override
+	public void filterMutations(String mutantType, String oldOp, String newOp) {
+		for (int i=0; i<alMutableRows.size(); i++) {
+			MutationRow oRow = alMutableRows.get(i);
+			
+			if (!mutantType.equals("")) {
+				if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(mutantType)) {
+					oRow.setVisible(true);
+				} else {
+					oRow.setVisible(false);
+				}
+			} else {
+				oRow.setVisible(true);
+			}
+//			
+//			if (!oldOp.equals("")) {
+//				if (oRow.getMutableObject().getOldOperator().equalsIgnoreCase(oldOp)) {
+//					oRow.setVisible(true);
+//				} else {
+//					oRow.setVisible(false);
+//				}
+//			} else {
+//				oRow.setVisible(true);
+//			}
+//			
+//			if (!newOp.equals("")) {
+//				if (oRow.getMutableObject().getNewOperator().equalsIgnoreCase(newOp)) {
+//					oRow.setVisible(true);
+//				} else {
+//					oRow.setVisible(false);
+//				}
+//			} else {
+//				oRow.setVisible(true);
+//			}			
+		}
+	}
+
+	@Override
+	public void selectAllVisible(boolean bSelectAll) {
+		for (int i=0; i<alMutableRows.size(); i++) {
+			if (alMutableRows.get(i).isVisible()) {
+				alMutableRows.get(i).setSelected(bSelectAll);
+			}
+		}		
 	}
 
 }
