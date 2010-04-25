@@ -39,6 +39,7 @@ public class ParseXML {
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
         	tempMutant = new Mutant();
+        	this.mutationsList = new ArrayList<IMutableObject>();
         } catch (Exception e) {
 
             System.out.println(e);
@@ -117,7 +118,7 @@ public class ParseXML {
 				
 			}
 			
-			//mutationsList.add(tempMutant);
+			mutationsList.add(tempMutant);
 			System.out.println();
 		}
 	}
