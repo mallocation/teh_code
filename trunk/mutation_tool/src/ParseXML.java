@@ -1,4 +1,5 @@
 import interfaces.IMutableObject;
+import mutations.Mutant;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -92,14 +93,14 @@ public class ParseXML {
 				tempAttribute = mutantAttribute.getNodeName();
 				
 				if(tempAttribute.equals("level")){
-					tempMutant.setMutantLevel(tempMutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
+					tempMutant.setMutantLevel(Mutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
 					
 				}
 				else if(tempAttribute.equals("name")){
 					tempMutant.setMethodName(mutantAttribute.getNodeValue());
 				}
 				else if(tempAttribute.equals("type")){
-					tempMutant.setMutantType(tempMutant.stringToMutantType(mutantAttribute.getNodeValue()));
+					tempMutant.setMutantType(Mutant.stringToMutantType(mutantAttribute.getNodeValue()));
 				}
 				else if(tempAttribute.equals("oldOp")){
 					tempMutant.setOldOperator(mutantAttribute.getNodeValue());
