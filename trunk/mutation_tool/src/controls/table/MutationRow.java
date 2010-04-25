@@ -1,5 +1,8 @@
 package controls.table;
 
+import interfaces.IMutableObject;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,6 +26,7 @@ public class MutationRow extends JPanel implements MouseListener {
 	JLabel lblMutationType;
 	JLabel lblMutationOps;
 	JLabel lblMutationLevel;
+	JPanel pnlPropPanel;
 	
 	Font oMutationNameFont;
 	Font oPropertiesFont;
@@ -34,32 +38,40 @@ public class MutationRow extends JPanel implements MouseListener {
 	boolean bRowIsSelected;
 	boolean bIsHighlighted;
 	
+	private IMutableObject oMutableObject;
 	
+	
+	public MutationRow(IMutableObject oObject, boolean bAltRow, ActionListener oTableListener) {
+		this.oMutableObject = oObject;
+		
+//	}
 
-	public MutationRow(String mutationName, boolean bCreateMutation, String mutationType, String oldOperator,
-					   	String newOperator, String mutationLevel, boolean bAltRow, ActionListener oTableListener) {
-		lblMutationName = new JLabel(mutationName);
+//	public MutationRow(String mutationName, boolean bCreateMutation, String mutationType, String oldOperator,
+//					   	String newOperator, String mutationLevel, boolean bAltRow, ActionListener oTableListener) {
+		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
 		chkCreateMutation = new JCheckBox();
 		chkCreateMutation.setOpaque(true);
-		chkCreateMutation.setSelected(bCreateMutation);
-		lblMutationType = new JLabel("Type: " + mutationType);
-		lblMutationOps = new JLabel("Mutates: " + oldOperator + " to " + newOperator);
-		lblMutationLevel = new JLabel("Level: " + mutationLevel);
+		//chkCreateMutation.setSelected(bCreateMutation);
+		lblMutationType = new JLabel("Type: " + oMutableObject.getMutantTypeAsString());
+		lblMutationOps = new JLabel("<html>Mutates: <b>" + oMutableObject.getOldOperator() + "</b> to <b>" + oMutableObject.getNewOperator() + "</b></html>");
+		lblMutationLevel = new JLabel("Level: " + oMutableObject.getMutantLevelAsString());
 		
 		oMutationNameFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
-		oPropertiesFont = new Font(Font.SANS_SERIF, Font.ITALIC, 10);
+		oPropertiesFont = new Font(Font.SANS_SERIF, Font.ITALIC, 11);
 		
-		oMutationNameDim = new Dimension(500, 20);
-		oPropertiesDim = new Dimension(150,20);
-		oRowDimension = new Dimension(600, 50);
+		oMutationNameDim = new Dimension(495, 20);
+		oPropertiesDim = new Dimension(178,20);
+		oRowDimension = new Dimension(535, 50);
 		
-		rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
+		//rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
+		rowBgColor = bAltRow ? new Color(235,245,255) : new Color(255, 255, 255);
 		
 		chkCreateMutation.addActionListener(oTableListener);
 		chkCreateMutation.addMouseListener(this);
 		this.addMouseListener(this);
 		
 		this.bRowIsSelected = false;
+		pnlPropPanel = new JPanel(new BorderLayout());
 		
 		drawMutantRow();
 	}
@@ -70,9 +82,11 @@ public class MutationRow extends JPanel implements MouseListener {
 		
 		lblMutationType.setFont(oPropertiesFont);
 		lblMutationType.setPreferredSize(oPropertiesDim);
+
 		
 		lblMutationOps.setFont(oPropertiesFont);
 		lblMutationOps.setPreferredSize(oPropertiesDim);
+
 		
 		lblMutationLevel.setFont(oPropertiesFont);
 		
@@ -83,6 +97,7 @@ public class MutationRow extends JPanel implements MouseListener {
 		this.add(lblMutationType);
 		this.add(lblMutationOps);
 		this.add(lblMutationLevel);
+
 		
 		this.setBackground(rowBgColor);
 		chkCreateMutation.setBackground(rowBgColor);
@@ -99,16 +114,24 @@ public class MutationRow extends JPanel implements MouseListener {
 	public boolean isSelected() {
 		return this.chkCreateMutation.isSelected();
 	}
+	
+	public void setSelected(boolean bSelected) {
+		this.chkCreateMutation.setSelected(bSelected);
+	}
+	
+	public IMutableObject getMutableObject() {
+		return this.oMutableObject;
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (this.bIsHighlighted) {
-			this.setBackground(rowBgColor);
-			this.bIsHighlighted = false;
-		} else {
-			this.setBackground(Color.BLUE);
-			this.bIsHighlighted = true;
-		}
+//		if (this.bIsHighlighted) {
+//			this.setBackground(rowBgColor);
+//			this.bIsHighlighted = false;
+//		} else {
+//			this.setBackground(Color.BLUE);
+//			this.bIsHighlighted = true;
+//		}
 	}
 
 	@Override
