@@ -37,9 +37,9 @@ public interface IMutableObject {
 	
 	public String getMethodName();
 	
-	public eMutantLevel stringToMutantLevel(String sMutantLevel);
+	//public eMutantLevel stringToMutantLevel(String sMutantLevel);
 	
-	public eMutantType stringToMutantType(String sMutantType);
+	//public eMutantType stringToMutantType(String sMutantType);
 	
 	public void printMutableObjectProperties();
 	
