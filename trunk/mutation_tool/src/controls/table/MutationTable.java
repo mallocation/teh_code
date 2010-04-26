@@ -3,6 +3,7 @@ package controls.table;
 import interfaces.IMutableObject;
 import interfaces.IMutableTreeListener;
 import interfaces.IMutationFilterListener;
+import mutations.MutantCollection;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -69,11 +70,11 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	@Override
 	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
 		//ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass());
-		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null);
+		MutantCollection alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null);
 		this.alMutableRows.clear();
 		this.removeAll();
-		for (int i=0; i<alMutableObjects.size(); i++) {
-			IMutableObject oMutableObject = alMutableObjects.get(i);
+		for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
+			IMutableObject oMutableObject = alMutableObjects.getMutants().get(i);
 			boolean bAltRow = (i%2 == 0) ? false : true;
 			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
 		}
