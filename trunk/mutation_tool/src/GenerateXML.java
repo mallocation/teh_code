@@ -1,4 +1,10 @@
+import interfaces.IMutableObject;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Random;
+
+import mutations.Mutant;
+
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -24,6 +30,7 @@ public class GenerateXML {
 	private Document appendedXMLDoc;
 	private Element mutation;
 	private Element classes;
+	private String idFileName;
 	
     /**
      * Main method to test functionality.
@@ -33,25 +40,24 @@ public class GenerateXML {
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
  
-        //oXML.createClassesXMLRoot();
-        oXML.createMutationsXMLRoot();
-        //oXML.createClassesXMLEntry("/blah/blah", "1234");
-        //oXML.createClassesXMLEntry("/fwe/easf", "86786");
+        oXML.createClassesXMLRoot();
+        //oXML.createMutationsXMLRoot();
+        oXML.createClassesXMLEntry("/blah/blah", "");
+       // oXML.createClassesXMLEntry("/fwe/easf", "");
         //oXML.createClassesXMLEntry("/asd/asdf", "54");
         //oXML.createClassesXMLEntry("/blah/fda", "615");
-        //oXML.createClassesXMLEntry("/faw/afw", "6678");
+        //oXML.createClassesXMLEntry("/faw/afw");
         //oXML.outputClassesXML("1234.xml");
-        oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-        oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-        oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-        oXML.createMutationsXMLEntry("method", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-        oXML.outputMutantsXML("1234.xml");
-     	//oXML.outputToFile("classes.xml", oXML.classXMLDoc);
-     	//oXML.outputToFile("mutations.xml", oXML.mutationXMLDoc);
-     	//oXML.appendToXMLFile("mutations.xml", "mutant");
+        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "*", "/");
+        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "/", "+");
+        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "-", "*");
+       // oXML.createMutationsXMLEntry("METHOD", "methodName", "RELATIONAL", ">", "<");
+       // oXML.outputMutantsXML(oXML.idFileName+".xml");
 
-        //oXML.outputAppendedXML("mutations.xml");
-     	
+     	oXML.appendToClassXMLFile("classes.xml", "class");
+        //oXML.outputAppendedXML("classes.xml");
+     	oXML.outputClassesXML("classes.xml");
+
      	
     }
 
@@ -79,19 +85,29 @@ public class GenerateXML {
      * @param inputFileName the name of the input file
      * @param inputXMLType mutant or class to append to
      */
-    public void appendToXMLFile(String inputFileName, String inputXMLType){
+    public void appendToClassXMLFile(String inputFileName, String inputXMLType){
 		try{
+			int numberOfAttributes;
+			Element Class = classXMLDoc.createElement("class");
 			File xmlFile = new File(inputFileName);
+			String tempPath = "", tempID = "";
 			appendedXMLDoc = docBuild.parse(xmlFile);
-			NodeList listOfNodes = appendedXMLDoc.getElementsByTagName(inputXMLType);
-			Element newElement;
-			Node elementCopy; 
-			int numberOfClasses = listOfNodes.getLength();
-			for(int i = 0; i < numberOfClasses; i++){
-				newElement = (Element)listOfNodes.item(i);
-				elementCopy = appendedXMLDoc.importNode(newElement,true);
-				appendedXMLDoc.getDocumentElement().appendChild(elementCopy);
+			for(int i = 0; i < appendedXMLDoc.getElementsByTagName("class").getLength(); i++){
+				Class = (Element) appendedXMLDoc.getElementsByTagName("class").item(i);
+				NamedNodeMap classAttributes = Class.getAttributes();
+				numberOfAttributes = classAttributes.getLength();
+				for(int j = 0; j < numberOfAttributes; j++){
+					Attr classAttribute = (Attr)classAttributes.item(j);
+					if(classAttribute.getNodeName().equals("path")){
+						tempPath = classAttribute.getNodeValue();
+					}
+					else if(classAttribute.getNodeName().equals("id")){
+						tempID = classAttribute.getNodeValue();
+					}		
+				}
+				createClassesXMLEntry(tempPath,tempID);
 			}
+
 		} catch(FileNotFoundException e){
 			System.out.println("File not found!");
 			System.exit(0);
@@ -203,16 +219,22 @@ public class GenerateXML {
      * Creates the classes xml entry.
      *
      * @param classPath the class path
-     * @param classID the class id
+     * @param id the class id
      */
-    public void createClassesXMLEntry(String classPath, String classID){
+    public void createClassesXMLEntry(String classPath, String id){
     	try{
     		//create child element of mutation, add attributes
-  
+    		Random rand = new Random(System.currentTimeMillis());
+        	int randomID = rand.nextInt();
+        	idFileName = Integer.toString(randomID);
             Element Class = classXMLDoc.createElement("class");
             Class.setAttribute("path", classPath);
             classes.appendChild(Class);
-            Class.setAttribute("id", classID);
+            if(id.equals("")){
+            	Class.setAttribute("id", idFileName);
+            }
+            else
+            	Class.setAttribute("id", id);
             classes.appendChild(Class);
                         
     	} catch (Exception e) {
@@ -249,5 +271,35 @@ public class GenerateXML {
     	
     }
     
-   
+    /**
+     * Creates the xml file containing mutations.
+     *
+     *@param classPath path for the class file.
+     * @param listOfMutations the array list of mutations associated with the class file in the classPath.
+     */
+    public void createMutationsXML(ArrayList<IMutableObject> listOfMutations, String classPath){
+    	IMutableObject tempMutant = new Mutant();
+    	createClassesXMLRoot();
+    	createMutationsXMLRoot();
+    	createClassesXMLEntry(classPath,"");
+    	appendToClassXMLFile("classes.xml", "class");
+    	String tempLevel, tempName, tempType, tempOld, tempNew;
+    	
+    	for(int i = 0; i < listOfMutations.size(); i++){
+    		tempMutant = listOfMutations.get(i);
+    		tempLevel = tempMutant.getMutantLevelAsString();
+    		tempType = tempMutant.getMutantTypeAsString();
+    		tempOld = tempMutant.getOldOperator();
+    		tempNew = tempMutant.getNewOperator();
+    		if(tempLevel.equals("METHOD"))
+    			tempName = tempMutant.getMethodName();
+    		else
+    			tempName = null;
+    		
+    		createMutationsXMLEntry(tempLevel, tempName, tempType, tempOld, tempNew);
+    	}
+    	
+    	outputMutantsXML(idFileName+".xml");
+    	outputAppendedXML("classes.xml");
+    }
 }

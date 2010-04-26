@@ -29,9 +29,11 @@ public class ParseXML {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-		ParseXML oXMLParse = new ParseXML();
-        //oXMLParse.getXMLFile("mutations.xml");
-        oXMLParse.getMutantAttributes("/blah/blah");
+//		ParseXML oXMLParse = new ParseXML();
+//        //oXMLParse.getXMLFile("mutations.xml");
+//        oXMLParse.getMutantAttributes("/blah/blah");
+//        GenerateXML oXML = new GenerateXML();
+//        oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
 	}
 
 	/**
@@ -44,6 +46,7 @@ public class ParseXML {
         	docBuild = docFact.newDocumentBuilder();
         	tempMutant = new Mutant();
         	this.mutationsList = new ArrayList<IMutableObject>();
+        	
         } catch (Exception e) {
 
             System.out.println(e);
@@ -73,6 +76,9 @@ public class ParseXML {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(0);
+		} catch (NullPointerException e){
+			System.out.println("Classes.xml is empty");
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -109,22 +115,24 @@ public class ParseXML {
 		int numberOfAttributes;
 		String tempAttribute;
 		String inputFileName = getMutationsFileName(classPath);
+		
 		Document xmlDoc = getXMLFile(inputFileName);
 
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
 			mutant = (Element) listOfMutants.item(i);
-			NamedNodeMap mutantAtrributes = mutant.getAttributes();
-        	numberOfAttributes = mutantAtrributes.getLength();
+			NamedNodeMap mutantAttributes = mutant.getAttributes();
+        	numberOfAttributes = mutantAttributes.getLength();
 			
 			for(int j = 0; j < numberOfAttributes; j++){
-				Attr mutantAttribute = (Attr)mutantAtrributes.item(j);
+				Attr mutantAttribute = (Attr)mutantAttributes.item(j);
 				tempAttribute = mutantAttribute.getNodeName();
 				
 				if(tempAttribute.equals("level")){
 					tempMutant.setMutantLevel(Mutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
 				}
 				else if(tempAttribute.equals("name")){
-					tempMutant.setMethodName(mutantAttribute.getNodeValue());
+					if(tempMutant.getMutantLevelAsString().equals("METHOD"))
+						tempMutant.setMethodName(mutantAttribute.getNodeValue());
 				}
 				else if(tempAttribute.equals("type")){
 					tempMutant.setMutantType(Mutant.stringToMutantType(mutantAttribute.getNodeValue()));
@@ -137,9 +145,9 @@ public class ParseXML {
 				}
 				else{
 					System.out.println("Unkown attribute in file.");
-					System.exit(0);
+					//System.exit(0);
 				}
-				//PUT IT IN THE MUTANT ARRAY LIST!!
+				//REMOVE
 				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
 				
 			}
@@ -188,8 +196,6 @@ public class ParseXML {
 	public void setClassPath(String classPath) {
 		this.pathOfClassFile = classPath;
 	}
-	public void storeMutations(){
-		
-	}
+
 	
 }
