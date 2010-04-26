@@ -1,9 +1,7 @@
 import interfaces.IMutableObject;
 import mutations.Mutant;
-
 import java.io.*;
 import java.util.ArrayList;
-
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
@@ -31,8 +29,8 @@ public class ParseXML {
 	 */
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
-        oXMLParse.getXMLFile("test.xml");
-        oXMLParse.getMutantAttributes();
+        //oXMLParse.getXMLFile("mutations.xml");
+        oXMLParse.getMutantAttributes("mutations.xml");
         
 	}
 
@@ -102,12 +100,13 @@ public class ParseXML {
 	/**
 	 * Gets the mutant attributes.
 	 *
-	 * @return the mutant attributes
+	 * @param inputFileName the name of the input file
+	 * @return the list ofmutant attributes
 	 */
-	public void getMutantAttributes(){
+	public ArrayList<IMutableObject> getMutantAttributes(String inputFileName){
 		int numberOfAttributes;
 		String tempAttribute;
-
+		getXMLFile(inputFileName);
         //Redo with the fancy enum type Mutant
         for(int i = 0; i < getNumberOfMutants(); i++){
 			mutant = (Element) listOfMutants.item(i);
@@ -146,6 +145,7 @@ public class ParseXML {
 			mutationsList.add(tempMutant);
 			System.out.println();
 		}
+		return mutationsList;
 	}
 	
 }
