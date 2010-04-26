@@ -1,5 +1,6 @@
 import interfaces.IMutableObject;
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,25 +37,21 @@ public class GenerateXML {
      * Main method to test functionality.
      *
      * @param args the arguments
+     * @throws URISyntaxException 
      */
-    public static void main (String args[]) {
+    public static void main (String args[]) throws URISyntaxException {
         GenerateXML oXML = new GenerateXML();
  
         oXML.createClassesXMLRoot();
-        //oXML.createMutationsXMLRoot();
+        oXML.createMutationsXMLRoot();
         oXML.createClassesXMLEntry("/blah/blah", "");
-       // oXML.createClassesXMLEntry("/fwe/easf", "");
-        //oXML.createClassesXMLEntry("/asd/asdf", "54");
-        //oXML.createClassesXMLEntry("/blah/fda", "615");
-        //oXML.createClassesXMLEntry("/faw/afw");
-        //oXML.outputClassesXML("1234.xml");
-        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "*", "/");
-        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "/", "+");
-        //oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "-", "*");
-       // oXML.createMutationsXMLEntry("METHOD", "methodName", "RELATIONAL", ">", "<");
-       // oXML.outputMutantsXML(oXML.idFileName+".xml");
+        oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "*", "/");
+        oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "/", "+");
+        oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "-", "*");
+        oXML.createMutationsXMLEntry("METHOD", "methodName", "RELATIONAL", ">", "<");
+        oXML.outputMutantsXML(oXML.idFileName+".xml");
 
-     	oXML.appendToClassXMLFile("classes.xml", "class");
+     	//oXML.appendToClassXMLFile("classes.xml", "class");
         //oXML.outputAppendedXML("classes.xml");
      	oXML.outputClassesXML("classes.xml");
 
@@ -129,7 +126,7 @@ public class GenerateXML {
      *
      * @param outputFile the name of the output file
      */
-    public void outputClassesXML(String outputFile){
+    public void outputClassesXML(String outputFile) throws URISyntaxException{
     	outputToFile(outputFile, classXMLDoc);
     }
     
@@ -138,7 +135,7 @@ public class GenerateXML {
      *
      * @param outputFile the name of the output file
      */
-    public void outputMutantsXML(String outputFile){
+    public void outputMutantsXML(String outputFile) throws URISyntaxException{
     	outputToFile(outputFile, mutationXMLDoc);
     }
     
@@ -147,7 +144,7 @@ public class GenerateXML {
      *
      * @param outputFile the name of the output file
      */
-    public void outputAppendedXML(String outputFile){
+    public void outputAppendedXML(String outputFile) throws URISyntaxException{
     	outputToFile(outputFile, appendedXMLDoc);
     }
     
@@ -156,36 +153,25 @@ public class GenerateXML {
      *
      * @param outputFile the name of the output file
      * @param outputDoc the name of the document to output (classes or mutations)
+     * @throws URISyntaxException 
+     * @throws URISyntaxException 
      */
-    public void outputToFile(String outputFile, Document outputDoc){
-    	FileOutputStream oOutput;
-    	PrintStream oStream;
-    	try{
-    		            
-            TransformerFactory transfac = TransformerFactory.newInstance();
-            Transformer trans = transfac.newTransformer();
-            
-            //remove the xml specifications from the top of the document
-            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            //pretty pretty white spaces
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+    public void outputToFile(String outputFile, Document outputDoc) throws URISyntaxException{
 
-            //create String from xml tree
-            StringWriter sw = new StringWriter();
-            StreamResult result = new StreamResult(sw);
-            DOMSource source = new DOMSource(outputDoc);
-            trans.transform(source, result);
-            xmlOutput = sw.toString();
-
-            //Output to file
-            oOutput = new FileOutputStream(outputFile);
-            oStream = new PrintStream(oOutput);
-            oStream.println(xmlOutput);
-            oStream.close();
-    	} catch (Exception e) {
-            System.out.println(e);
-        }
+    	try {
+    	    // Prepare the DOM document for writing
+    		Source source = new DOMSource(outputDoc);
+   	        // Prepare the output file
+    		File oFile = new File(outputFile);
+   	        Result result = new StreamResult(oFile);
+   	        // Write the DOM document to the file
+   	        Transformer xformer = TransformerFactory.newInstance().newTransformer();
+   	        xformer.transform(source, result);
+    	    } catch (TransformerConfigurationException e) {
+    	    } catch (TransformerException e) {
+    	    }
     }
+
     
 
     /**
@@ -224,9 +210,9 @@ public class GenerateXML {
     public void createClassesXMLEntry(String classPath, String id){
     	try{
     		//create child element of mutation, add attributes
-    		Random rand = new Random(System.currentTimeMillis());
-        	int randomID = rand.nextInt();
-        	idFileName = Integer.toString(randomID);
+    		//Random rand = new Random(System.currentTimeMillis());
+        	//int randomID = rand.nextInt();
+        	idFileName = Long.toString(System.nanoTime());
             Element Class = classXMLDoc.createElement("class");
             Class.setAttribute("path", classPath);
             classes.appendChild(Class);
@@ -276,8 +262,9 @@ public class GenerateXML {
      *
      *@param classPath path for the class file.
      * @param listOfMutations the array list of mutations associated with the class file in the classPath.
+     * @throws URISyntaxException 
      */
-    public void createMutationsXML(ArrayList<IMutableObject> listOfMutations, String classPath){
+    public void createMutationsXML(ArrayList<IMutableObject> listOfMutations, String classPath) throws URISyntaxException{
     	IMutableObject tempMutant = new Mutant();
     	createClassesXMLRoot();
     	createMutationsXMLRoot();
