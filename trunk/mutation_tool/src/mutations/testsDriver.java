@@ -62,7 +62,7 @@ public class testsDriver{
 		oMutant.setMethodName("sillyAddition");
 		System.out.println("" + Mutator.getMutationCount(oMutant));
 		//Mutator.performMutation(oMutant);
-		MutantCollection mutableObjectsList = MutationFactory.createIMutableObjects(oClass, oMutant.getMethodName());
+		MutantCollection mutableObjectsList = MutationFactory.createIMutableObjects(oClass, null);
 		Iterator<IMutableObject> iterator = mutableObjectsList.getMutants().iterator();
 		
 		while(iterator.hasNext()){
