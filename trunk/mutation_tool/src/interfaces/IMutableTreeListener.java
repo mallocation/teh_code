@@ -1,6 +1,6 @@
 package interfaces;
 
-import controls.MutableNode;
+import controls.tree.MutableNode;
 
 public interface IMutableTreeListener {
 	
