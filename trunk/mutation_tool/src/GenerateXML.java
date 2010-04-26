@@ -40,16 +40,17 @@ public class GenerateXML {
         //oXML.createClassesXMLEntry("/asd/asdf", "54");
         //oXML.createClassesXMLEntry("/blah/fda", "615");
         //oXML.createClassesXMLEntry("/faw/afw", "6678");
+        //oXML.outputClassesXML("1234.xml");
         oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
         oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
         oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
         oXML.createMutationsXMLEntry("method", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-        //oXML.outputMutantsXML("mutations.xml");
+        oXML.outputMutantsXML("1234.xml");
      	//oXML.outputToFile("classes.xml", oXML.classXMLDoc);
      	//oXML.outputToFile("mutations.xml", oXML.mutationXMLDoc);
-     	oXML.appendToXMLFile("mutations.xml", "mutant");
+     	//oXML.appendToXMLFile("mutations.xml", "mutant");
 
-        oXML.outputAppendedXML("mutations.xml");
+        //oXML.outputAppendedXML("mutations.xml");
      	
      	
     }
@@ -211,9 +212,8 @@ public class GenerateXML {
             Element Class = classXMLDoc.createElement("class");
             Class.setAttribute("path", classPath);
             classes.appendChild(Class);
-            Element id = classXMLDoc.createElement("id");
-            id.setTextContent(classID);
-            Class.appendChild(id);
+            Class.setAttribute("id", classID);
+            classes.appendChild(Class);
                         
     	} catch (Exception e) {
             System.out.println(e);
