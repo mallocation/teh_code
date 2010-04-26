@@ -1,7 +1,7 @@
 package mutations;
 
 import mutations.Mutator;
-
+import mutations.MutantCollection;
 import java.io.IOException;
 import java.util.jar.*;
 import interfaces.IMutableObject;
@@ -26,7 +26,7 @@ public class testsDriver{
 	 * @param args
 	 */
 	public static void main(String args[]){
-		/*String path = "/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/";
+		String path = "/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/";
 
 		System.out.println("" + args[0] + "" + args[1] + "" + args[2]);
 
@@ -59,18 +59,17 @@ public class testsDriver{
 		oMutant.setNewOperator(newOp);
 		oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
 		//To test at method-level, just have a class that has the name specified below
-		oMutant.setMethodName("main");
+		oMutant.setMethodName("sillyAddition");
 		System.out.println("" + Mutator.getMutationCount(oMutant));
-		Mutator.performMutation(oMutant);
-		ArrayList<IMutableObject> mutableObjectsList = MutationFactory.createIMutableObjects(oClass, null);
-		Iterator<IMutableObject> iterator = mutableObjectsList.iterator();
+		//Mutator.performMutation(oMutant);
+		MutantCollection mutableObjectsList = MutationFactory.createIMutableObjects(oClass, oMutant.getMethodName());
+		Iterator<IMutableObject> iterator = mutableObjectsList.getMutants().iterator();
 		
 		while(iterator.hasNext()){
-			//((IMutableObject) iterator.next()).printMutableObjectProperties();
+			((IMutableObject) iterator.next()).printMutableObjectProperties();
 			//Mutator.performMutation((IMutableObject) iterator.next());
-			break;
 		}
-		*/
+		
 	/*	JarFile littleJar = null;
 		try {
 			 littleJar = new JarFile("/Users/Pavel/Documents/workspace/mutation_tool/bcel-5.2.jar");
@@ -83,12 +82,12 @@ public class testsDriver{
 			if( z.toString().contains(".class")){
 				System.out.println(z);
 			}
-		}*/
+		}
 		
 		
 		//Go into MutationFactory to set the correct path for your JAR file.
 		//See comments in MutationFactory for further instructions.
-		MutationFactory.arIMObjectsFromJar();
+		MutationFactory.arIMObjectsFromJar();*/
 		
 	}
 }
