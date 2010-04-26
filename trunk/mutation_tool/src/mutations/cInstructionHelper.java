@@ -163,7 +163,7 @@ public class cInstructionHelper {
 	
 	/**
 	 * Determines an operator's corresponding instruction name. The input should be parsed
-	 * so that this function will always return one of: add, sub, ... , ge, gt.  
+	 * so that this function will always return one of: add, sub, ... , ge, gt.
 	 *
 	 * @param sOperator the operator passed
 	 *
@@ -307,4 +307,21 @@ public class cInstructionHelper {
 		A,
 		ZERO
 	}
+	
+	public static String[] getArithmeticInstructionsAsString(){
+		String[] sArithmeticInstructions  = {"+", "-", "*", "/", "%"};
+		return sArithmeticInstructions;
+	}
+	
+	public static String[] getRelationalInstructionsAsString(){
+		String[] sBranchInstructions = {"==", "!=", "<", "<=", ">", ">="};
+		return sBranchInstructions;
+	}
+	
+	public static String[] getBooleanInstructionsAsString(){
+		String[] sBooleanInstructions = {"&&", "||"};
+		return sBooleanInstructions;
+	}
+	
+	
 }

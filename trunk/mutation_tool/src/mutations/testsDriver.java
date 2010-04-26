@@ -13,10 +13,17 @@ public class testsDriver{
 		System.out.println(sError);
 		System.exit(1);
 	}
+	/**
+	 * This class is for testing Mutator and MutatorFactory: The path
+	 * was created specifically for my computer -> I'm sure there is an
+	 * easy way to get the path, but I didn't want to waste time.
+	 * If you would like to be able to run this, just create a class
+	 * and specify its path in the 'path' variable.
+	 * @param args
+	 */
 	public static void main(String args[]){
 		String path = "/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/";
 
-		System.out.println(args.length);
 		System.out.println("" + args[0] + "" + args[1] + "" + args[2]);
 
 		IMutableObject oMutant = new Mutant();
@@ -46,14 +53,20 @@ public class testsDriver{
 		oMutant.setMutableClass(oClass);
 		oMutant.setOldOperator(oldOp);
 		oMutant.setNewOperator(newOp);
+		oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
+		//To test at method-level, just have a class that has the name specified below
+		oMutant.setMethodName("main");
 		System.out.println("" + Mutator.getMutationCount(oMutant));
 		Mutator.performMutation(oMutant);
-		ArrayList<IMutableObject> mutableObjectsList = MutationFactory.createIMutableObjects(oClass);
+		ArrayList<IMutableObject> mutableObjectsList = MutationFactory.createIMutableObjects(oClass, null);
 		Iterator<IMutableObject> iterator = mutableObjectsList.iterator();
 		
 		while(iterator.hasNext()){
-			((IMutableObject) iterator.next()).printMutableObjectProperties();
+			//((IMutableObject) iterator.next()).printMutableObjectProperties();
+			//Mutator.performMutation((IMutableObject) iterator.next());
+			break;
 		}
+		
 		
 		
 	}

@@ -157,7 +157,6 @@ public class Mutator {
 		}
 	}
 
-	
 	/**
 	 * Parses the arguments passed from the "main" method.
 	 * These arguments should contain the class name, and the operators.
@@ -174,6 +173,25 @@ public class Mutator {
 		//Store the operators, and trim any single quotes (needed to pass *, <, >, etc. as an argument)
 		sOldOperator = oMutableObject.getOldOperator();			//.replace("'", "");
 		sNewOperator = oMutableObject.getNewOperator();
+		/** The handing of && and || is severely oversimplified.  But examining the way that ByteCode
+		 * changes as you replace && with || or vice versa, there is no true set
+		 * pattern as all branch instructions surrounding the || and && will change
+		 * depending on many different things, especially in complex boolean functions. The
+		 * factors that affect these changes are largely related to the order in which && and ||'s come
+		 * in the code, amongst other factors.
+		 * So by my reasoning, nothing made any true 'sense' to do with && and || besides
+		 * actually having a complex lookahead functions, which teh_code ruled beyond the
+		 * scope of our project and time limits.  Therefore, a decision was made to
+		 * simply replace the operators when a && or || are encountered, as follows:
+		 */
+		if(sOldOperator.equals("&&")){
+			sOldOperator = "==";
+			sNewOperator = "!=";
+		}
+		if(sOldOperator.equals("||")){
+			sOldOperator = "!=";
+			sNewOperator = "==";
+		}
 		//Having sOldOperator equal '*' and sNewOperator equal '>' is an example of type mismatch,
 		//or an unacceptable combination of operators.
 		boolean operatorTypesMismatch = true;
@@ -225,10 +243,10 @@ public class Mutator {
 	 * later for method-level)
 	 */
 	public static int getMutationCount(IMutableObject oMutableObject) {
+		int nMutations = 0;
 		oInstHelper = new cInstructionHelper();
 		parseArguments(oMutableObject);
-		int nMutations = 0;
-		
+				
 		oConstantPoolGen = oClassGen.getConstantPool();
 		arMethods = oClassGen.getMethods();
 		
@@ -246,8 +264,13 @@ public class Mutator {
 				Instruction oInstruction = ih.getInstruction();
 				if (oInstHelper.isArithmeticInstruction(oInstruction) || oInstHelper.isBranchInstruction(oInstruction)) {
 					if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
-						//convert to the new instruction			
-						nMutations++;
+						if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.CLASS)){
+							//convert to the new instruction			
+							nMutations++;
+						}else if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.METHOD)
+								&& oMutableObject.getMethodName().equals(arMethods[i].getName())){
+							nMutations++;
+						}
 					}					
 				}
 			}
@@ -265,50 +288,69 @@ public class Mutator {
 		parseArguments(oMutableObject);
 		oInstHelper = new cInstructionHelper();
 		System.out.println("Changing all instances of \"" + sOldOperator + "\" to \"" + sNewOperator + "\" in " + oClass.getClassName());
-		
+	
 		oConstantPoolGen = oClassGen.getConstantPool();
 		arMethods = oClassGen.getMethods();
 		for (int i=0; i<arMethods.length; i++) {
-			// mutation process
-			// 1. Go through all instructions in a method
-			// 2. If an instruction is an arithmetic instruction, see if it matches the old operator
-			// 3. If it matches the old operator, change the instruction to match the new operator, and set the isntruction
-			// 4. otherwise, don't worry about it and move on!
-			
-			MethodGen oMethodGen = new MethodGen(arMethods[i], oClass.getClassName(), oConstantPoolGen);
-			InstructionList il = oMethodGen.getInstructionList();
-			InstructionHandle ih;
+			System.out.println(arMethods[i].getName());
+				// mutation process
+				// 1. Go through all instructions in a method
+				// 2. If an instruction is an arithmetic instruction, see if it matches the old operator
+				// 3. If it matches the old operator, change the instruction to match the new operator, and set the isntruction
+				// 4. otherwise, don't worry about it and move on!
 
-			for (ih = il.getStart(); ih != null; ih = ih.getNext()) {
-				Instruction oInstruction = ih.getInstruction();
-				
-				if (oInstHelper.isArithmeticInstruction(oInstruction)) {
-					if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
-						//convert to the new instruction
-						oInstruction = oInstHelper.ConvertArithmetic(oInstruction, sNewOperator);
-						ih.setInstruction(oInstruction);					
-						nMutations++;
-					}					
-				}
-				else if(oInstHelper.isBranchInstruction(oInstruction)){
-					BranchInstruction oBranchInstruction = (BranchInstruction) oInstruction;
-					if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
-						oBranchInstruction = oInstHelper.ConvertBranch(oBranchInstruction, sNewOperator);
-						ih.setInstruction(oBranchInstruction);
-						nMutations++;
+				MethodGen oMethodGen = new MethodGen(arMethods[i], oClass.getClassName(), oConstantPoolGen);
+				InstructionList il = oMethodGen.getInstructionList();
+				InstructionHandle ih;
+
+				for (ih = il.getStart(); ih != null; ih = ih.getNext()) {
+					Instruction oInstruction = ih.getInstruction();
+
+					if (oInstHelper.isArithmeticInstruction(oInstruction)) {
+						if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
+							if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.CLASS)){
+								oInstruction = oInstHelper.ConvertArithmetic(oInstruction, sNewOperator);
+								ih.setInstruction(oInstruction);					
+								nMutations++;
+							}
+							if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.METHOD)
+								&& oMutableObject.getMethodName().equals(arMethods[i].getName())){
+								//convert to the new instruction
+								oInstruction = oInstHelper.ConvertArithmetic(oInstruction, sNewOperator);
+								ih.setInstruction(oInstruction);					
+								nMutations++;
+							}
+							
+						}
+					}
+					else if(oInstHelper.isBranchInstruction(oInstruction)){
+						
+						BranchInstruction oBranchInstruction = (BranchInstruction) oInstruction;
+						if (oInstHelper.InstructionMatchOperator(oInstruction, sOldOperator)) {
+							if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.CLASS)){
+								oBranchInstruction = oInstHelper.ConvertBranch(oBranchInstruction, sNewOperator);
+								ih.setInstruction(oBranchInstruction);
+								nMutations++;
+							}
+							if(oMutableObject.getMutantLevel().equals(IMutableObject.eMutantLevel.METHOD)
+									&& oMutableObject.getMethodName().equals(arMethods[i].getName())){
+								oBranchInstruction = oInstHelper.ConvertBranch(oBranchInstruction, sNewOperator);
+								ih.setInstruction(oBranchInstruction);
+								nMutations++;
+							}
+						}
 					}
 				}
-
-			}
-			il.setPositions();
-			oMethodGen.setInstructionList(il);
-			oClassGen.setMethodAt(oMethodGen.getMethod(), i);
-			il.dispose();
+				il.setPositions();
+				oMethodGen.setInstructionList(il);
+				oClassGen.setMethodAt(oMethodGen.getMethod(), i);
+				il.dispose();
+			
 		}		
 		System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");	
 		dumpClass();
 	}	
-	
+
 	/**
 	 * Dumps the modified class to the program directory.
 	 */
