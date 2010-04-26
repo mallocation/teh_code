@@ -1,11 +1,15 @@
 package mutations;
 
 import mutations.Mutator;
+
+import java.io.IOException;
+import java.util.jar.*;
 import interfaces.IMutableObject;
 import org.apache.bcel.classfile.JavaClass;
 import utilities.ClassLoader;
 import mutations.MutationFactory;
 import java.util.*;
+import org.apache.bcel.classfile.*;
 
 public class testsDriver{
 	
@@ -22,7 +26,7 @@ public class testsDriver{
 	 * @param args
 	 */
 	public static void main(String args[]){
-		String path = "/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/";
+		/*String path = "/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/";
 
 		System.out.println("" + args[0] + "" + args[1] + "" + args[2]);
 
@@ -66,8 +70,25 @@ public class testsDriver{
 			//Mutator.performMutation((IMutableObject) iterator.next());
 			break;
 		}
+		*/
+	/*	JarFile littleJar = null;
+		try {
+			 littleJar = new JarFile("/Users/Pavel/Documents/workspace/mutation_tool/bcel-5.2.jar");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for(Enumeration e = littleJar.entries() ; e.hasMoreElements();){
+			Object z =  e.nextElement();
+			JavaClass myClass = (JavaClass) z;
+			if( z.toString().contains(".class")){
+				System.out.println(z);
+			}
+		}*/
 		
 		
+		//Go into MutationFactory to set the correct path for your JAR file.
+		//See comments in MutationFactory for further instructions.
+		MutationFactory.arIMObjectsFromJar();
 		
 	}
 }
