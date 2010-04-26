@@ -180,6 +180,11 @@ public class ParseXML {
 		return id;
 	}
 	
+	/**
+	 * Sets the path of the class file
+	 *
+	 * @param classPath the class path .class file is located in
+	 */
 	public void setClassPath(String classPath) {
 		this.pathOfClassFile = classPath;
 	}
