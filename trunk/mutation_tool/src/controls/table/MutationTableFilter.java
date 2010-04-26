@@ -1,5 +1,6 @@
 package controls.table;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,11 @@ public class MutationTableFilter extends JPanel implements ActionListener {
 	
 	public MutationTableFilter() {
 		this.setBorder(BorderFactory.createTitledBorder("Mutation Filter"));
+		
+		// Layout Testing!!!
+		this.setLayout(new BorderLayout());
+		
+		
 		lblMutationType = new JLabel("Mutation Type");
 		lblMutatedOp = new JLabel("Mutated Operation");
 		lblNewOp = new JLabel("New Operation");
@@ -39,8 +45,7 @@ public class MutationTableFilter extends JPanel implements ActionListener {
 		chkSelectAll = new JCheckBox("Select All");
 		
 		oTableDimension = new Dimension(565, 90);
-		
-		
+
 		this.add(lblMutationType);
 		this.add(ddlMutationType);
 		this.add(lblMutatedOp);
