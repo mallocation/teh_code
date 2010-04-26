@@ -18,28 +18,13 @@ import javax.xml.transform.stream.*;
  */
 public class GenerateXML {
 
-	/** String to be output to xml file */
 	private String xmlOutput;
-	
-	/**Factory API to create DOM object trees from XML documents.  */
 	private DocumentBuilderFactory docFact;
-	
-	/** The doc build. */
 	private DocumentBuilder docBuild;
-	
-	/** The Document containing list of mutations. */
 	private Document mutationXMLDoc;
-	
-	/** The Document containing list of classes. */
 	private Document classXMLDoc;
-	
-	/** The Document to append to. */
 	private Document appendedXMLDoc;
-	
-	/** The mutation element. */
 	private Element mutation;
-	
-	/** The classes element. */
 	private Element classes;
 	
     /**
