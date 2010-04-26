@@ -23,5 +23,4 @@ public class MutantCollection {
 	public int getCollectionCount() {
 		return this.alMutants.size();
 	}
-
 }
