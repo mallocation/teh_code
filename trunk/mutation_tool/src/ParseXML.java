@@ -101,7 +101,7 @@ public class ParseXML {
 	 * Gets the mutant attributes.
 	 *
 	 * @param inputFileName the name of the input file
-	 * @return the list ofmutant attributes
+	 * @return the list of mutant attributes
 	 */
 	public ArrayList<IMutableObject> getMutantAttributes(String inputFileName){
 		int numberOfAttributes;
@@ -119,7 +119,6 @@ public class ParseXML {
 				
 				if(tempAttribute.equals("level")){
 					tempMutant.setMutantLevel(Mutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
-					
 				}
 				else if(tempAttribute.equals("name")){
 					tempMutant.setMethodName(mutantAttribute.getNodeValue());
@@ -134,7 +133,7 @@ public class ParseXML {
 					tempMutant.setNewOperator(mutantAttribute.getNodeValue());
 				}
 				else{
-					System.out.println("Unkown attribute in file");
+					System.out.println("Unkown attribute in file.");
 					System.exit(0);
 				}
 				//PUT IT IN THE MUTANT ARRAY LIST!!
