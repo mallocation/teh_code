@@ -12,7 +12,9 @@ import javax.xml.transform.stream.*;
 
 /**
  * The Class GenerateXML. Used to generate a XML Document
- * of a list of classes, or a list of mutants in a class.
+ * of a list of classes, or a list of mutants in a class,
+ * or append classes/mutants to a file. 
+ * @author teh_code
  */
 public class GenerateXML {
 
