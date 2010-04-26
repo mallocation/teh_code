@@ -3,7 +3,7 @@ package mutations;
 import interfaces.IMutableObject;
 
 import java.util.ArrayList;
-
+// TODO Implement this class in place of array lists.
 public class MutantCollection {
 	
 	private ArrayList<IMutableObject> alMutants;
