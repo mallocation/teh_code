@@ -8,8 +8,10 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 import javax.xml.parsers.*;
 
-
-
+/**
+ * The Class ParseXML used to parse a XML file.
+ * @author teh_code
+ */
 public class ParseXML {
 
 	private DocumentBuilderFactory docFact;
@@ -22,6 +24,11 @@ public class ParseXML {
 	private Element mutant;
 
 	
+	/**
+	 * The main method. Used to test functionality
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
         oXMLParse.getXMLFile("test.xml");
@@ -29,6 +36,9 @@ public class ParseXML {
         
 	}
 
+	/**
+	 * Instantiates a new ParseXML class.
+	 */
 	public ParseXML(){
         try {
         	//DOM to make a blank document
@@ -42,6 +52,12 @@ public class ParseXML {
         }
 	}
 	
+	/**
+	 * Opens xml file and create a Document from it.
+	 *
+	 * @param inputFileName the name of the input file
+	 * @return the XML Document
+	 */
 	public void getXMLFile(String inputFileName){
 		try{
 			File xmlFile = new File(inputFileName);
@@ -61,18 +77,33 @@ public class ParseXML {
 		}
 	}
 	
+	/**
+	 * Gets the number of mutants in an xml file.
+	 *
+	 * @return the number of mutants
+	 */
 	public int getNumberOfMutants(){
 		//list of nodes with element name of mutant
 		listOfMutants = xmlDoc.getElementsByTagName("mutant");
 		return listOfMutants.getLength();
 	}
 	//I need??
+	/**
+	 * Gets the number of classes in the xml file.
+	 *
+	 * @return the number of classes
+	 */
 	public int getNumberOfClasses(){
 		//list of nodes with element name of mutant
 		listOfClasses = xmlDoc.getElementsByTagName("class");
 		return listOfClasses.getLength();
 	}
 	
+	/**
+	 * Gets the mutant attributes.
+	 *
+	 * @return the mutant attributes
+	 */
 	public void getMutantAttributes(){
 		int numberOfAttributes;
 		String tempAttribute;
