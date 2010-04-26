@@ -1,9 +1,7 @@
 import java.io.*;
-
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
@@ -46,12 +44,12 @@ public class GenerateXML {
         oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
         oXML.createMutationsXMLEntry("class", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
         oXML.createMutationsXMLEntry("method", "asdaf", "ARITHMETIC", "asddff", "asdfsf");
-
+        //oXML.outputMutantsXML("mutations.xml");
      	//oXML.outputToFile("classes.xml", oXML.classXMLDoc);
      	//oXML.outputToFile("mutations.xml", oXML.mutationXMLDoc);
-     	oXML.appendToXMLFile("mutations.xml", "mutation");
+     	oXML.appendToXMLFile("mutations.xml", "mutant");
 
-     	oXML.outputToFile("mutations.xml", oXML.appendedXMLDoc);
+        oXML.outputAppendedXML("mutations.xml");
      	
      	
     }
@@ -66,8 +64,7 @@ public class GenerateXML {
         	//DOM to make a blank document
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
-        	classXMLDoc = docBuild.newDocument();
-        	mutationXMLDoc = docBuild.newDocument();
+        	
 
         } catch (Exception e) {
             System.out.println(e);
@@ -85,7 +82,7 @@ public class GenerateXML {
 		try{
 			File xmlFile = new File(inputFileName);
 			appendedXMLDoc = docBuild.parse(xmlFile);
-			NodeList listOfNodes = appendedXMLDoc.getElementsByTagName("inputXMLType");
+			NodeList listOfNodes = appendedXMLDoc.getElementsByTagName(inputXMLType);
 			Element newElement;
 			Node elementCopy; 
 			int numberOfClasses = listOfNodes.getLength();
@@ -110,7 +107,32 @@ public class GenerateXML {
 			
 	}
     
+    /**
+     * Output classes xml file.
+     *
+     * @param outputFile the name of the output file
+     */
+    public void outputClassesXML(String outputFile){
+    	outputToFile(outputFile, classXMLDoc);
+    }
     
+    /**
+     * Output mutations xml file.
+     *
+     * @param outputFile the name of the output file
+     */
+    public void outputMutantsXML(String outputFile){
+    	outputToFile(outputFile, mutationXMLDoc);
+    }
+    
+    /**
+     * Output appended xml file.
+     *
+     * @param outputFile the name of the output file
+     */
+    public void outputAppendedXML(String outputFile){
+    	outputToFile(outputFile, appendedXMLDoc);
+    }
     
     /**
      * Output to file.
@@ -153,7 +175,8 @@ public class GenerateXML {
      * Creates the root of the mutations xml file.
      */
     public void createMutationsXMLRoot(){
-    	try{        	 	
+    	try{        
+        	mutationXMLDoc = docBuild.newDocument();
     		//Create root element and add it to the tree
     		mutation = mutationXMLDoc.createElement("mutations");
     		mutationXMLDoc.appendChild(mutation);
@@ -166,7 +189,8 @@ public class GenerateXML {
      * Creates the root of the classes xml file.
      */
     public void createClassesXMLRoot(){
-    	try{        	 	
+    	try{       
+    		classXMLDoc = docBuild.newDocument();
     		classes = classXMLDoc.createElement("classes");
     		classXMLDoc.appendChild(classes);
 
