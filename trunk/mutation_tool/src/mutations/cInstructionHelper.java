@@ -1,5 +1,7 @@
 package mutations;
 
+import interfaces.IMutableObject;
+
 import java.util.*;
 import org.apache.bcel.generic.Instruction;
 import org.apache.bcel.generic.ArithmeticInstruction;
@@ -306,6 +308,17 @@ public class cInstructionHelper {
 		INT,
 		A,
 		ZERO
+	}
+	
+	public static String[] getInstructionsAsString(IMutableObject.eMutantType oMutantType) {
+		if (oMutantType.equals(IMutableObject.eMutantType.ARITHMETIC))
+			return getArithmeticInstructionsAsString();
+		else if (oMutantType.equals(IMutableObject.eMutantType.LOGICAL))
+			return getBooleanInstructionsAsString();
+		else if (oMutantType.equals(IMutableObject.eMutantType.RELATIONAL))
+			return getRelationalInstructionsAsString();
+		else
+			return new String[] {""};
 	}
 	
 	public static String[] getArithmeticInstructionsAsString(){
