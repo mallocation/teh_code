@@ -3,6 +3,7 @@ package mutations;
 import java.io.IOException;
 import java.util.*;
 import java.util.jar.*;
+import mutations.MutantCollection;
 
 import org.apache.bcel.classfile.JavaClass;
 import interfaces.IMutableObject;
@@ -45,7 +46,7 @@ public class MutationFactory{
 			Object z =  e.nextElement();
 			if( z.toString().contains(".class")){
 				JavaClass myClass = loadJavaClass(z);
-				arIMutObjects.add(createIMutableObjects(myClass, null));
+				arIMutObjects.add(createIMutableObjects(myClass, null).getMutants());
 			}
 		}
 		printNestedArrayListToSeeIfPavelIsDumbOrNot(arIMutObjects);
@@ -70,11 +71,12 @@ public class MutationFactory{
 	 * Creates permutations.
 	 * @return
 	 */
-	public static ArrayList<IMutableObject> createIMutableObjects(JavaClass oClass, Method oMethod){
+	public static /*ArrayList<IMutableObjects>*/MutantCollection createIMutableObjects(JavaClass oClass, String oMethod){
 		String arithmeticOps[] = cInstructionHelper.getArithmeticInstructionsAsString();
 		String relationalOps[] = cInstructionHelper.getRelationalInstructionsAsString();
 		String booleanOps[] = cInstructionHelper.getBooleanInstructionsAsString();
-		ArrayList<IMutableObject> oMutableObjects = new ArrayList<IMutableObject>();
+		MutantCollection oMutableObjects = new MutantCollection();
+		//ArrayList<IMutableObject> oMutableObjects = new ArrayList<IMutableObject>();
 		int length;
 		
 		length = arithmeticOps.length;
@@ -90,11 +92,11 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-						oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod.getName());
+					//	oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod/*.getName()*/);
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
-						oMutableObjects.add(oMutant);
+						oMutableObjects.getMutants().add(oMutant);
 					}
 				}
 			}
@@ -113,11 +115,11 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-						oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod.getName());
+					//	oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod/*.getName()*/);
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
-						oMutableObjects.add(oMutant);
+						oMutableObjects.getMutants().add(oMutant);
 					}
 				}
 			}
@@ -137,11 +139,11 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-						oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod.getName());
+					//	oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod/*.getName()*/);
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
-						oMutableObjects.add(oMutant);
+						oMutableObjects.getMutants().add(oMutant);
 					}
 					
 				}
