@@ -18,7 +18,7 @@ import utilities.ClassLoader;
 
 import mutations.MutationFactory;
 
-import controls.MutableNode;
+import controls.tree.MutableNode;
 
 public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener, IMutationFilterListener {
 

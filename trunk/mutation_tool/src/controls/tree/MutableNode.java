@@ -1,4 +1,4 @@
-package controls;
+package controls.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
