@@ -27,7 +27,6 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	public MutationTable() {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		loadTableWithClass();		
 	}
 	
 	private void showAllMutableRows() {
@@ -55,8 +54,22 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		getSelectedMutationCount();		
 	}
 	
-	public void loadTableWithClass() {
-		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(ClassLoader.loadClassFromPath("C:\\Users\\cjohnson\\Documents\\Class Documents\\Spring 07\\CSE155\\HW #6\\CasualEmployee.class"));
+//	public void loadTableWithClass() {
+//		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(ClassLoader.loadClassFromPath("C:\\Users\\cjohnson\\Documents\\Class Documents\\Spring 07\\CSE155\\HW #6\\CasualEmployee.class"));
+//		this.alMutableRows.clear();
+//		this.removeAll();
+//		for (int i=0; i<alMutableObjects.size(); i++) {
+//			IMutableObject oMutableObject = alMutableObjects.get(i);
+//			boolean bAltRow = (i%2 == 0) ? false : true;
+//			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
+//		}
+//		showAllMutableRows();
+//	}
+
+	@Override
+	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
+		//ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass());
+		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null);
 		this.alMutableRows.clear();
 		this.removeAll();
 		for (int i=0; i<alMutableObjects.size(); i++) {
@@ -68,30 +81,34 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	}
 
 	@Override
-	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
-		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass());
-		this.alMutableRows.clear();
-		for (int i=0; i<alMutableObjects.size(); i++) {
-			IMutableObject oMutableObject = alMutableObjects.get(i);
-			boolean bAltRow = (i%2 == 0) ? false : true;
-			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
-		}
-	}
-
-	@Override
 	public void filterMutations(String mutantType, String oldOp, String newOp) {
 		for (int i=0; i<alMutableRows.size(); i++) {
 			MutationRow oRow = alMutableRows.get(i);
 			
-			if (!mutantType.equals("")) {
-				if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(mutantType)) {
-					oRow.setVisible(true);
-				} else {
-					oRow.setVisible(false);
-				}
-			} else {
+			String matchMutant = mutantType.equals("") ? oRow.getMutableObject().getMutantTypeAsString() : mutantType;
+			String matchOldOp = oldOp.equals("") ? oRow.getMutableObject().getOldOperator() : oldOp;
+			String matchNewOp = newOp.equals("") ? oRow.getMutableObject().getNewOperator() : newOp;
+			
+			if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(matchMutant) &&
+					oRow.getMutableObject().getOldOperator().equals(matchOldOp) &&
+					oRow.getMutableObject().getNewOperator().equals(matchNewOp)) {
 				oRow.setVisible(true);
+			} else {
+				oRow.setVisible(false);
 			}
+//
+//			
+//			
+//			
+//			if (!mutantType.equals("")) {
+//				if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(mutantType)) {
+//					oRow.setVisible(true);
+//				} else {
+//					oRow.setVisible(false);
+//				}
+//			} else {
+//				oRow.setVisible(true);
+//			}
 //			
 //			if (!oldOp.equals("")) {
 //				if (oRow.getMutableObject().getOldOperator().equalsIgnoreCase(oldOp)) {

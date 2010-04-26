@@ -20,8 +20,9 @@ import javax.swing.*;
 
 import utilities.ClassLoader;
 
-import controls.MutableTree;
+import controls.tree.MutableTree;
 import controls.table.MutationTable;
+import controls.table.MutationTableFilter;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -93,14 +94,22 @@ public class MutationTool extends JFrame implements ActionListener
 //		panel.add(new Label("Jar, Class, Method Select Panel"));
 //		panel.setPreferredSize(new Dimension(250,800));
 		
-		
+		MutationTableFilter oTableFilter = new MutationTableFilter();
 		oMutationTable = new MutationTable();
-		oMutationTable.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		oMutationTable.setPreferredSize(new Dimension(400, 800));
-		//JPanel panel2 = new JPanel();
+		//oMutationTable.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+		//oMutationTable.setPreferredSize(new Dimension(400, 800));
+		oTableFilter.addMutationFilterListener(oMutationTable);
+		JPanel panel2 = new JPanel();
 		//panel2.add(new Label("Mutation Table Panel"));
 		//panel2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		//panel2.setPreferredSize(new Dimension(500,800));
+		panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
+		panel2.add(oTableFilter);
+		JScrollPane oTablePane = new JScrollPane(oMutationTable);
+		oTablePane.setBorder(BorderFactory.createTitledBorder("Available Mutations"));
+		oTablePane.getVerticalScrollBar().setUnitIncrement(10);
+		panel2.add(oTablePane);
+		oMutableTree.addMutableNodeSelectionListener(oMutationTable);
 		
 		JPanel panel3 = new JPanel();
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
@@ -110,12 +119,12 @@ public class MutationTool extends JFrame implements ActionListener
 		BorderLayout borderLayout = new BorderLayout();
 		
 		this.getContentPane().setLayout(borderLayout);	
-		//this.getContentPane().add(panel, BorderLayout.WEST);
+
 		this.getContentPane().add(oMutableTree, BorderLayout.WEST);
-		//this.getContentPane().add(panel2, BorderLayout.CENTER);
-		JScrollPane oTableScrollPane = new JScrollPane(oMutationTable);
-		oTableScrollPane.getVerticalScrollBar().setUnitIncrement(100);
-		this.getContentPane().add(oTableScrollPane, BorderLayout.CENTER);
+		this.getContentPane().add(panel2, BorderLayout.CENTER);
+//		JScrollPane oTableScrollPane = new JScrollPane(oMutationTable);
+//		oTableScrollPane.getVerticalScrollBar().setUnitIncrement(100);
+		//this.getContentPane().add(oTableScrollPane, BorderLayout.CENTER);
 		
 		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
@@ -157,6 +166,4 @@ public class MutationTool extends JFrame implements ActionListener
 	public static void main(String[] args){
 		new MutationTool();
 	}
-	//
-	
 }

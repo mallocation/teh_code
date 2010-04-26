@@ -7,7 +7,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,18 +17,27 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import mutations.Mutator;
+
+import utilities.ByteCodeViewer;
 
 
 
-public class MutationRow extends JPanel implements MouseListener {
+public class MutationRow extends JPanel implements ActionListener, MouseListener {
+	// Right-click options
+	JPopupMenu popupOptions;
+	JMenuItem menuViewDiff;
+	ByteCodeViewer oDiffViewer;
 	
 	JLabel lblMutationName;
 	JCheckBox chkCreateMutation;	
 	JLabel lblMutationType;
 	JLabel lblMutationOps;
 	JLabel lblMutationLevel;
-	JPanel pnlPropPanel;
 	
 	Font oMutationNameFont;
 	Font oPropertiesFont;
@@ -42,16 +53,20 @@ public class MutationRow extends JPanel implements MouseListener {
 	
 	
 	public MutationRow(IMutableObject oObject, boolean bAltRow, ActionListener oTableListener) {
+		// Create right-click properties
+		popupOptions = new JPopupMenu();
+		menuViewDiff = new JMenuItem("View Byte Code...");
+		menuViewDiff.addActionListener(this);
+		popupOptions.add(menuViewDiff);
+		oDiffViewer = null;
+		
 		this.oMutableObject = oObject;
 		
-//	}
 
-//	public MutationRow(String mutationName, boolean bCreateMutation, String mutationType, String oldOperator,
-//					   	String newOperator, String mutationLevel, boolean bAltRow, ActionListener oTableListener) {
 		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
 		chkCreateMutation = new JCheckBox();
 		chkCreateMutation.setOpaque(true);
-		//chkCreateMutation.setSelected(bCreateMutation);
+
 		lblMutationType = new JLabel("Type: " + oMutableObject.getMutantTypeAsString());
 		lblMutationOps = new JLabel("<html>Mutates: <b>" + oMutableObject.getOldOperator() + "</b> to <b>" + oMutableObject.getNewOperator() + "</b></html>");
 		lblMutationLevel = new JLabel("Level: " + oMutableObject.getMutantLevelAsString());
@@ -63,7 +78,6 @@ public class MutationRow extends JPanel implements MouseListener {
 		oPropertiesDim = new Dimension(178,20);
 		oRowDimension = new Dimension(535, 50);
 		
-		//rowBgColor = bAltRow ? new Color(238, 238, 238) : new Color(255, 255, 255);
 		rowBgColor = bAltRow ? new Color(235,245,255) : new Color(255, 255, 255);
 		
 		chkCreateMutation.addActionListener(oTableListener);
@@ -71,7 +85,6 @@ public class MutationRow extends JPanel implements MouseListener {
 		this.addMouseListener(this);
 		
 		this.bRowIsSelected = false;
-		pnlPropPanel = new JPanel(new BorderLayout());
 		
 		drawMutantRow();
 	}
@@ -109,6 +122,7 @@ public class MutationRow extends JPanel implements MouseListener {
 		this.setMaximumSize(oRowDimension);
 		
 		bIsHighlighted = false;
+		
 	}
 	
 	public boolean isSelected() {
@@ -125,6 +139,7 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+
 //		if (this.bIsHighlighted) {
 //			this.setBackground(rowBgColor);
 //			this.bIsHighlighted = false;
@@ -146,12 +161,28 @@ public class MutationRow extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		//do nothing		
+		if (e.isPopupTrigger()) {
+			popupOptions.show(e.getComponent(), e.getX(), e.getY());
+		}		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		//do nothing		
+		if (e.isPopupTrigger()) {
+			popupOptions.show(e.getComponent(), e.getX(), e.getY());
+		}	
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object oActionObject = e.getSource();
+		if (oActionObject.equals(menuViewDiff)) {
+			// TODO only let them open the bytecodeviewer once
+			if (oDiffViewer == null) {
+				oDiffViewer = new ByteCodeViewer(this.getMutableObject().getMutableClass(), this.getMutableObject().getMutableClass());
+			}
+		}
+		
 	}
 	
 }

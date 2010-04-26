@@ -1,3 +1,4 @@
+package utilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import utilities.ByteViewer;
 import org.apache.bcel.classfile.*;
 
 /**
@@ -32,7 +32,8 @@ public class ByteCodeViewer extends JFrame{
 		//-----------------------------------------------
 		//create GUI
 		//-----------------------------------------------
-		setDefaultCloseOperation(EXIT_ON_CLOSE);		
+		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setSize(800, 600);
 		this.setTitle     ("Byte Code Differences Viewer");
         this.setLocation  (100, 100);
@@ -84,6 +85,68 @@ public class ByteCodeViewer extends JFrame{
 	    modifiedClassTextArea.setText(oModifiedByteCode.oClass.toString());
 	    for(int i=0; i < oModifiedByteCode.oClassMethods.length; i++) {
 	    	Code code = oModifiedByteCode.oClassMethods[i].getCode();
+  	  		if(code != null)
+  	  			modifiedClassTextArea.append(code.toString());
+  	  	}
+	    modifiedClassTextArea.setEditable(false);
+	    JScrollPane modifiedClassScrollPane = new JScrollPane(modifiedClassTextArea);
+	    mutatedClassPanel.add(modifiedClassScrollPane);
+	    
+	    
+	    this.setVisible(true);
+	}
+	
+	public ByteCodeViewer(JavaClass oClass1, JavaClass oClass2)
+	{
+		
+		//-----------------------------------------------
+		//create GUI
+		//-----------------------------------------------
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);	
+		this.setSize(800, 600);
+		this.setTitle     ("Byte Code Differences Viewer");
+        this.setLocation  (100, 100);
+        this.setResizable(false);
+	    
+	    
+	    JPanel originalClassPanel = new JPanel();
+	    originalClassPanel.add(new Label("Original Class File"));
+	    originalClassPanel.setPreferredSize(new Dimension(400,600));
+	    originalClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+	    
+	    JPanel mutatedClassPanel = new JPanel();
+	    mutatedClassPanel.add(new Label("Mutated Class File"));
+	    mutatedClassPanel.setPreferredSize(new Dimension(400,600));
+	    mutatedClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
+	    
+	    this.getContentPane().setLayout(new BorderLayout());
+	    this.getContentPane().add(originalClassPanel, BorderLayout.WEST);
+	    this.getContentPane().add(mutatedClassPanel, BorderLayout.EAST);
+	    
+	    
+	    //-----------------------------------------------
+	    // generate and display bytecode
+	    //-----------------------------------------------
+	    	    
+	    
+	    //place bytecode in appropriate text area
+	    JTextArea originalClassTextArea = new JTextArea(32,34);
+	    originalClassTextArea.setText(oClass1.toString());
+	    for(int i=0; i < oClass1.getMethods().length; i++) {
+	    	Code code = oClass1.getMethods()[i].getCode();
+  	  		if(code != null)
+  	  			originalClassTextArea.append(code.toString());
+  	  	}
+	    originalClassTextArea.setEditable(false);
+	    JScrollPane originalClassScrollPane = new JScrollPane(originalClassTextArea);
+	    originalClassPanel.add(originalClassScrollPane);
+	    
+	    
+	        
+	    JTextArea modifiedClassTextArea = new JTextArea(32,33);
+	    modifiedClassTextArea.setText(oClass2.toString());
+	    for(int i=0; i < oClass2.getMethods().length; i++) {
+	    	Code code = oClass2.getMethods()[i].getCode();
   	  		if(code != null)
   	  			modifiedClassTextArea.append(code.toString());
   	  	}

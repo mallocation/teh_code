@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import mutations.Mutant;
+import mutations.cInstructionHelper;
 import interfaces.IMutationFilterListener;
 
 public class MutationTableFilter extends JPanel implements ActionListener {
@@ -86,6 +87,23 @@ public class MutationTableFilter extends JPanel implements ActionListener {
 		if (e.getSource() instanceof JCheckBox) {
 			fireSelectAllListeners();
 		} else {
+			if (e.getSource().equals(ddlMutationType)) {
+				String mutationType = ddlMutationType.getSelectedItem().toString();
+				if (mutationType != "") {
+					String[] arOps = cInstructionHelper.getInstructionsAsString(Mutant.stringToMutantType(mutationType));
+					ddlMutatedOp.removeAllItems();
+					ddlNewOp.removeAllItems();
+					ddlMutatedOp.addItem("");
+					ddlNewOp.addItem("");
+					for (int i=0; i<arOps.length; i++) {
+						ddlMutatedOp.addItem(arOps[i]);
+						ddlNewOp.addItem(arOps[i]);
+					}
+				} else {
+					ddlMutatedOp.removeAllItems();
+					ddlNewOp.removeAllItems();
+				}
+			}
 			fireFilterListeners();
 		}
 		
