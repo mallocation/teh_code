@@ -71,7 +71,7 @@ public class MutationFactory{
 	 * Creates permutations.
 	 * @return
 	 */
-	public static /*ArrayList<IMutableObjects>*/MutantCollection createIMutableObjects(JavaClass oClass, String oMethod){
+	public static /*ArrayList<IMutableObjects>*/MutantCollection createIMutableObjects(JavaClass oClass, Method oMethod){
 		String arithmeticOps[] = cInstructionHelper.getArithmeticInstructionsAsString();
 		String relationalOps[] = cInstructionHelper.getRelationalInstructionsAsString();
 		String booleanOps[] = cInstructionHelper.getBooleanInstructionsAsString();
@@ -92,8 +92,8 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-					//	oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod/*.getName()*/);
+						oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod.getName());
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.getMutants().add(oMutant);
@@ -115,8 +115,8 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-					//	oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod/*.getName()*/);
+						oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod.getName());
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.getMutants().add(oMutant);
@@ -139,8 +139,8 @@ public class MutationFactory{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.CLASS);
 					}else{
 						oMutant.setMutantLevel(IMutableObject.eMutantLevel.METHOD);
-					//	oMutant.setMutableMethod(oMethod);
-						oMutant.setMethodName(oMethod/*.getName()*/);
+						oMutant.setMutableMethod(oMethod);
+						oMutant.setMethodName(oMethod.getName());
 					}
 					if(Mutator.getMutationCount(oMutant) != 0){
 						oMutableObjects.getMutants().add(oMutant);
