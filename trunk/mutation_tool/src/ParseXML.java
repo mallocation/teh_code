@@ -14,12 +14,13 @@ public class ParseXML {
 
 	private DocumentBuilderFactory docFact;
 	private DocumentBuilder docBuild;
-	private Document xmlDoc;
 	private NodeList listOfMutants;
 	private NodeList listOfClasses;
 	private IMutableObject tempMutant;
 	public ArrayList<IMutableObject> mutationsList;
 	private Element mutant;
+	private Element Class;
+	private String pathOfClassFile;
 
 	
 	/**
@@ -30,8 +31,7 @@ public class ParseXML {
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
         //oXMLParse.getXMLFile("mutations.xml");
-        oXMLParse.getMutantAttributes("mutations.xml");
-        
+        oXMLParse.getMutantAttributes("/blah/blah");
 	}
 
 	/**
@@ -56,12 +56,13 @@ public class ParseXML {
 	 * @param inputFileName the name of the input file
 	 * @return the XML Document
 	 */
-	public void getXMLFile(String inputFileName){
+	public Document getXMLFile(String inputFileName){
 		try{
 			File xmlFile = new File(inputFileName);
-			xmlDoc = docBuild.parse(xmlFile);
+			Document xmlDoc = docBuild.parse(xmlFile);
+			return xmlDoc;
 		} catch(FileNotFoundException e){
-			System.out.println("File not found!");
+			System.out.println("XML File "+inputFileName+" for "+pathOfClassFile +" not found!");
 			System.exit(0);
 		}catch(SAXParseException e) {
 			System.out.println("Error: "+e.getMessage()+" at line " + e.getLineNumber() + ", column " + e.getColumnNumber());
@@ -73,6 +74,7 @@ public class ParseXML {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		return null;
 	}
 	
 	/**
@@ -80,18 +82,18 @@ public class ParseXML {
 	 *
 	 * @return the number of mutants
 	 */
-	public int getNumberOfMutants(){
+	public int getNumberOfMutants(Document xmlDoc){
 		//list of nodes with element name of mutant
 		listOfMutants = xmlDoc.getElementsByTagName("mutant");
 		return listOfMutants.getLength();
 	}
-	//I need??
+
 	/**
 	 * Gets the number of classes in the xml file.
 	 *
 	 * @return the number of classes
 	 */
-	public int getNumberOfClasses(){
+	public int getNumberOfClasses(Document xmlDoc){
 		//list of nodes with element name of mutant
 		listOfClasses = xmlDoc.getElementsByTagName("class");
 		return listOfClasses.getLength();
@@ -100,15 +102,16 @@ public class ParseXML {
 	/**
 	 * Gets the mutant attributes.
 	 *
-	 * @param inputFileName the name of the input file
+	 * @param classPath the class path of the class file
 	 * @return the list of mutant attributes
 	 */
-	public ArrayList<IMutableObject> getMutantAttributes(String inputFileName){
+	public ArrayList<IMutableObject> getMutantAttributes(String classPath){
 		int numberOfAttributes;
 		String tempAttribute;
-		getXMLFile(inputFileName);
-        //Redo with the fancy enum type Mutant
-        for(int i = 0; i < getNumberOfMutants(); i++){
+		String inputFileName = getMutationsFileName(classPath);
+		Document xmlDoc = getXMLFile(inputFileName);
+
+        for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
 			mutant = (Element) listOfMutants.item(i);
 			NamedNodeMap mutantAtrributes = mutant.getAttributes();
         	numberOfAttributes = mutantAtrributes.getLength();
@@ -145,6 +148,43 @@ public class ParseXML {
 			System.out.println();
 		}
 		return mutationsList;
+	}
+	
+	
+	/**
+	 * Gets the name of the xml file containing mutations.
+	 *
+	 * @param classPath the class path .class file is located in
+	 * @return the name of the xml file 
+	 */
+	public String getMutationsFileName(String classPath){
+		String id = null;
+		setClassPath(classPath);
+		Document xmlDoc = getXMLFile("classes.xml");
+
+        for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
+        	Class = (Element) listOfClasses.item(i);
+			NamedNodeMap classAtrributes = Class.getAttributes();
+			if(classAtrributes.getLength() != 2) {
+				System.out.println("Class must have exactly two attributes.");
+				System.exit(0);
+			}
+			else{
+				Attr pathAttribute = (Attr)classAtrributes.item(1);
+				if(pathAttribute.getNodeValue().equals(classPath)){
+					Attr idAttribute = (Attr)classAtrributes.item(0);
+					id = idAttribute.getNodeValue()+".xml";
+				}
+			}
+		}		
+		return id;
+	}
+	
+	public void setClassPath(String classPath) {
+		this.pathOfClassFile = classPath;
+	}
+	public void storeMutations(){
+		
 	}
 	
 }
