@@ -7,25 +7,25 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import mutations.MutantCollection;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class MutationsSelected extends JPanel implements ActionListener {
 	MutantCollection mc;
-	private MutationsSelectedRow lastSelected;
+	private DefaultListModel listModel;
 	
-	private MutationsSelectedRow rows[] = {
-			new MutationsSelectedRow("ClassName1", null),
-			new MutationsSelectedRow("ClassName2", null),
-			new MutationsSelectedRow("ClassName3", null),
-	};
-	
-	private JList list = new JList(rows);
+	private JList list;
 	
 	public MutationsSelected() {
+		listModel = new DefaultListModel();
+		listModel.addElement(new MutationsSelectedRow("ClassName1", null));
+		listModel.addElement(new MutationsSelectedRow("ClassName2", null));
+		
 		//setLayout(new BorderLayout());
 		setLayout(new GridBagLayout());
 		
-		list = new JList(rows);
+		list = new JList(listModel);
 		list.setCellRenderer(new MutationsSelectedCellRenderer());
 		//list.setVisibleRowCount(2);
 		JScrollPane pane = new JScrollPane(list);
@@ -50,7 +50,7 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		d.gridy = 1;
 		
 		add(button, d);
-		
+		/*
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -64,23 +64,18 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		              System.out.println(" Selections: ");
 		            }
 		            System.out.println(selections[i] + "/" + selectionValues[i] + " ");
+		            lastIndex = selections[i];
 		            lastSelected = (MutationsSelectedRow) selectionValues[i];
 		          }
 		        }
 			}
-	});
+	});*/
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		System.out.println("Generate: " + lastSelected);
-	}
-	
-	public MutationsSelectedRow findRow(int index){
-		MutationsSelectedRow ss = rows[0];
-		
-		System.out.println(ss.className);
-		
-		return ss;
+		System.out.println("Index: " + list.getSelectedIndex());
+		MutationsSelectedRow oRow = (MutationsSelectedRow)list.getSelectedValue();
+		System.out.println("Generate: " + oRow);
 	}
 
 	public static void main(String[] args) {
