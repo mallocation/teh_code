@@ -42,6 +42,10 @@ public class MutantCollection {
 		this.alMutants.add(oMutant);
 	}
 	
+	public void removeMutant(IMutableObject oMutant) {
+		this.alMutants.remove(oMutant);
+	}
+	
 	/**
 	 * Return the mutants in this collection.
 	 * 
