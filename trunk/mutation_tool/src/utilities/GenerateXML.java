@@ -53,12 +53,12 @@ public class GenerateXML {
         oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "/", "+");
         oXML.createMutationsXMLEntry("CLASS", "", "ARITHMETIC", "-", "*");
         oXML.createMutationsXMLEntry("METHOD", "methodName", "RELATIONAL", ">", "<");
-        oXML.outputMutantsXML(oXML.idFileName+".xml");
+        //oXML.outputMutantsXML(oXML.idFileName+".xml");
 
-     	oXML.appendToClassXMLFile("classes.xml", "class");
+     	//oXML.appendToClassXMLFile("classes.xml", "class");
         //oXML.outputAppendedXML("classes.xml");
-     	oXML.outputClassesXML("classes.xml");
-
+     	oXML.outputMutantsXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + oXML.idFileName+".xml");
+    	oXML.outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
      	
     }
 
@@ -78,6 +78,7 @@ public class GenerateXML {
             System.out.println(e);
         }
     }
+    
     
 
 	/**
@@ -280,12 +281,16 @@ public class GenerateXML {
      * @param listOfMutations the array list of mutations associated with the class file in the classPath.
      * @throws URISyntaxException 
      */
-    public void createMutationsXML(MutantCollection listOfMutations, String classPath){
+    public void createMutationsXML(MutantCollection listOfMutations, String classPath, String pathToSave){
+    	boolean status;
+		status = new File(pathToSave).mkdirs();
+		status = new File(pathToSave + "/mutants/").mkdirs();
     	IMutableObject tempMutant = new Mutant();
     	createClassesXMLRoot();
+    	outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
     	createMutationsXMLRoot();
     	createClassesXMLEntry(classPath,"");
-    	appendToClassXMLFile("classes.xml", "class");
+    	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", "class");
     	String tempLevel, tempName, tempType, tempOld, tempNew;
     	
     	for(int i = 0; i < listOfMutations.getMutants().size(); i++){
@@ -302,7 +307,18 @@ public class GenerateXML {
     		createMutationsXMLEntry(tempLevel, tempName, tempType, tempOld, tempNew);
     	}
     	
-    	outputMutantsXML(idFileName+".xml");
-    	outputClassesXML("classes.xml");
+    	outputMutantsXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + idFileName+".xml");
+    	outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
