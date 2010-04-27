@@ -14,6 +14,7 @@ public class MutationsSelectedRow extends JPanel {
 	public String imagePath;
 	public ImageIcon image;
 	public MutantCollection mutant;
+	private JLabel cn, mc, im;
 	
 	public MutationsSelectedRow(JavaClass rClass, boolean isExported){
 		this.oClass = rClass;
@@ -26,11 +27,11 @@ public class MutationsSelectedRow extends JPanel {
 		this.mutant = new MutantCollection();
 		//this.mutationCount = Integer.toString(mutants.getCollectionCount());
 		
-		//JLabel cn = new JLabel(rClass.toString());
-		JLabel cn = new JLabel("ClassName1");
-		//JLabel mc = new JLabel(" (Mutation Count: " + this.mutant.getCollectionCount() + ")");
-		JLabel mc = new JLabel(" (Mutation Count: 1111)");
-		JLabel im = new JLabel(new ImageIcon(this.getClass().getResource(this.imagePath)));
+		cn = new JLabel(rClass.getClassName());
+		//JLabel cn = new JLabel("ClassName1");
+		mc = new JLabel(" (Mutation Count: " + this.mutant.getCollectionCount() + ")");
+		//JLabel mc = new JLabel(" (Mutation Count: 1111)");
+		im = new JLabel(new ImageIcon(this.getClass().getResource(this.imagePath)));
 		
 		this.add(im);
 		this.add(cn);
@@ -62,9 +63,16 @@ public class MutationsSelectedRow extends JPanel {
 	
 	public void addMutableObj(IMutableObject mObject){
 		this.mutant.addMutant(mObject);
+		this.updateMutationCount();		
 	}
 	
 	public void removeMutableObj(IMutableObject mObject){
 		this.mutant.removeMutant(mObject);
+		this.updateMutationCount();
+	}
+	
+	private void updateMutationCount() {
+		this.mc.setText(" (Mutation Count: " + this.mutant.getCollectionCount() + ")");
+		this.repaint();
 	}
 }
