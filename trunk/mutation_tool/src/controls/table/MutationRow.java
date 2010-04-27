@@ -2,6 +2,7 @@ package controls.table;
 
 import interfaces.IMutableObject;
 import interfaces.IMutationRowActor;
+import interfaces.IMutationRowListener;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -54,8 +55,9 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	
 	private IMutationRowActor oPropertiesPanel;
 	
+	private IMutationRowListener oRowListener;
 	
-	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel) {
+	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
 		// Create right-click properties
 		popupOptions = new JPopupMenu();
 		menuViewDiff = new JMenuItem("View Byte Code...");
@@ -65,6 +67,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		
 		this.oMutableObject = oObject;
 		this.oPropertiesPanel = oPropertiesPanel;
+		this.oRowListener = oGeneratePanel;
 		
 
 		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
@@ -118,7 +121,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		
 		this.setBackground(rowBgColor);
 		chkCreateMutation.setBackground(rowBgColor);
-		
+		chkCreateMutation.addActionListener(this);
 
 		
 		this.setPreferredSize(oRowDimension);
@@ -182,6 +185,12 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 			// TODO only let them open the bytecodeviewer once
 			if (oDiffViewer == null) {
 				oDiffViewer = new ByteCodeViewer(this.getMutableObject().getMutableClass(), this.getMutableObject().getMutableClass());
+			}
+		} else if (oActionObject.equals(chkCreateMutation)) {
+			if (this.isSelected()) {
+				oRowListener.mutableObjectSelected(this.getMutableObject());
+			} else {
+				oRowListener.mutableObjectUnSelected(this.getMutableObject());
 			}
 		}
 		
