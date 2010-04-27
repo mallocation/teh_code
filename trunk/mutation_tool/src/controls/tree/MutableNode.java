@@ -9,6 +9,12 @@ public class MutableNode extends DefaultMutableTreeNode {
 	
 	private JavaClass oMutableClass;
 	private Method oMutableMethod;
+	
+	public MutableNode(String nodeDisplay) {
+		super(nodeDisplay);
+		this.oMutableClass = null;
+		this.oMutableMethod = null;
+	}
 
 	/**
 	 * Construct a tree node for a class.

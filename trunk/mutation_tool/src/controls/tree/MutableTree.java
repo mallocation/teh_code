@@ -48,29 +48,24 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	/**
 	 * Tree cell renderer.
 	 */
-	private DefaultTreeCellRenderer oTreeRenderer;
+	private MutableNodeRenderer oTreeRenderer;
 	
 	/**
 	 * Root node of the tree.  This should show 'No classes found.'
 	 */
-	private DefaultMutableTreeNode oRootNode;
-	
-	/**
-	 * Image for class nodes.
-	 */
-	private ImageIcon imgClass;// = new ImageIcon(getClass().getResource("../images/ClassTree.png"));
-	
-	/**
-	 * Image for method nodes.
-	 */
-	private ImageIcon imgMethod;// = new ImageIcon(getClass().getResource("../images/MethodTree.png"));
+	private MutableNode oRootNode;
 	
 	/**
 	 * Constructs a new mutable tree with no classes loaded.
 	 */
 	public MutableTree() {
-		// Call the JTree constructor.
-		super();
+		this.setModel(null);
+
+		// Create the root node, stating 'No classes loaded.'
+		this.oRootNode = new MutableNode("No classes loaded.");
+	    // Create the tree model with the root node
+		this.oTreeModel = new DefaultTreeModel(oRootNode);
+		
 		
 		// Clear the list of mutable classes that are represented in this tree
 		alMutableClasses = new ArrayList<JavaClass>();
@@ -78,31 +73,17 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		// Create an array list for all of the tree selection listeners.
 		alTreeSelectionListeners = new ArrayList<IMutableTreeListener>();
 
-		// Load the Class and Method images
-		imgClass = new ImageIcon(getClass().getResource("../../images/ClassTree.png"));
-		imgMethod = new ImageIcon(getClass().getResource("../../images/MethodTree.png"));
-		
 		// Create the tree cell renderer.
 	    oTreeRenderer = new MutableNodeRenderer();
-	    oTreeRenderer.setOpenIcon(imgClass);
-	    oTreeRenderer.setClosedIcon(imgClass);
-	    oTreeRenderer.setLeafIcon(imgClass);
-	    oTreeRenderer.setIcon(imgClass);
-
-	    // No need to show the handle for roots
-	    this.setShowsRootHandles(true);
 	    
-	    // Create the root node, stating 'No classes loaded.'
-	    oRootNode = new DefaultMutableTreeNode("No classes loaded.");
-	
-	    // Create the tree model with the root node
-		oTreeModel = new DefaultTreeModel(oRootNode);
-
+		// Set the cell renderer
+		this.setCellRenderer(oTreeRenderer);
+		
 		// Set the tree model with the model containing the root node
 		this.setModel(oTreeModel);
 
-		// Set the cell renderer
-		this.setCellRenderer(oTreeRenderer);
+	    // No need to show the handle for roots
+	    this.setShowsRootHandles(true);
 		
 		// Only one selection at a time!
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -111,7 +92,7 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		this.addTreeSelectionListener(this);
 		
 		// Draw the objects
-		drawMutableObjects();
+		//drawMutableObjects();
 		
 //		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
 //		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
@@ -130,10 +111,13 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	public void addMutableClassToTree(JavaClass oJavaClass) {
 		JavaClass oClassToAdd = oJavaClass.copy();
 		this.alMutableClasses.add(oClassToAdd);
-		//sortMutableClasses();
-		//drawMutableObjects();
-		this.oRootNode.add(new MutableNode(oClassToAdd));
-		this.repaint();
+		MutableNode oNewClassNode = new MutableNode(oClassToAdd);
+		for (int i=0; i<oClassToAdd.getMethods().length; i++) {
+			new MutableNode(oClassToAdd.getMethods()[i], oNewClassNode);			
+		}
+		oTreeModel.insertNodeInto(oNewClassNode, this.oRootNode, this.oRootNode.getChildCount());
+		oTreeModel.reload();
+		this.setRootVisible(false);
 	}
 	
 	/**
@@ -147,7 +131,7 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	 * Clear all nodes in the tree, leaving the root node intact.
 	 */
 	private void clearTree() {
-		oRootNode.removeAllChildren();
+		//oRootNode.removeAllChildren();
 	}
 	
 	/**
@@ -160,8 +144,8 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		// Clear the tree
 		clearTree();
 		
-		// If there are classes to show, then don't show the root node (stating that no classes are loaded.)
-		//	Otherwise, show the root node
+//		 If there are classes to show, then don't show the root node (stating that no classes are loaded.)
+//			Otherwise, show the root node
 //		if (alMutableClasses.size() == 0)
 //			this.setRootVisible(true);
 //		else
@@ -174,7 +158,7 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 			for (int j=0; j < arMethods.length; j++) {
 				new MutableNode(arMethods[j], mutableClassNode);
 			}
-			oRootNode.add(mutableClassNode);
+			//oRootNode.add(mutableClassNode);
 		}
 		this.repaint();
 	}

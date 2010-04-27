@@ -15,14 +15,39 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 
-public class MutableNodeRenderer extends DefaultTreeCellRenderer {
+public class MutableNodeRenderer extends JLabel implements TreeCellRenderer {
+	private static final String sImgClassTree = "../../images/ClassTree.png";
+	private static final String sImgMethodTree = "../../images/MethodTree.png";
+	private ImageIcon imgClass, imgMethod;
+	private DefaultTreeCellRenderer oDefaultRenderer;
+	
+	public MutableNodeRenderer () {
+		imgClass = new ImageIcon(getClass().getResource(sImgClassTree));
+		imgMethod = new ImageIcon(getClass().getResource(sImgMethodTree));
+		oDefaultRenderer = new DefaultTreeCellRenderer();
+	}
+	
+	
 	
 	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
-			return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);			
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+			MutableNode oNode = (MutableNode)value;
+			if (oNode.getMutableMethod() != null) {
+				this.setText(oNode.getMutableMethod().getName());
+				this.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+				this.setIcon(imgMethod);
+			} else if (oNode.getMutableClass() != null) {
+				this.setText(oNode.getMutableClass().getClassName());
+				this.setIcon(imgClass);
+			}
+			this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+			return this;
+//		} else {
+//			return oDefaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+//		}
 	}
+	
+
 
 //	private JLabel oNodeLabel;
 //	private Color bgNotSelectedColor;
