@@ -21,30 +21,27 @@ public class MutationsSelected extends JPanel implements ActionListener {
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
 		
-		setLayout(new GridBagLayout());
+		listModel.addElement(new MutationsSelectedRow(null, true));
+		listModel.addElement(new MutationsSelectedRow(null, false));
+		
+		//setLayout(new GridBagLayout());
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
 		list = new JList(listModel);
 		list.setCellRenderer(new MutationsSelectedCellRenderer());
 		//list.setVisibleRowCount(2);
 		JScrollPane pane = new JScrollPane(list);
+		pane.setPreferredSize(new Dimension(240,700));
+		add(pane);
 		
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.anchor=GridBagConstraints.PAGE_START;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(pane, c);
 		
 		//Create "Generate" button
 		JButton button = new JButton("Generate");
 		button.addActionListener(this);
+		button.setAlignmentX(CENTER_ALIGNMENT);
+		add(button);
 		
-		GridBagConstraints d = new GridBagConstraints();
-		d.fill = GridBagConstraints.HORIZONTAL;
-		d.anchor = GridBagConstraints.PAGE_END;
-		d.gridx = 0;
-		d.gridy = 1;
-		add(button, d);
+		this.setVisible(true);
 	}
 	
 	public void addMutation(IMutableObject mObject){
@@ -55,7 +52,7 @@ public class MutationsSelected extends JPanel implements ActionListener {
 				return;
 			}
 		}
-		MutationsSelectedRow tempRow = new MutationsSelectedRow(mObject.getMutableClass());
+		MutationsSelectedRow tempRow = new MutationsSelectedRow(mObject.getMutableClass(), false);
 		listModel.addElement(tempRow);
 		tempRow.addMutableObj(mObject);
 	}
@@ -78,12 +75,12 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		MutationsSelectedRow oRow = (MutationsSelectedRow)list.getSelectedValue();
 		System.out.println("Generate: " + oRow);
 	}
-
+/*
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Selected Mutations");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(new MutationsSelected());
-		frame.setSize(new Dimension(300,300));
+		frame.pack();
 		frame.setVisible(true);
-	}
+	}*/
 }
