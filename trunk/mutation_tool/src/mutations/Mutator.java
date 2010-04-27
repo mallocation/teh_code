@@ -391,7 +391,8 @@ public class Mutator {
 			performMutation(tmpMutableObject, true);
 		}
 		GenerateXML xmlGenerator = new GenerateXML();
-		xmlGenerator.createMutationsXML(oMutantsToGenerate, oMutantsToGenerate.getClass().getProtectionDomain().getCodeSource().getLocation().toString(),  System.getProperty("user.dir") + "/persistentStorage/generated_XML/");
+		String classPath = oMutantsToGenerate.getMutants().iterator().next().getMutableClass().getFileName();
+		xmlGenerator.createMutationsXML(oMutantsToGenerate, classPath,  System.getProperty("user.dir") + "/persistentStorage/generated_XML/");
 	}
 }
 
