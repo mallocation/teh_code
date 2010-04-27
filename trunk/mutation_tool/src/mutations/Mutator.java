@@ -1,10 +1,9 @@
 package mutations;
 
 import java.util.*;
-
+import java.io.File;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import sun.tools.jconsole.CreateMBeanDialog;
 import interfaces.IMutableObject;
 import utilities.GenerateXML;
 
@@ -287,11 +286,12 @@ public class Mutator {
 	 * Changes all instances of the old operator to the new operator
 	 * within a specific class file.
 	 */
-	public static void performMutation(IMutableObject oMutableObject) {
+
+	public static void performMutation(IMutableObject oMutableObject, boolean writeToFile ) {
 		int nMutations = 0;
 		parseArguments(oMutableObject);
 		oInstHelper = new cInstructionHelper();
-		System.out.println("Changing all instances of \"" + sOldOperator + "\" to \"" + sNewOperator + "\" in " + oClass.getClassName());
+		//System.out.println("Changing all instances of \"" + sOldOperator + "\" to \"" + sNewOperator + "\" in " + oClass.getClassName());
 	
 		oConstantPoolGen = oClassGen.getConstantPool();
 		arMethods = oClassGen.getMethods();
@@ -351,29 +351,47 @@ public class Mutator {
 				il.dispose();
 			
 		}		
-		System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");	
-		//dumpClass();
+		String idFileName = Long.toString(System.nanoTime());
+	//	System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");
+		if(writeToFile){
+			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", idFileName);
+		}
 	}
 
 	/**
-	 * Dumps the modified class to the program directory.
+	 * Dumps the modified class to the directory 'path' + 'idFileName' + '.class'.
+	 * @param <code>path</code> The path to dump the class to
+	 * @param <code>idFileName</code> The file name to dump the class to.
 	 */
-	public static void dumpClass() {
+	public static void dumpClass(String path, String idFileName) {
+		boolean status;
+		status = new File(path).mkdirs();
+		
 		try {
-			oClassGen.getJavaClass().dump("/Users/Pavel/Documents/workspace/mutation_tool/src/mutations/" + oClass.getClassName() + ".class");
+			oClassGen.getJavaClass().dump(path + oClass.getClassName() + "/" + idFileName + ".class");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+
 	}
 	
+	/**
+	 * Generates all persistent XML code and mutations.  XML Code is generated using
+	 * GenerateXML.java, and mutations are generated and stored in a pre-determined directory 
+	 * specified in 'performMutation()' with subdirectories named by the class name being mutated.  The 
+	 * actual mutants are created within the directories named by class name.  These mutations
+	 * have a 'randomly' generated numerical name (done using System.time).
+	 * Assumption:   oMutantsToGenerate are all mutations on the same file.
+	 * @param <code>oMutantsToGenerate</code> The MutantCollenction containing all IMutableObjects that will be used for creating mutations.
+	 */
 	public static void generate(MutantCollection oMutantsToGenerate){
 		Iterator<IMutableObject> iterator = oMutantsToGenerate.getMutants().iterator();
 		while(iterator.hasNext()){
 			IMutableObject tmpMutableObject = iterator.next();
-			performMutation(tmpMutableObject);
+			performMutation(tmpMutableObject, true);
 		}
 		GenerateXML xmlGenerator = new GenerateXML();
-		xmlGenerator.createMutationsXML(oMutantsToGenerate, "/Users/Pavel/Documents/workspace/mutation_tool");
+		xmlGenerator.createMutationsXML(oMutantsToGenerate, oMutantsToGenerate.getMutants().iterator().next().getClass().getCanonicalName(),  System.getProperty("user.dir") + "/persistentStorage/generated_XML/");
 	}
 }
 
