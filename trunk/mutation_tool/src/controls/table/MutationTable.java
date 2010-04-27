@@ -4,6 +4,7 @@ import interfaces.IMutableObject;
 import interfaces.IMutableTreeListener;
 import interfaces.IMutationFilterListener;
 import interfaces.IMutationRowActor;
+import interfaces.IMutationRowListener;
 import mutations.MutantCollection;
 
 import java.awt.Component;
@@ -24,10 +25,13 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	
 	private IMutationRowActor oPropertiesPanel;
 	
-	public MutationTable(IMutationRowActor oPropertiesPanel) {
+	private IMutationRowListener oRowListener;
+	
+	public MutationTable(IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.oPropertiesPanel = oPropertiesPanel;
+		this.oRowListener = oGeneratePanel;
 	}
 	
 	/**
@@ -79,7 +83,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
 			IMutableObject oMutableObject = alMutableObjects.getMutants().get(i);
 			boolean bAltRow = (i%2 == 0) ? false : true;
-			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel));
+			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel, oRowListener));
 		}
 		showAllMutableRows();
 	}
