@@ -77,6 +77,7 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 			for (int i=0; i<this.listModel.getSize(); i++) {
 				MutationsSelectedRow oRow = (MutationsSelectedRow)this.listModel.getElementAt(i);
 				Mutator.generate(oRow.getMutationCollection());
+				oRow.setExported(true);
 			}
 		}
 	}
