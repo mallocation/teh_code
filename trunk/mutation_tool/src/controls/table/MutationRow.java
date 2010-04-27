@@ -1,6 +1,7 @@
 package controls.table;
 
 import interfaces.IMutableObject;
+import interfaces.IMutationRowActor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,8 +52,10 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	
 	private IMutableObject oMutableObject;
 	
+	private IMutationRowActor oPropertiesPanel;
 	
-	public MutationRow(IMutableObject oObject, boolean bAltRow, ActionListener oTableListener) {
+	
+	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel) {
 		// Create right-click properties
 		popupOptions = new JPopupMenu();
 		menuViewDiff = new JMenuItem("View Byte Code...");
@@ -61,6 +64,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		oDiffViewer = null;
 		
 		this.oMutableObject = oObject;
+		this.oPropertiesPanel = oPropertiesPanel;
 		
 
 		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
@@ -80,7 +84,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		
 		rowBgColor = bAltRow ? new Color(235,245,255) : new Color(255, 255, 255);
 		
-		chkCreateMutation.addActionListener(oTableListener);
+//		chkCreateMutation.addActionListener(oTableListener);
 		chkCreateMutation.addMouseListener(this);
 		this.addMouseListener(this);
 		
@@ -147,6 +151,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 //			this.setBackground(Color.BLUE);
 //			this.bIsHighlighted = true;
 //		}
+		oPropertiesPanel.updatePropertiesPanel(this.oMutableObject);
 	}
 
 	@Override
