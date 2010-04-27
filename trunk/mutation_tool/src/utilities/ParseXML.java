@@ -182,17 +182,17 @@ public class ParseXML {
         for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
         	Class = (Element) listOfClasses.item(i);
 			NamedNodeMap classAtrributes = Class.getAttributes();
-			//if(classAtrributes.getLength() != 2) {
-			//	System.out.println("Class must have exactly two attributes.");
-			//	System.exit(0);
-			//}
-			//else{
+			if(classAtrributes.getLength() != 2) {
+				System.out.println("Class must have exactly two attributes.");
+				System.exit(0);
+			}
+			else{
 				Attr pathAttribute = (Attr)classAtrributes.item(1);
 				if(pathAttribute.getNodeValue().equals(classPath)){
 					Attr idAttribute = (Attr)classAtrributes.item(0);
 					id = idAttribute.getNodeValue()+".xml";
 				}
-			//}
+			}
 		}		
         System.out.println(id);
 		return id;
