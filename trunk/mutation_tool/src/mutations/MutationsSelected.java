@@ -18,6 +18,7 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 	MutantCollection mc;
 	private DefaultListModel listModel;
 	private JList list;
+	private JButton button; 
 	
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
@@ -32,12 +33,12 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		list.setCellRenderer(new MutationsSelectedCellRenderer());
 		//list.setVisibleRowCount(2);
 		JScrollPane pane = new JScrollPane(list);
-		pane.setPreferredSize(new Dimension(240,700));
+		pane.setPreferredSize(new Dimension(240,500));
 		add(pane);
 		
 		
 		//Create "Generate" button
-		JButton button = new JButton("Generate");
+		button = new JButton("Generate");
 		button.addActionListener(this);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		add(button);
@@ -72,9 +73,12 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		System.out.println("Index: " + list.getSelectedIndex());
-		MutationsSelectedRow oRow = (MutationsSelectedRow)list.getSelectedValue();
-		System.out.println("Generate: " + oRow);
+		if (e.getSource().equals(button)) {
+			for (int i=0; i<this.listModel.getSize(); i++) {
+				MutationsSelectedRow oRow = (MutationsSelectedRow)this.listModel.getElementAt(i);
+				Mutator.generate(oRow.getMutationCollection());
+			}
+		}
 	}
 /*
 	public static void main(String[] args) {
