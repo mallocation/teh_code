@@ -2,6 +2,8 @@ package utilities;
 
 import interfaces.IMutableObject;
 import mutations.Mutant;
+import mutations.MutantCollection;
+
 import java.io.*;
 import java.util.ArrayList;
 import org.w3c.dom.*;
@@ -19,7 +21,7 @@ public class ParseXML {
 	private NodeList listOfMutants;
 	private NodeList listOfClasses;
 	private IMutableObject tempMutant;
-	public ArrayList<IMutableObject> mutationsList;
+	public  MutantCollection mutationsList;
 	private Element mutant;
 	private Element Class;
 	private String pathOfClassFile;
@@ -31,11 +33,15 @@ public class ParseXML {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-//		ParseXML oXMLParse = new ParseXML();
-//        //oXMLParse.getXMLFile("mutations.xml");
-//        oXMLParse.getMutantAttributes("/blah/blah");
-//        GenerateXML oXML = new GenerateXML();
-//        oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
+		ParseXML oXMLParse = new ParseXML();
+        //oXMLParse.getXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+        oXMLParse.getMutantAttributes(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+        
+        
+        //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
+        //oXMLParse.getMutantAttributes("/blah/blah");
+        //GenerateXML oXML = new GenerateXML();
+       // oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
 	}
 
 	/**
@@ -47,7 +53,7 @@ public class ParseXML {
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
         	tempMutant = new Mutant();
-        	this.mutationsList = new ArrayList<IMutableObject>();
+        	this.mutationsList = new MutantCollection();
         	
         } catch (Exception e) {
 
@@ -58,7 +64,7 @@ public class ParseXML {
 	/**
 	 * Opens xml file and create a Document from it.
 	 *
-	 * @param inputFileName the name of the input file
+	 * @param inputFileName the name of the input file with absolute path
 	 * @return the XML Document
 	 */
 	public Document getXMLFile(String inputFileName){
@@ -113,11 +119,12 @@ public class ParseXML {
 	 * @param classPath the class path of the class file
 	 * @return the list of mutant attributes
 	 */
-	public ArrayList<IMutableObject> getMutantAttributes(String classPath){
+	public MutantCollection getMutantAttributes(String classPath){
 		int numberOfAttributes;
 		String tempAttribute;
 		String inputFileName = getMutationsFileName(classPath);
-		
+		//DEBUG
+		System.out.println(classPath);
 		Document xmlDoc = getXMLFile(inputFileName);
 
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
@@ -154,7 +161,7 @@ public class ParseXML {
 				
 			}
 			
-			mutationsList.add(tempMutant);
+			mutationsList.getMutants().add(tempMutant);
 			System.out.println();
 		}
 		return mutationsList;
@@ -170,23 +177,24 @@ public class ParseXML {
 	public String getMutationsFileName(String classPath){
 		String id = null;
 		setClassPath(classPath);
-		Document xmlDoc = getXMLFile("classes.xml");
-
+		Document xmlDoc = getXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+		System.out.println(getNumberOfClasses(xmlDoc));
         for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
         	Class = (Element) listOfClasses.item(i);
 			NamedNodeMap classAtrributes = Class.getAttributes();
-			if(classAtrributes.getLength() != 2) {
-				System.out.println("Class must have exactly two attributes.");
-				System.exit(0);
-			}
-			else{
+			//if(classAtrributes.getLength() != 2) {
+			//	System.out.println("Class must have exactly two attributes.");
+			//	System.exit(0);
+			//}
+			//else{
 				Attr pathAttribute = (Attr)classAtrributes.item(1);
 				if(pathAttribute.getNodeValue().equals(classPath)){
 					Attr idAttribute = (Attr)classAtrributes.item(0);
 					id = idAttribute.getNodeValue()+".xml";
 				}
-			}
+			//}
 		}		
+        System.out.println(id);
 		return id;
 	}
 	
