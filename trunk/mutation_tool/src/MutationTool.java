@@ -57,7 +57,7 @@ public class MutationTool extends JFrame implements ActionListener
 	
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//this.pack();
-		this.setSize(1062,800);
+		this.setSize(1080,700);
 		this.setVisible(true);
 	}
 	
