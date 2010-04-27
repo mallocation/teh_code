@@ -23,6 +23,7 @@ import utilities.ClassLoader;
 import controls.tree.MutableTree;
 import controls.table.MutationTable;
 import controls.table.MutationTableFilter;
+import controls.table.PropertiesPanel;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -35,15 +36,16 @@ public class MutationTool extends JFrame implements ActionListener
 	//------------------------------------------
 	
 	
-	
 	//------------------------------------------
 	// GUI declarations
 	//------------------------------------------
 	MutableTree oMutableTree;
 	MutationTable oMutationTable;
 	IMutableTreeListener oTreeListener = new MutableTreeListenerExample();
+	PropertiesPanel oPropertiesPanel;
 	
 	public MutationTool(){
+		this.setTitle("Mutation Tool");
 		createMenu();
 		
 		createFrames();
@@ -63,14 +65,6 @@ public class MutationTool extends JFrame implements ActionListener
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem fileMenuOpen = new JMenuItem("Open");
 		JMenuItem fileMenuExit = new JMenuItem("Exit");
-		//subMenu.setMnemonic(KeyEvent.VK_S);
-
-		//JMenuItem menuItem = new JMenuItem("SubMenu Item");
-		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
-		//subMenu.add(menuItem);
-
-		//JMenuItem menuItem2 = new JMenuItem("SubMenu Item 2");
-		//subMenu.add(menuItem2);
 
 		//add action listeners
 		fileMenuOpen.addActionListener(this);
@@ -89,20 +83,14 @@ public class MutationTool extends JFrame implements ActionListener
 		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		oMutableTree.setPreferredSize(new Dimension(250,800));
 		oMutableTree.addMutableNodeSelectionListener(oTreeListener);
-//		JPanel panel = new JPanel();
-//		panel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-//		panel.add(new Label("Jar, Class, Method Select Panel"));
-//		panel.setPreferredSize(new Dimension(250,800));
+		
+		oPropertiesPanel = new PropertiesPanel();
+		
 		
 		MutationTableFilter oTableFilter = new MutationTableFilter();
-		oMutationTable = new MutationTable();
-		//oMutationTable.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		//oMutationTable.setPreferredSize(new Dimension(400, 800));
+		oMutationTable = new MutationTable(oPropertiesPanel);
 		oTableFilter.addMutationFilterListener(oMutationTable);
 		JPanel panel2 = new JPanel();
-		//panel2.add(new Label("Mutation Table Panel"));
-		//panel2.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		//panel2.setPreferredSize(new Dimension(500,800));
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
 		panel2.add(oTableFilter);
 		JScrollPane oTablePane = new JScrollPane(oMutationTable);
@@ -110,6 +98,8 @@ public class MutationTool extends JFrame implements ActionListener
 		oTablePane.getVerticalScrollBar().setUnitIncrement(10);
 		panel2.add(oTablePane);
 		oMutableTree.addMutableNodeSelectionListener(oMutationTable);
+		panel2.add(oPropertiesPanel);
+		
 		
 		JPanel panel3 = new JPanel();
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
@@ -122,9 +112,6 @@ public class MutationTool extends JFrame implements ActionListener
 
 		this.getContentPane().add(oMutableTree, BorderLayout.WEST);
 		this.getContentPane().add(panel2, BorderLayout.CENTER);
-//		JScrollPane oTableScrollPane = new JScrollPane(oMutationTable);
-//		oTableScrollPane.getVerticalScrollBar().setUnitIncrement(100);
-		//this.getContentPane().add(oTableScrollPane, BorderLayout.CENTER);
 		
 		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
