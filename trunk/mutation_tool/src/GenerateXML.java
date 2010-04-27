@@ -1,5 +1,6 @@
 import interfaces.IMutableObject;
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -162,17 +163,29 @@ public class GenerateXML {
     	    // Prepare the DOM document for writing
     		Source source = new DOMSource(outputDoc);
    	        // Prepare the output file
-    		File oFile = new File(outputFile);
+    		URI oTest = new URI(getClass().getResource("teh_c0d3_xml/").toURI().toString()+outputFile);
+    		File oFile = new File(oTest);
    	        Result result = new StreamResult(oFile);
    	        // Write the DOM document to the file
    	        Transformer xformer = TransformerFactory.newInstance().newTransformer();
    	        xformer.transform(source, result);
     	    } catch (TransformerConfigurationException e) {
     	    } catch (TransformerException e) {
-    	    }
+    	    } catch (NullPointerException e){
+    	    	System.out.println("...");
+    	    	createDirectory(outputFile, outputDoc);
+   	    }
     }
 
-    
+    public void createDirectory(String outputFile, Document outputDoc){
+    	try{
+    		String directory = "/teh_c0d3_xml/";
+    		new File(directory).mkdir();
+    	}catch (Exception e) {
+    		System.err.println("Error: " +e.getMessage());
+    	}
+    	
+    }
 
     /**
      * Creates the root of the mutations xml file.
