@@ -85,17 +85,20 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	}
 
 	@Override
-	public void filterMutations(String mutantType, String oldOp, String newOp) {
+	public void filterMutations(String mutantSearch, String mutantType, String oldOp, String newOp) {
 		for (int i=0; i<alMutableRows.size(); i++) {
 			MutationRow oRow = alMutableRows.get(i);
-			
+
+			String matchSearchTerm = oRow.getMutableObject().getMutableMethod() == null ? oRow.getMutableObject().getMutableClass().getClassName() : oRow.getMutableObject().getMutableMethod().getName();
 			String matchMutant = mutantType.equals("") ? oRow.getMutableObject().getMutantTypeAsString() : mutantType;
 			String matchOldOp = oldOp.equals("") ? oRow.getMutableObject().getOldOperator() : oldOp;
 			String matchNewOp = newOp.equals("") ? oRow.getMutableObject().getNewOperator() : newOp;
+
 			
 			if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(matchMutant) &&
 					oRow.getMutableObject().getOldOperator().equals(matchOldOp) &&
-					oRow.getMutableObject().getNewOperator().equals(matchNewOp)) {
+					oRow.getMutableObject().getNewOperator().equals(matchNewOp) &&
+					matchSearchTerm.toLowerCase().contains(mutantSearch.toLowerCase())) {
 				oRow.setVisible(true);
 			} else {
 				oRow.setVisible(false);
