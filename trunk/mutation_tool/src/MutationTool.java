@@ -14,6 +14,8 @@
 
 import interfaces.IMutableTreeListener;
 
+import mutations.*;
+
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
@@ -102,8 +104,9 @@ public class MutationTool extends JFrame implements ActionListener
 		
 		
 		JPanel panel3 = new JPanel();
+		MutationsSelected oMutationsSelected = new MutationsSelected();
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		panel3.add(new Label("Selected Mutations Panel"));
+		panel3.add(oMutationsSelected);
 		panel3.setPreferredSize(new Dimension(250,800));
 				
 		BorderLayout borderLayout = new BorderLayout();
