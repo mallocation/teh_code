@@ -93,7 +93,8 @@ public class MutationTool extends JFrame implements ActionListener
 		
 		
 		MutationTableFilter oTableFilter = new MutationTableFilter();
-		oMutationTable = new MutationTable(oPropertiesPanel);
+		MutationsSelected oMutationsSelected = new MutationsSelected();
+		oMutationTable = new MutationTable(oPropertiesPanel, oMutationsSelected);
 		oTableFilter.addMutationFilterListener(oMutationTable);
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
@@ -107,15 +108,10 @@ public class MutationTool extends JFrame implements ActionListener
 		
 		
 		JPanel panel3 = new JPanel();
-		MutationsSelected oMutationsSelected = new MutationsSelected();
+
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		panel3.add(oMutationsSelected);
-		panel3.setPreferredSize(new Dimension(250,800));
-		JButton oButton = oMutationsSelected.getJButton();
-		oButton.addActionListener(this);
-	
-
-		
+		panel3.setPreferredSize(new Dimension(250,800));		
 				
 		BorderLayout borderLayout = new BorderLayout();
 		
@@ -157,14 +153,7 @@ public class MutationTool extends JFrame implements ActionListener
 			{
 				// The user wants to exit (quit)
 				System.exit(0);
-			}
-			
-		}else if(e.getSource() instanceof JButton){
-			String eventName = ((JButton) e.getSource()).getText();
-			if(eventName.equals("Generate")){
-				Mutator.generate(oMutationTable.getSelectedMutants());
-			}
-			
+			}			
 		}
 	}
 	
