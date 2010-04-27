@@ -85,7 +85,7 @@ public class ParseXML {
 			e.printStackTrace();
 			System.exit(0);
 		} catch (NullPointerException e){
-			System.out.println("Classes.xml is empty");
+			System.out.println("classes.xml is empty");
 			e.printStackTrace();
 		}
 		return null;
@@ -177,8 +177,7 @@ public class ParseXML {
 	public String getMutationsFileName(String classPath){
 		String id = null;
 		setClassPath(classPath);
-		Document xmlDoc = getXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
-		System.out.println(getNumberOfClasses(xmlDoc));
+		Document xmlDoc = getXMLFile(classPath);
         for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
         	Class = (Element) listOfClasses.item(i);
 			NamedNodeMap classAtrributes = Class.getAttributes();
