@@ -4,17 +4,19 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.Frame;
 import java.awt.event.*;
 import java.util.*;
+import mutations.MutantCollection;
 
 
 public class MutationsSelected extends JPanel implements ActionListener {
-
+	MutantCollection mc;
+	private MutationsSelectedRow lastSelected;
+	
 	private MutationsSelectedRow rows[] = {
-			new MutationsSelectedRow("ClassName1", "11", "../images/ClassTree.png"),
-			new MutationsSelectedRow("ClassName2", "23", "../images/ClassTree.png"),
-			new MutationsSelectedRow("ClassName3", "36", "../images/MethodTree.png")
+			new MutationsSelectedRow("ClassName1", null),
+			new MutationsSelectedRow("ClassName2", null),
+			new MutationsSelectedRow("ClassName3", null),
 	};
 	
 	private JList list = new JList(rows);
@@ -49,10 +51,36 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		
 		add(button, d);
 		
+		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+		        boolean adjust = e.getValueIsAdjusting();
+		        if (!adjust) {
+		          JList list = (JList) e.getSource();
+		          int selections[] = list.getSelectedIndices();
+		          Object selectionValues[] = list.getSelectedValues();
+		          for (int i = 0, n = selections.length; i < n; i++) {
+		            if (i == 0) {
+		              System.out.println(" Selections: ");
+		            }
+		            System.out.println(selections[i] + "/" + selectionValues[i] + " ");
+		            lastSelected = (MutationsSelectedRow) selectionValues[i];
+		          }
+		        }
+			}
+	});
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		//TODO - implement
+		System.out.println("Generate: " + lastSelected);
+	}
+	
+	public MutationsSelectedRow findRow(int index){
+		MutationsSelectedRow ss = rows[0];
+		
+		System.out.println(ss.className);
+		
+		return ss;
 	}
 
 	public static void main(String[] args) {
