@@ -1,5 +1,7 @@
 package mutations;
 
+import interfaces.IMutableObject;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -14,15 +16,11 @@ import java.util.Iterator;
 public class MutationsSelected extends JPanel implements ActionListener {
 	MutantCollection mc;
 	private DefaultListModel listModel;
-	
 	private JList list;
 	
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
-		listModel.addElement(new MutationsSelectedRow("ClassName1", null));
-		listModel.addElement(new MutationsSelectedRow("ClassName2", null));
 		
-		//setLayout(new BorderLayout());
 		setLayout(new GridBagLayout());
 		
 		list = new JList(listModel);
@@ -35,9 +33,7 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		c.anchor=GridBagConstraints.PAGE_START;
 		c.gridx = 0;
 		c.gridy = 0;
-		
 		add(pane, c);
-		
 		
 		//Create "Generate" button
 		JButton button = new JButton("Generate");
@@ -48,28 +44,33 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		d.anchor = GridBagConstraints.PAGE_END;
 		d.gridx = 0;
 		d.gridy = 1;
-		
 		add(button, d);
-		/*
-		list.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-		        boolean adjust = e.getValueIsAdjusting();
-		        if (!adjust) {
-		          JList list = (JList) e.getSource();
-		          int selections[] = list.getSelectedIndices();
-		          Object selectionValues[] = list.getSelectedValues();
-		          for (int i = 0, n = selections.length; i < n; i++) {
-		            if (i == 0) {
-		              System.out.println(" Selections: ");
-		            }
-		            System.out.println(selections[i] + "/" + selectionValues[i] + " ");
-		            lastIndex = selections[i];
-		            lastSelected = (MutationsSelectedRow) selectionValues[i];
-		          }
-		        }
+	}
+	
+	public void addMutation(IMutableObject mObject){
+		for(int i=0;i<listModel.getSize();i++){
+			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);
+			if(mObject.getMutableClass().equals(mRow.getJavaClass())){
+				mRow.addMutableObj(mObject);
+				return;
 			}
-	});*/
+		}
+		MutationsSelectedRow tempRow = new MutationsSelectedRow(mObject.getMutableClass());
+		listModel.addElement(tempRow);
+		tempRow.addMutableObj(mObject);
+	}
+	
+	public void removeMutation(IMutableObject mObject){
+		for(int i=0;i<listModel.getSize();i++){
+			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);
+			if(mObject.getMutableClass().equals(mRow.getJavaClass())){
+				mRow.removeMutableObj(mObject);
+				if (mRow.getMutationCollection().getCollectionCount() == 0){
+					listModel.removeElement(mRow);
+				}
+				return;
+			}
+		}
 	}
 	
 	public void actionPerformed(ActionEvent e){
