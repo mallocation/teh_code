@@ -1,9 +1,13 @@
 package mutations;
 
 import java.util.*;
+
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
-import interfaces.IMutableObject;;
+import sun.tools.jconsole.CreateMBeanDialog;
+import interfaces.IMutableObject;
+import utilities.GenerateXML;
+
 /**
  * Mutator performs dynamic operator mutations on a specific
  * class package, class file, or method in a class.  Its purpose is to change
@@ -348,8 +352,8 @@ public class Mutator {
 			
 		}		
 		System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");	
-		dumpClass();
-	}	
+		//dumpClass();
+	}
 
 	/**
 	 * Dumps the modified class to the program directory.
@@ -361,4 +365,28 @@ public class Mutator {
 			System.out.println(e);
 		}
 	}
+	
+	public static void generate(MutantCollection oMutantsToGenerate){
+		Iterator<IMutableObject> iterator = oMutantsToGenerate.getMutants().iterator();
+		while(iterator.hasNext()){
+			IMutableObject tmpMutableObject = iterator.next();
+			performMutation(tmpMutableObject);
+		}
+		GenerateXML xmlGenerator = new GenerateXML();
+		xmlGenerator.createMutationsXML(oMutantsToGenerate, "/Users/Pavel/Documents/workspace/mutation_tool");
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
