@@ -20,6 +20,8 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+import mutations.Mutator;
+
 import utilities.ClassLoader;
 
 import controls.tree.MutableTree;
@@ -41,6 +43,7 @@ public class MutationTool extends JFrame implements ActionListener
 	//------------------------------------------
 	// GUI declarations
 	//------------------------------------------
+	JButton oButton;
 	MutableTree oMutableTree;
 	MutationTable oMutationTable;
 	IMutableTreeListener oTreeListener = new MutableTreeListenerExample();
@@ -108,6 +111,11 @@ public class MutationTool extends JFrame implements ActionListener
 		panel3.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 		panel3.add(oMutationsSelected);
 		panel3.setPreferredSize(new Dimension(250,800));
+		JButton oButton = oMutationsSelected.getJButton();
+		oButton.addActionListener(this);
+	
+
+		
 				
 		BorderLayout borderLayout = new BorderLayout();
 		
@@ -139,17 +147,24 @@ public class MutationTool extends JFrame implements ActionListener
             		if (!ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {//if (oClassToOpen.canRead() == false || oClassToOpen.exists() == false || !ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {
             			JOptionPane.showMessageDialog(null, "File did not load successfully. Either the file\ndoes not exist, or it is not a valid class file.");
             			oClassToOpen = null;
-            		} else {            			
+            		} else {
             			oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(oClassToOpen.getAbsolutePath()));
             		}
             	}
             }
-			
+            
 			if (eventName.equals("Exit"))
 			{
 				// The user wants to exit (quit)
 				System.exit(0);
 			}
+			
+		}else if(e.getSource() instanceof JButton){
+			String eventName = ((JButton) e.getSource()).getText();
+			if(eventName.equals("Generate")){
+				Mutator.generate(oMutationTable.getSelectedMutants());
+			}
+			
 		}
 	}
 	
