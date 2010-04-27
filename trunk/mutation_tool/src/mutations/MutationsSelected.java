@@ -1,6 +1,7 @@
 package mutations;
 
 import interfaces.IMutableObject;
+import interfaces.IMutationRowListener;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class MutationsSelected extends JPanel implements ActionListener {
+public class MutationsSelected extends JPanel implements ActionListener, IMutationRowListener {
 	MutantCollection mc;
 	private DefaultListModel listModel;
 	private JList list;
@@ -21,8 +22,8 @@ public class MutationsSelected extends JPanel implements ActionListener {
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
 		
-		listModel.addElement(new MutationsSelectedRow(null, true));
-		listModel.addElement(new MutationsSelectedRow(null, false));
+		//listModel.addElement(new MutationsSelectedRow(null, true));
+		//listModel.addElement(new MutationsSelectedRow(null, false));
 		
 		//setLayout(new GridBagLayout());
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -83,4 +84,16 @@ public class MutationsSelected extends JPanel implements ActionListener {
 		frame.pack();
 		frame.setVisible(true);
 	}*/
+
+	@Override
+	public void mutableObjectSelected(IMutableObject oMutant) {
+		this.addMutation(oMutant);
+		this.repaint();
+	}
+
+	@Override
+	public void mutableObjectUnSelected(IMutableObject oMutant) {
+		this.removeMutation(oMutant);
+		this.repaint();
+	}
 }
