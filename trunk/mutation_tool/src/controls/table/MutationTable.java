@@ -10,12 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import utilities.ClassLoader;
 
 import mutations.MutationFactory;
 
@@ -28,6 +24,21 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	public MutationTable() {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+	}
+	
+	/**
+	 * Get a collection returning all mutations that are selected to be created.
+	 * 
+	 * @return collection of IMutableObject
+	 */
+	public MutantCollection getSelectedMutants() {
+		MutantCollection oSelectedColl = new MutantCollection();
+		for (int i=0; i<alMutableRows.size(); i++) {
+			if (alMutableRows.get(i).isSelected()) {
+				oSelectedColl.addMutant(alMutableRows.get(i).getMutableObject());
+			}
+		}
+		return oSelectedColl;
 	}
 	
 	private void showAllMutableRows() {
@@ -46,26 +57,13 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 				nSelected++;
 			}			
 		}
-		System.out.println(nSelected + " selected mutations.");
-		
+		System.out.println(nSelected + " selected mutations.");		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		getSelectedMutationCount();		
 	}
-	
-//	public void loadTableWithClass() {
-//		ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(ClassLoader.loadClassFromPath("C:\\Users\\cjohnson\\Documents\\Class Documents\\Spring 07\\CSE155\\HW #6\\CasualEmployee.class"));
-//		this.alMutableRows.clear();
-//		this.removeAll();
-//		for (int i=0; i<alMutableObjects.size(); i++) {
-//			IMutableObject oMutableObject = alMutableObjects.get(i);
-//			boolean bAltRow = (i%2 == 0) ? false : true;
-//			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, this));
-//		}
-//		showAllMutableRows();
-//	}
 
 	@Override
 	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
@@ -96,40 +94,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 				oRow.setVisible(true);
 			} else {
 				oRow.setVisible(false);
-			}
-//
-//			
-//			
-//			
-//			if (!mutantType.equals("")) {
-//				if (oRow.getMutableObject().getMutantTypeAsString().equalsIgnoreCase(mutantType)) {
-//					oRow.setVisible(true);
-//				} else {
-//					oRow.setVisible(false);
-//				}
-//			} else {
-//				oRow.setVisible(true);
-//			}
-//			
-//			if (!oldOp.equals("")) {
-//				if (oRow.getMutableObject().getOldOperator().equalsIgnoreCase(oldOp)) {
-//					oRow.setVisible(true);
-//				} else {
-//					oRow.setVisible(false);
-//				}
-//			} else {
-//				oRow.setVisible(true);
-//			}
-//			
-//			if (!newOp.equals("")) {
-//				if (oRow.getMutableObject().getNewOperator().equalsIgnoreCase(newOp)) {
-//					oRow.setVisible(true);
-//				} else {
-//					oRow.setVisible(false);
-//				}
-//			} else {
-//				oRow.setVisible(true);
-//			}			
+			}		
 		}
 	}
 
