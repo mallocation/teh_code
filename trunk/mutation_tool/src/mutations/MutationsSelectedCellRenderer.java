@@ -10,7 +10,7 @@ public class MutationsSelectedCellRenderer implements ListCellRenderer {
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		MutationsSelectedRow row = (MutationsSelectedRow) value;
 		if (isSelected) {
-			row.setBackground(Color.cyan);
+			row.setBackground(Color.LIGHT_GRAY);
 			row.setForeground(Color.white);
 		} else {
 			row.setBackground(Color.white);
