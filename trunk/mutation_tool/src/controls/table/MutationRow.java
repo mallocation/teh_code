@@ -68,11 +68,11 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		chkCreateMutation.setOpaque(true);
 
 		lblMutationType = new JLabel("Type: " + oMutableObject.getMutantTypeAsString());
-		lblMutationOps = new JLabel("<html>Mutates: <b>" + oMutableObject.getOldOperator() + "</b> to <b>" + oMutableObject.getNewOperator() + "</b></html>");
+		lblMutationOps = new JLabel("Mutates: " + oMutableObject.getOldOperator() + " to " + oMutableObject.getNewOperator());
 		lblMutationLevel = new JLabel("Level: " + oMutableObject.getMutantLevelAsString());
 		
 		oMutationNameFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
-		oPropertiesFont = new Font(Font.SANS_SERIF, Font.ITALIC, 11);
+		oPropertiesFont = new Font(Font.SANS_SERIF, Font.ITALIC, 12);
 		
 		oMutationNameDim = new Dimension(495, 20);
 		oPropertiesDim = new Dimension(178,20);

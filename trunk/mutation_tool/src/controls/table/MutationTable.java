@@ -46,6 +46,8 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		for (int i=0; i<alMutableRows.size(); i++) {
 			this.add(alMutableRows.get(i));
 		}
+		this.setVisible(false);
+		this.setVisible(true);
 	}
 	
 	public void getSelectedMutationCount() {
@@ -67,8 +69,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 
 	@Override
 	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
-		//ArrayList<IMutableObject> alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass());
-		MutantCollection alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null);
+		MutantCollection alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableMethod());
 		this.alMutableRows.clear();
 		this.removeAll();
 		for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
