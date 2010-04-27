@@ -4,20 +4,23 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MutationsSelectedRow extends JPanel {
-	private String className;
-	private String mutationCount;
-	private boolean exported;
-	private String imagePath;
-	private ImageIcon image;
+	public String className;
+	public String mutationCount;
+	public boolean exported;
+	public String imagePath;
+	public ImageIcon image;
+	public MutantCollection mutant;
 	
-	public MutationsSelectedRow(String name, String count, String imagePath1){
+	public MutationsSelectedRow(String name, MutantCollection mutants){
 		this.className = name;
-		this.mutationCount = count;
 		this.exported = false;
-		this.imagePath = imagePath1;
+		this.imagePath = "../images/ClassTree.png";
+		this.mutant = mutants;
+		//this.mutationCount = Integer.toString(mutants.getCollectionCount());
 		
 		JLabel cn = new JLabel(this.className);
-		JLabel mc = new JLabel(" (Mutation Count: " + this.mutationCount + ")");
+		//JLabel mc = new JLabel(" (Mutation Count: " + this.mutationCount + ")");
+		JLabel mc = new JLabel(" (Mutation Count: 1111)");
 		JLabel im = new JLabel(new ImageIcon(this.getClass().getResource(this.imagePath)));
 		
 		this.add(im);
