@@ -162,33 +162,27 @@ public class GenerateXML {
      * @throws URISyntaxException 
      */
     public void outputToFile(String outputFile, Document outputDoc){
-
+    	FileOutputStream oOutput;
+    	PrintStream oStream;
     	try {
-    	    // Prepare the DOM document for writing
-    		Source source = new DOMSource(outputDoc);
-   	        // Prepare the output file
-    		//URI oTest = new URI(getClass().getResource("teh_c0d3_xml/").toURI().toString()+outputFile);
-    		File oFile = new File(outputFile);
-   	        Result result = new StreamResult(oFile);
-   	        // Write the DOM document to the file
-   	        Transformer xformer = TransformerFactory.newInstance().newTransformer();
-   	        xformer.transform(source, result);
-    	    } catch (TransformerConfigurationException e) {
-    	    } catch (TransformerException e) {
-    	    } catch (NullPointerException e){
-    	    	System.out.println("...");
-    	    	createDirectory(outputFile, outputDoc);
-   	    }
-    }
-
-    public void createDirectory(String outputFile, Document outputDoc){
-    	try{
-    		String directory = "/teh_c0d3_xml/";
-    		new File(directory).mkdir();
-    	}catch (Exception e) {
-    		System.err.println("Error: " +e.getMessage());
-    	}
-    	
+    	    TransformerFactory transfac = TransformerFactory.newInstance();
+    	    Transformer trans = transfac.newTransformer();
+    	    trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"yes");
+    	    trans.setOutputProperty(OutputKeys.INDENT,"yes");
+    	    StringWriter sw = new StringWriter();
+    	    StreamResult result = new StreamResult(sw);
+    	    DOMSource source = new DOMSource(outputDoc);
+    	    trans.transform(source,result);
+    	    xmlOutput = sw.toString();
+    	    oOutput = new FileOutputStream(outputFile);
+    	    oStream = new PrintStream(oOutput);
+    	    oStream.println(xmlOutput);
+    	    oStream.close();
+    	    } catch (Exception e) {
+  	    	System.out.println(e);
+    	 }
+ 
+   	    
     }
 
     /**
@@ -287,7 +281,10 @@ public class GenerateXML {
 		status = new File(pathToSave + "/mutants/").mkdirs();
     	IMutableObject tempMutant = new Mutant();
     	createClassesXMLRoot();
-    	outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    	File oClassToOpen = new File(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    	if(!oClassToOpen.canRead()){	
+    		outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    	}
     	createMutationsXMLRoot();
     	createClassesXMLEntry(classPath,"");
     	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", "class");
