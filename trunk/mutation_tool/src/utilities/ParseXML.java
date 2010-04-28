@@ -162,7 +162,7 @@ public class ParseXML {
 			}
 			
 			mutationsList.getMutants().add(tempMutant);
-			System.out.println();
+
 		}
 		return mutationsList;
 	}
@@ -193,7 +193,6 @@ public class ParseXML {
 				}
 			}
 		}		
-        System.out.println(id);
 		return id;
 	}
 	
