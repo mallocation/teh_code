@@ -140,7 +140,7 @@ public class ParseXML {
 					tempMutant.setMutantLevel(Mutant.stringToMutantLevel(mutantAttribute.getNodeValue()));
 				}
 				else if(tempAttribute.equals("name")){
-					if(tempMutant.getMutantLevelAsString().equals("METHOD"))
+					if(tempMutant.getMutantLevel().equals(IMutableObject.eMutantLevel.METHOD))
 						tempMutant.setMethodName(mutantAttribute.getNodeValue());
 				}
 				else if(tempAttribute.equals("type")){

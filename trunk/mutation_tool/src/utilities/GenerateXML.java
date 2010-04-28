@@ -257,7 +257,8 @@ public class GenerateXML {
     		//create child element of mutation, add attributes
             Element mutant = mutationXMLDoc.createElement("mutant");
             mutant.setAttribute("level", level);
-            mutant.setAttribute("name", mutantName);
+            if (mutantName != null)
+            	mutant.setAttribute("name", mutantName);
             mutant.setAttribute("type", mutationType);
             mutant.setAttribute("oldOp", opOld);
             mutant.setAttribute("newOp", opNew);
@@ -291,6 +292,7 @@ public class GenerateXML {
     	if(!appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath)){
     		return;
     	}
+    	//String tempLevel, tempName, tempType, tempOld, tempNew;
     	String tempLevel, tempName, tempType, tempOld, tempNew;
     	
     	for(int i = 0; i < listOfMutations.getMutants().size(); i++){
@@ -299,11 +301,11 @@ public class GenerateXML {
     		tempType = tempMutant.getMutantTypeAsString();
     		tempOld = tempMutant.getOldOperator();
     		tempNew = tempMutant.getNewOperator();
-    		if(tempLevel.equals("METHOD"))
+    		//if(tempLevel.equals("METHOD"))
+    		if(tempLevel.equals(Mutant.mutantLevelToString(IMutableObject.eMutantLevel.METHOD)))
     			tempName = tempMutant.getMethodName();
     		else
-    			tempName = null;
-    		
+    			tempName = null;		
     		createMutationsXMLEntry(tempLevel, tempName, tempType, tempOld, tempNew);
     	}
  
