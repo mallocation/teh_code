@@ -41,7 +41,6 @@ public class GenerateXML {
      * Main method to test functionality.
      *
      * @param args the arguments
-     * @throws URISyntaxException 
      */
     public static void main (String args[]) {
         GenerateXML oXML = new GenerateXML();
@@ -85,9 +84,9 @@ public class GenerateXML {
      * Used to append elements to an existing xml file
      *
      * @param inputFileName the name of the input file
-     * @param inputXMLType mutant or class to append to
+	 * @return append was successful or not
      */
-    public void appendToClassXMLFile(String inputFileName, String inputXMLType){
+    public Boolean appendToClassXMLFile(String inputFileName, String classPath){
 		try{
 			int numberOfAttributes;
 			Element Class = classXMLDoc.createElement("class");
@@ -102,6 +101,9 @@ public class GenerateXML {
 					Attr classAttribute = (Attr)classAttributes.item(j);
 					if(classAttribute.getNodeName().equals("path")){
 						tempPath = classAttribute.getNodeValue();
+						if(classPath.equals(tempPath)){
+							return false;
+						}
 					}
 					else if(classAttribute.getNodeName().equals("id")){
 						tempID = classAttribute.getNodeValue();
@@ -109,6 +111,7 @@ public class GenerateXML {
 				}
 				createClassesXMLEntry(tempPath,tempID);
 			}
+			return true;
 
 		} catch(FileNotFoundException e){
 			System.out.println("File not found!");
@@ -123,6 +126,7 @@ public class GenerateXML {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		return null;
 			
 	}
     
@@ -158,8 +162,6 @@ public class GenerateXML {
      *
      * @param outputFile the name of the output file
      * @param outputDoc the name of the document to output (classes or mutations)
-     * @throws URISyntaxException 
-     * @throws URISyntaxException 
      */
     public void outputToFile(String outputFile, Document outputDoc){
     	FileOutputStream oOutput;
@@ -273,7 +275,6 @@ public class GenerateXML {
      *
      *@param classPath path for the class file.
      * @param listOfMutations the array list of mutations associated with the class file in the classPath.
-     * @throws URISyntaxException 
      */
     public void createMutationsXML(MutantCollection listOfMutations, String classPath, String pathToSave){
     	boolean status;
@@ -287,7 +288,9 @@ public class GenerateXML {
     	}
     	createMutationsXMLRoot();
     	createClassesXMLEntry(classPath,"");
-    	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", "class");
+    	if(!appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath)){
+    		return;
+    	}
     	String tempLevel, tempName, tempType, tempOld, tempNew;
     	
     	for(int i = 0; i < listOfMutations.getMutants().size(); i++){
@@ -303,10 +306,11 @@ public class GenerateXML {
     		
     		createMutationsXMLEntry(tempLevel, tempName, tempType, tempOld, tempNew);
     	}
-    	
+ 
     	outputMutantsXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + idFileName+".xml");
     	outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
     }
+    
 }
 
 
