@@ -1,100 +1,87 @@
 package mutations;
 
-import interfaces.IMutableObject;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import java.awt.*;
-import javax.swing.*;
+import interfaces.IMutableObject;
 
 import org.apache.bcel.classfile.JavaClass;
 
 public class MutationsSelectedRow extends JPanel {
 	private JavaClass oClass;
-	private String mutationCount;
-	private boolean exported;
-	private ImageIcon imgExported, imgNotExported;// String imagePath;
-	private ImageIcon image;
-	private MutantCollection mutant;
-	private JLabel cn, mc, im;
+	private boolean bExported;
+	private ImageIcon imgExported, imgNotExported;
+	private MutantCollection colClassMutants;
+	private JLabel lblClass, lblMutationCount;
 	
-	private static final String pathImgExported = "../images/green_dot.png";
-	private static final String pathImgNotExported = "../images/yellow_dot.png";
+	private final String pathImgExported = "../images/green_dot.png";
+	private final String pathImgNotExported = "../images/yellow_dot.png";
 	
-	public MutationsSelectedRow(JavaClass rClass, boolean isExported){
-		this.oClass = rClass;
-		this.exported = isExported;
-		imgExported = new ImageIcon(getClass().getResource(pathImgExported));
-		imgNotExported = new ImageIcon(getClass().getResource(pathImgNotExported));
+	public MutationsSelectedRow(JavaClass oClass, boolean isExported){
+		this.oClass = oClass;
+		this.bExported = isExported;
+		
+		this.imgExported = new ImageIcon(getClass().getResource(pathImgExported));
+		this.imgNotExported = new ImageIcon(getClass().getResource(pathImgNotExported));
 
-		this.mutant = new MutantCollection();
+		this.colClassMutants = new MutantCollection();
 		
-		cn = new JLabel(rClass.getClassName());
-		if (isExported) {
-			cn.setIcon(imgExported);
+		this.lblClass = new JLabel(oClass.getClassName());
+		
+		this.bExported = isExported;
+		if (bExported) {
+			lblClass.setIcon(imgExported);
 		} else {
-			cn.setIcon(imgNotExported);
+			lblClass.setIcon(imgNotExported);
 		}
-		//cn.setIcon(image);
 		
-		mc = new JLabel(" (Mutation Count: " + this.mutant.getCollectionCount() + ")");
+		lblMutationCount = new JLabel("Mutation Count: " + this.colClassMutants.getCollectionCount());
 		
-		//im = new JLabel(new ImageIcon(this.getClass().getResource(this.imagePath)));
-		
-		//this.add(im);
-		this.add(cn);
-		this.add(mc);
+		this.add(lblClass);
+		this.add(lblMutationCount);
 	}
 	
 	public JavaClass getJavaClass(){
 		return this.oClass;
 	}
 	
-	public String getMutationCount(){
-		return this.mutationCount;
+	public int getMutationCount(){
+		return this.colClassMutants.getCollectionCount();
 	}
 	
 	public MutantCollection getMutationCollection(){
-		return this.mutant;
+		return this.colClassMutants;
 	}
 	
 	public boolean isExported(){
-		return this.exported;
+		return this.bExported;
 	}
 	
 	public void addMutableObj(IMutableObject mObject){
-		this.mutant.addMutant(mObject);
+		this.colClassMutants.addMutant(mObject);
 		this.updateMutationCount();		
 	}
 	
 	public void removeMutableObj(IMutableObject mObject){
-		this.mutant.removeMutant(mObject);
+		this.colClassMutants.removeMutant(mObject);
 		this.updateMutationCount();
 	}
 	
 	private void updateMutationCount() {
-		this.mc.setText(" (Mutation Count: " + this.mutant.getCollectionCount() + ")");
+		this.lblMutationCount.setText("Mutation Count: " + this.colClassMutants.getCollectionCount());
 		this.setExported(false);
 		this.repaint();
 	}
 	
 	public void setExported(boolean bExported) {
-		this.exported = bExported;
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				if (exported) {
-					cn.setIcon(imgExported);
-				} else {
-					cn.setIcon(imgNotExported);
-				}
-			}
-		});
-		
-//		if (bExported) {
-//			cn.setIcon(imgExported);
-//		} else {
-//			cn.setIcon(imgNotExported);
-//		}
-//		this.paintImmediately(cn.getVisibleRect());
+		this.bExported = bExported;
+		if (isExported()) {
+			lblClass.setIcon(imgExported);
+		} else {
+			lblClass.setIcon(imgNotExported);
+		}
+		lblClass.repaint();
+		this.repaint();
 	}
 }

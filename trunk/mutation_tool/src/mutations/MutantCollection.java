@@ -63,4 +63,14 @@ public class MutantCollection {
 	public int getCollectionCount() {
 		return this.alMutants.size();
 	}
+	
+	public IMutableObject getMutant(int i) {
+		return this.getMutants().get(i);
+	}
+	
+	public void appendToCollection(MutantCollection oCollection) {
+		for (int i=0; i<oCollection.getCollectionCount(); i++) {
+			this.addMutant(oCollection.getMutant(i));
+		}
+	}
 }

@@ -13,7 +13,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import mutations.MutationFactory;
 
@@ -27,11 +30,19 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	
 	private IMutationRowListener oRowListener;
 	
+	private JLabel lblNoMutations;
+	
+	private ImageIcon imgLoadingTable;
+	
 	public MutationTable(IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.oPropertiesPanel = oPropertiesPanel;
 		this.oRowListener = oGeneratePanel;
+		this.lblNoMutations = new JLabel("Loading Mutations...");
+		this.imgLoadingTable = new ImageIcon(getClass().getResource("../../images/TableLoader.gif"));
+		this.lblNoMutations.setIcon(imgLoadingTable);
+		this.add(lblNoMutations);
 	}
 	
 	/**
@@ -51,9 +62,16 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	
 	private void showAllMutableRows() {
 		this.removeAll();
+		this.add(lblNoMutations);
+		this.setVisible(false);
+		this.setVisible(true);
 		for (int i=0; i<alMutableRows.size(); i++) {
 			this.add(alMutableRows.get(i));
 		}
+		if (this.getComponentCount() == 0) {
+			this.add(lblNoMutations);
+		}
+		this.remove(lblNoMutations);
 		this.setVisible(false);
 		this.setVisible(true);
 	}
@@ -77,7 +95,18 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 
 	@Override
 	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
-		MutantCollection alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableMethod());
+		MutantCollection alMutableObjects = new MutantCollection();
+		if (oSelectedNode.getMutableMethod() == null) {
+			//show both class level and method level!
+			alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null));
+			for (int i=0; i<oSelectedNode.getMutableClass().getMethods().length; i++) {
+				alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableClass().getMethods()[i]));
+			}			
+		} else {
+			alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableMethod());
+		}
+		//MutantCollection alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null);
+		
 		this.alMutableRows.clear();
 		this.removeAll();
 		for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
@@ -85,7 +114,16 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 			boolean bAltRow = (i%2 == 0) ? false : true;
 			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel, oRowListener));
 		}
-		showAllMutableRows();
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				showAllMutableRows();
+				
+			}
+		});
+		//showAllMutableRows();
 	}
 
 	@Override
