@@ -293,7 +293,7 @@ public class GenerateXML {
     	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath);
  
 
-    	//String tempLevel, tempName, tempType, tempOld, tempNew;
+
     	String tempLevel, tempName, tempType, tempOld, tempNew;
     	
     	for(int i = 0; i < listOfMutations.getMutants().size(); i++){
@@ -302,7 +302,7 @@ public class GenerateXML {
     		tempType = tempMutant.getMutantTypeAsString();
     		tempOld = tempMutant.getOldOperator();
     		tempNew = tempMutant.getNewOperator();
-    		//if(tempLevel.equals("METHOD"))
+
     		if(tempLevel.equals(Mutant.mutantLevelToString(IMutableObject.eMutantLevel.METHOD)))
     			tempName = tempMutant.getMethodName();
     		else

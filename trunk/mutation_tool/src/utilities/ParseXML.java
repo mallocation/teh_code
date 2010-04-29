@@ -24,8 +24,8 @@ public class ParseXML {
 	private DocumentBuilder docBuild;
 	private NodeList listOfMutants;
 	private NodeList listOfClasses;
-	private Element mutant;
-	private Element Class;
+	private Element eMutant;
+	private Element eClass;
 
 
 	
@@ -38,7 +38,7 @@ public class ParseXML {
 		ParseXML oXMLParse = new ParseXML();
 	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
        //oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class"),System.getProperty("user.dir") + "\\bin\\GenerateXML.class");
-       oXMLParse.getMutationsFromCommandLine("test.xml");
+       oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
        //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
         //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
         //oXMLParse.getMutantAttributes("/blah/blah");
@@ -127,19 +127,12 @@ public class ParseXML {
 		Document xmlDoc;
 		MutantCollection mutationsList = new MutantCollection();
 		IMutableObject tempMutant = new Mutant(); 
-//		if(!classPathToSearch.equals("")){
-//			String inputFileName = getPersistentMutationsFileName(locationOfXML,classPathToSearch);
-//			xmlDoc = getXMLFile(inputFileName);
-//		}
-//		else{
-//			xmlDoc = getXMLFile(locationOfXML);		
-//		}
-		
 		xmlDoc = getXMLFile(locationOfXML);
 		
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
-			mutant = (Element) listOfMutants.item(i);
-			NamedNodeMap mutantAttributes = mutant.getAttributes();
+        	Boolean valid = true;
+			eMutant = (Element) listOfMutants.item(i);
+			NamedNodeMap mutantAttributes = eMutant.getAttributes();
         	numberOfAttributes = mutantAttributes.getLength();
     		if(ClassLoader.isClassFile(classPath))
     			tempMutant.setMutableClass(ClassLoader.loadClassFromPath(classPath));
@@ -154,7 +147,15 @@ public class ParseXML {
 				}
 				else if(tempAttribute.equals("name")){
 					if(tempMutant.getMutantLevel().equals(IMutableObject.eMutantLevel.METHOD))
-						tempMutant.setMethodName(mutantAttribute.getNodeValue());
+						for(int k = 0; k < ClassLoader.loadClassFromPath(classPath).getMethods().length; k++) {
+							if(mutantAttribute.getNodeValue().equalsIgnoreCase(ClassLoader.loadClassFromPath(classPath).getMethods()[k].getName())){
+								valid = true;
+								break;
+							}else
+								valid = false;
+						}
+					
+					tempMutant.setMethodName(mutantAttribute.getNodeValue());
 				}
 				else if(tempAttribute.equals("type")){
 					tempMutant.setMutantType(Mutant.stringToMutantType(mutantAttribute.getNodeValue()));
@@ -170,11 +171,16 @@ public class ParseXML {
 					//System.exit(0);
 				}
 				//REMOVE
-				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
+				//System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
 				
 			}
-			
-			mutationsList.getMutants().add(tempMutant);
+			if(valid){
+				mutationsList.getMutants().add(tempMutant);
+			}
+			else{
+				System.out.println("Mutation skipped. Method name "+tempMutant.getMethodName()+" not valid for "+tempMutant.getMutableClass().getClassName()+".class.");
+			}
+			valid = true;
 
 		}
 		return mutationsList;
@@ -192,8 +198,8 @@ public class ParseXML {
 		String id = null;
 		Document xmlDoc = getXMLFile(classPath);
         for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
-        	Class = (Element) listOfClasses.item(i);
-			NamedNodeMap classAtrributes = Class.getAttributes();
+        	eClass = (Element) listOfClasses.item(i);
+			NamedNodeMap classAtrributes = eClass.getAttributes();
 			if(classAtrributes.getLength() != 2) {
 				System.out.println("Class must have exactly two attributes.");
 				System.exit(0);
@@ -215,6 +221,10 @@ public class ParseXML {
 		Document commandLineXMLDoc = getXMLFile(fileName);
 		Element mutations = commandLineXMLDoc.getDocumentElement();
 		String classPath = mutations.getAttribute("classPath");
+		if(classPath.equals("")){
+			System.out.println("Must include classPath attribute for mutations element.");
+			System.exit(0);
+		}
 		MutantCollection mutationsList = getMutantAttributes(fileName,classPath);
 		Mutator.generate(mutationsList);
 	
