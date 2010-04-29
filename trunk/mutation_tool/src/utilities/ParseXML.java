@@ -37,8 +37,8 @@ public class ParseXML {
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
 	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
-       //oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class"),System.getProperty("user.dir") + "\\bin\\GenerateXML.class");
-       oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
+       oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\Average.class"),System.getProperty("user.dir") + "\\bin\\Average.class");
+       //oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
        //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
         //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
         //oXMLParse.getMutantAttributes("/blah/blah");
@@ -216,7 +216,12 @@ public class ParseXML {
 		return id;
 	}
 	
-
+	/**
+	 * Gets xml file name form command line. Opens that xml file
+	 * and generates mutations based on its contents.
+	 *
+	 * @param fileName location of xml file. 
+	 */
 	public void getMutationsFromCommandLine(String fileName){
 		Document commandLineXMLDoc = getXMLFile(fileName);
 		Element mutations = commandLineXMLDoc.getDocumentElement();
