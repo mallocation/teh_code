@@ -81,7 +81,8 @@ public class MutationsSelectedRow extends JPanel {
 		} else {
 			lblClass.setIcon(imgNotExported);
 		}
-		lblClass.repaint();
-		this.repaint();
+		updateMutationCount();
+//		lblClass.repaint();
+//		this.repaint();
 	}
 }
