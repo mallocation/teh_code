@@ -34,8 +34,8 @@ public class ParseXML {
 	 */
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
-        //oXMLParse.getXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
-        oXMLParse.getMutantAttributes(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
+       oXMLParse.getMutantAttributes(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class");
         
         
         //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
@@ -73,7 +73,6 @@ public class ParseXML {
 			Document xmlDoc = docBuild.parse(xmlFile);
 			return xmlDoc;
 		} catch(FileNotFoundException e){
-			System.out.println("XML File "+inputFileName+" for "+pathOfClassFile +" not found!");
 			System.exit(0);
 		}catch(SAXParseException e) {
 			System.out.println("Error: "+e.getMessage()+" at line " + e.getLineNumber() + ", column " + e.getColumnNumber());
@@ -85,7 +84,7 @@ public class ParseXML {
 			e.printStackTrace();
 			System.exit(0);
 		} catch (NullPointerException e){
-			System.out.println("classes.xml is empty");
+			System.out.println(inputFileName+" is empty");
 			e.printStackTrace();
 		}
 		return null;
@@ -119,12 +118,13 @@ public class ParseXML {
 	 * @param classPath the class path of the class file
 	 * @return the list of mutant attributes
 	 */
-	public MutantCollection getMutantAttributes(String classPath){
+	public MutantCollection getMutantAttributes(String locationOfClassesXML, String classPathToSearch){
 		int numberOfAttributes;
 		String tempAttribute;
-		String inputFileName = getMutationsFileName(classPath);
+
+		String inputFileName = getPersistentMutationsFileName(locationOfClassesXML,classPathToSearch);
 		//DEBUG
-		System.out.println(classPath);
+		System.out.println(inputFileName);
 		Document xmlDoc = getXMLFile(inputFileName);
 
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
@@ -174,9 +174,8 @@ public class ParseXML {
 	 * @param classPath the class path .class file is located in
 	 * @return the name of the xml file 
 	 */
-	public String getMutationsFileName(String classPath){
+	public String getPersistentMutationsFileName(String classPath, String classPathToSearch){
 		String id = null;
-		setClassPath(classPath);
 		Document xmlDoc = getXMLFile(classPath);
         for(int i = 0; i < getNumberOfClasses(xmlDoc); i++){
         	Class = (Element) listOfClasses.item(i);
@@ -187,23 +186,22 @@ public class ParseXML {
 			}
 			else{
 				Attr pathAttribute = (Attr)classAtrributes.item(1);
-				if(pathAttribute.getNodeValue().equals(classPath)){
+				if(pathAttribute.getNodeValue().equals(classPathToSearch)){
 					Attr idAttribute = (Attr)classAtrributes.item(0);
-					id = idAttribute.getNodeValue()+".xml";
+					id = System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + idAttribute.getNodeValue()+".xml";
 				}
 			}
-		}		
+		}
+        System.out.println("ID "+id);
+        
 		return id;
 	}
 	
-	/**
-	 * Sets the path of the class file
-	 *
-	 * @param classPath the class path .class file is located in
-	 */
-	public void setClassPath(String classPath) {
-		this.pathOfClassFile = classPath;
+
+	public void getMutationsFromCommandLine(String fileName){
+		
 	}
+	
 
 	
 }

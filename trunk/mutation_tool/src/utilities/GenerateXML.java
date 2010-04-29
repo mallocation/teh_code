@@ -88,7 +88,7 @@ public class GenerateXML {
      */
     public Boolean appendToClassXMLFile(String inputFileName, String classPath){
 		try{
-			int numberOfAttributes;
+
 			Element Class = classXMLDoc.createElement("class");
 			File xmlFile = new File(inputFileName);
 			String tempPath = "", tempID = "";
@@ -96,8 +96,7 @@ public class GenerateXML {
 			for(int i = 0; i < appendedXMLDoc.getElementsByTagName("class").getLength(); i++){
 				Class = (Element) appendedXMLDoc.getElementsByTagName("class").item(i);
 				NamedNodeMap classAttributes = Class.getAttributes();
-				numberOfAttributes = classAttributes.getLength();
-				//for(int j = 0; j < numberOfAttributes; j++){
+
 					Attr classAttribute = (Attr)classAttributes.item(1);
 					if(classAttribute.getNodeName().equals("path")){
 						tempPath = classAttribute.getNodeValue();
@@ -111,7 +110,7 @@ public class GenerateXML {
 						
 						tempID = classAttribute.getNodeValue();
 					}		
-				//}
+
 				createClassesXMLEntry(tempPath,tempID);
 			}
 			outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
@@ -238,6 +237,7 @@ public class GenerateXML {
             }
             else
             	Class.setAttribute("id", id);
+         	System.out.println("classpath:"+classPath);
             classes.appendChild(Class);
                         
     	} catch (Exception e) {
@@ -292,6 +292,7 @@ public class GenerateXML {
     		outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
     	}
     	createMutationsXMLRoot();
+   
     	createClassesXMLEntry(classPath,"");
     	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath);
  
