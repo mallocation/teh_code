@@ -225,9 +225,6 @@ public class GenerateXML {
      */
     public void createClassesXMLEntry(String classPath, String id){
     	try{
-    		//create child element of mutation, add attributes
-    		//Random rand = new Random(System.currentTimeMillis());
-        	//int randomID = rand.nextInt();
         	idFileName = Long.toString(System.nanoTime());
             Element Class = classXMLDoc.createElement("class");
             Class.setAttribute("path", classPath);
@@ -237,7 +234,6 @@ public class GenerateXML {
             }
             else
             	Class.setAttribute("id", id);
-         	System.out.println("classpath:"+classPath);
             classes.appendChild(Class);
                         
     	} catch (Exception e) {
