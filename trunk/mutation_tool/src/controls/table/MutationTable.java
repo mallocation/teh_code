@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import mutations.MutationFactory;
 
@@ -41,18 +42,8 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		this.oRowListener = oGeneratePanel;
 		this.lblNoMutations = new JLabel("No mutations available.");
 		this.lblLoading = new JLabel("Loading mutations...");
-		this.imgLoadingTable = new ImageIcon(getClass().getResource("../../images/TableLoader.gif"));
-		
-		// Add the 'No mutations' label
-		this.add(lblNoMutations);
-	}
-	
-	private void setDefaultTable() {
-		this.removeAll();
-		lblNoMutations.setVisible(false);
-		lblLoading.setVisible(false);
-		this.add(lblNoMutations);
-		this.add(lblLoading);
+		this.imgLoadingTable = new ImageIcon(getClass().getResource("../../images/TableLoader2.gif"));
+		this.lblLoading.setIcon(imgLoadingTable);
 	}
 	
 	/**
@@ -70,13 +61,17 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		return oSelectedColl;
 	}
 	
-	private void showAllMutableRows() {
-		setDefaultTable();
+	private void showMutableRows() {
 		this.setVisible(false);
 		this.setVisible(true);
-		for (int i=0; i<alMutableRows.size(); i++) {
-			this.add(alMutableRows.get(i));
-		}		
+		if (this.alMutableRows.size() != 0) {
+			for (int i=0; i<alMutableRows.size(); i++) {
+				this.add(alMutableRows.get(i));
+			}
+		} else {
+			this.add(lblNoMutations);
+		}
+			
 		this.setVisible(false);
 		this.setVisible(true);
 	}
@@ -97,40 +92,67 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	public void actionPerformed(ActionEvent e) {
 		getSelectedMutationCount();		
 	}
+	
+	
+	private TableLoader tblLoader = null;
 
 	/**
 	 * This is fired when 
 	 */
 	@Override
 	public void mutableNodeSelectionChanged(MutableNode oSelectedNode) {
-		MutantCollection alMutableObjects = new MutantCollection();
-		if (oSelectedNode.getMutableMethod() == null) {
-			//show both class level and method level!
-			alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), null));
-			for (int i=0; i<oSelectedNode.getMutableClass().getMethods().length; i++) {
-				alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableClass().getMethods()[i]));
-			}			
-		} else {
-			alMutableObjects = MutationFactory.createIMutableObjects(oSelectedNode.getMutableClass(), oSelectedNode.getMutableMethod());
-		}
-		
-		this.alMutableRows.clear();
 		this.removeAll();
-		for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
-			IMutableObject oMutableObject = alMutableObjects.getMutants().get(i);
-			boolean bAltRow = (i%2 == 0) ? false : true;
-			alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel, oRowListener));
+		this.add(lblLoading);
+		this.setVisible(false);
+		this.setVisible(true);
+		
+//		if (tblLoader != null) {
+//			tblLoader.cancel(true);
+//			tblLoader = new TableLoader(oSelectedNode);
+//		} else {
+//			tblLoader = new TableLoader(oSelectedNode);
+//		}
+//		tblLoader.execute();
+		new TableLoader(oSelectedNode).execute();
+	}
+	
+	private class TableLoader extends SwingWorker<Void, Void> {
+		private MutableNode selectedNode;
+		
+		public TableLoader(MutableNode selectedNode) {
+			this.selectedNode = selectedNode;
 		}
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				showAllMutableRows();
-				
+		@Override
+		protected Void doInBackground() throws Exception {
+			MutantCollection alMutableObjects = new MutantCollection();
+			if (selectedNode.getMutableMethod() == null) {
+				//show both class level and method level!
+				alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(selectedNode.getMutableClass(), null));
+				for (int i=0; i<selectedNode.getMutableClass().getMethods().length; i++) {
+					alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(selectedNode.getMutableClass(), selectedNode.getMutableClass().getMethods()[i]));
+				}			
+			} else {
+				alMutableObjects = MutationFactory.createIMutableObjects(selectedNode.getMutableClass(), selectedNode.getMutableMethod());
 			}
-		});
-		//showAllMutableRows();
+			
+			alMutableRows.clear();
+			removeAll();
+
+			for (int i=0; i<alMutableObjects.getMutants().size(); i++) {
+				IMutableObject oMutableObject = alMutableObjects.getMutants().get(i);
+				boolean bAltRow = (i%2 == 0) ? false : true;
+				alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel, oRowListener));
+			}
+			return null;
+		}
+		
+		@Override
+		protected void done() {
+			if (!isCancelled()) 
+				showMutableRows();
+			super.done();
+		}
 	}
 
 	@Override

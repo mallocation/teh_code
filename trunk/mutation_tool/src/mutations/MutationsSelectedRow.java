@@ -1,8 +1,13 @@
 package mutations;
 
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 
 import interfaces.IMutableObject;
 
@@ -14,6 +19,7 @@ public class MutationsSelectedRow extends JPanel {
 	private ImageIcon imgExported, imgNotExported;
 	private MutantCollection colClassMutants;
 	private JLabel lblClass, lblMutationCount;
+	private JProgressBar progGenerateBar;
 	
 	private final String pathImgExported = "../images/green_dot.png";
 	private final String pathImgNotExported = "../images/yellow_dot.png";
@@ -21,6 +27,8 @@ public class MutationsSelectedRow extends JPanel {
 	public MutationsSelectedRow(JavaClass oClass, boolean isExported){
 		this.oClass = oClass;
 		this.bExported = isExported;
+		
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.imgExported = new ImageIcon(getClass().getResource(pathImgExported));
 		this.imgNotExported = new ImageIcon(getClass().getResource(pathImgNotExported));
@@ -37,9 +45,16 @@ public class MutationsSelectedRow extends JPanel {
 		}
 		
 		lblMutationCount = new JLabel("Mutation Count: " + this.colClassMutants.getCollectionCount());
+		lblMutationCount.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
 		
+		progGenerateBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
+		progGenerateBar.setStringPainted(true);
+		progGenerateBar.setPreferredSize(new Dimension(125, 15));
+		progGenerateBar.setMaximumSize(new Dimension(125, 15));
+				
 		this.add(lblClass);
 		this.add(lblMutationCount);
+		//this.add(progGenerateBar);
 	}
 	
 	public JavaClass getJavaClass(){
@@ -81,7 +96,7 @@ public class MutationsSelectedRow extends JPanel {
 		} else {
 			lblClass.setIcon(imgNotExported);
 		}
-		updateMutationCount();
+		//updateMutationCount();
 //		lblClass.repaint();
 //		this.repaint();
 	}

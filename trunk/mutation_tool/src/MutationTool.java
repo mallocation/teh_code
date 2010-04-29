@@ -158,6 +158,10 @@ public class MutationTool extends JFrame implements ActionListener
 	}
 	
 	public static void main(String[] args){
-		new MutationTool();
+		SwingUtilities.invokeLater(new Runnable() {			
+			public void run() {
+				new MutationTool();
+			}			
+		});		
 	}
 }

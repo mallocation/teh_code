@@ -18,7 +18,8 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 	MutantCollection mc;
 	private DefaultListModel listModel;
 	private JList list;
-	private JButton button; 
+	private JButton button;
+	private JProgressBar progClassBar;
 	
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
@@ -42,6 +43,9 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		button.addActionListener(this);
 		button.setAlignmentX(CENTER_ALIGNMENT);
 		add(button);
+		
+		progClassBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
+		add(progClassBar);
 		
 		this.setVisible(true);
 	}
@@ -76,19 +80,32 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		if (e.getSource().equals(button)) {
 			for (int i=0; i<this.listModel.getSize(); i++) {
 				MutationsSelectedRow oRow = (MutationsSelectedRow)this.listModel.getElementAt(i);
-				Mutator.generate(oRow.getMutationCollection());
-				oRow.setExported(true);
+				new GenerateMutationsWorker(oRow).execute();
 			}
 		}
 	}
-/*
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Selected Mutations");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(new MutationsSelected());
-		frame.pack();
-		frame.setVisible(true);
-	}*/
+	
+	private class GenerateMutationsWorker extends SwingWorker<Void, Void> {
+		
+		private MutationsSelectedRow rowToGenerate;
+		
+		public GenerateMutationsWorker(MutationsSelectedRow oListRow) {
+			this.rowToGenerate = oListRow;
+		}
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			Mutator.generate(rowToGenerate.getMutationCollection());
+			return null;
+		}
+		
+		@Override
+		protected void done() {
+			super.done();
+			this.rowToGenerate.setExported(true);
+		}
+		
+	}
 
 	@Override
 	public void mutableObjectSelected(IMutableObject oMutant) {
