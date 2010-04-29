@@ -6,11 +6,8 @@ import mutations.MutantCollection;
 import mutations.Mutator;
 
 import java.io.*;
-import java.util.ArrayList;
 import org.w3c.dom.*;
 import org.xml.sax.*;
-
-import org.apache.bcel.classfile.JavaClass;
 
 import javax.xml.parsers.*;
 
