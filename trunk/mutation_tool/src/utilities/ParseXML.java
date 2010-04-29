@@ -3,11 +3,15 @@ package utilities;
 import interfaces.IMutableObject;
 import mutations.Mutant;
 import mutations.MutantCollection;
+import mutations.Mutator;
 
 import java.io.*;
 import java.util.ArrayList;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+
+import org.apache.bcel.classfile.JavaClass;
+
 import javax.xml.parsers.*;
 
 /**
@@ -20,11 +24,9 @@ public class ParseXML {
 	private DocumentBuilder docBuild;
 	private NodeList listOfMutants;
 	private NodeList listOfClasses;
-	private IMutableObject tempMutant;
-	public  MutantCollection mutationsList;
 	private Element mutant;
 	private Element Class;
-	private String pathOfClassFile;
+
 
 	
 	/**
@@ -35,9 +37,9 @@ public class ParseXML {
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
 	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
-       oXMLParse.getMutantAttributes(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class");
-        
-        
+       //oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class"),System.getProperty("user.dir") + "\\bin\\GenerateXML.class");
+       oXMLParse.getMutationsFromCommandLine("test.xml");
+       //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
         //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
         //oXMLParse.getMutantAttributes("/blah/blah");
         //GenerateXML oXML = new GenerateXML();
@@ -52,8 +54,6 @@ public class ParseXML {
         	//DOM to make a blank document
         	docFact = DocumentBuilderFactory.newInstance();
         	docBuild = docFact.newDocumentBuilder();
-        	tempMutant = new Mutant();
-        	this.mutationsList = new MutantCollection();
         	
         } catch (Exception e) {
 
@@ -73,6 +73,7 @@ public class ParseXML {
 			Document xmlDoc = docBuild.parse(xmlFile);
 			return xmlDoc;
 		} catch(FileNotFoundException e){
+			System.err.println(e);
 			System.exit(0);
 		}catch(SAXParseException e) {
 			System.out.println("Error: "+e.getMessage()+" at line " + e.getLineNumber() + ", column " + e.getColumnNumber());
@@ -87,6 +88,7 @@ public class ParseXML {
 			System.out.println(inputFileName+" is empty");
 			e.printStackTrace();
 		}
+		System.out.println("NULL");
 		return null;
 	}
 	
@@ -115,23 +117,34 @@ public class ParseXML {
 	/**
 	 * Gets the mutant attributes.
 	 *
-	 * @param classPath the class path of the class file
+	 * @param locationOfXML location of xml file
+	 * @param classPathToSearch class path of file to mutate
 	 * @return the list of mutant attributes
 	 */
-	public MutantCollection getMutantAttributes(String locationOfClassesXML, String classPathToSearch){
+	public MutantCollection getMutantAttributes(String locationOfXML, String classPath){
 		int numberOfAttributes;
 		String tempAttribute;
-
-		String inputFileName = getPersistentMutationsFileName(locationOfClassesXML,classPathToSearch);
-		//DEBUG
-		System.out.println(inputFileName);
-		Document xmlDoc = getXMLFile(inputFileName);
-
+		Document xmlDoc;
+		MutantCollection mutationsList = new MutantCollection();
+		IMutableObject tempMutant = new Mutant(); 
+//		if(!classPathToSearch.equals("")){
+//			String inputFileName = getPersistentMutationsFileName(locationOfXML,classPathToSearch);
+//			xmlDoc = getXMLFile(inputFileName);
+//		}
+//		else{
+//			xmlDoc = getXMLFile(locationOfXML);		
+//		}
+		
+		xmlDoc = getXMLFile(locationOfXML);
+		
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
 			mutant = (Element) listOfMutants.item(i);
 			NamedNodeMap mutantAttributes = mutant.getAttributes();
         	numberOfAttributes = mutantAttributes.getLength();
-			
+    		if(ClassLoader.isClassFile(classPath))
+    			tempMutant.setMutableClass(ClassLoader.loadClassFromPath(classPath));
+    		else
+    			System.out.println("Invalid Class "+classPath);
 			for(int j = 0; j < numberOfAttributes; j++){
 				Attr mutantAttribute = (Attr)mutantAttributes.item(j);
 				tempAttribute = mutantAttribute.getNodeName();
@@ -172,6 +185,7 @@ public class ParseXML {
 	 * Gets the name of the xml file containing mutations.
 	 *
 	 * @param classPath the class path .class file is located in
+	 * @param clathPathToSearch attribute to search for
 	 * @return the name of the xml file 
 	 */
 	public String getPersistentMutationsFileName(String classPath, String classPathToSearch){
@@ -192,14 +206,18 @@ public class ParseXML {
 				}
 			}
 		}
-        System.out.println("ID "+id);
         
 		return id;
 	}
 	
 
 	public void getMutationsFromCommandLine(String fileName){
-		
+		Document commandLineXMLDoc = getXMLFile(fileName);
+		Element mutations = commandLineXMLDoc.getDocumentElement();
+		String classPath = mutations.getAttribute("classPath");
+		MutantCollection mutationsList = getMutantAttributes(fileName,classPath);
+		Mutator.generate(mutationsList);
+	
 	}
 	
 
