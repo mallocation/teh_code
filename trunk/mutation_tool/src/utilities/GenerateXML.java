@@ -97,20 +97,24 @@ public class GenerateXML {
 				Class = (Element) appendedXMLDoc.getElementsByTagName("class").item(i);
 				NamedNodeMap classAttributes = Class.getAttributes();
 				numberOfAttributes = classAttributes.getLength();
-				for(int j = 0; j < numberOfAttributes; j++){
-					Attr classAttribute = (Attr)classAttributes.item(j);
+				//for(int j = 0; j < numberOfAttributes; j++){
+					Attr classAttribute = (Attr)classAttributes.item(1);
 					if(classAttribute.getNodeName().equals("path")){
 						tempPath = classAttribute.getNodeValue();
 						if(classPath.equals(tempPath)){
+							idFileName=classAttributes.item(0).getNodeValue();
 							return false;
 						}
 					}
-					else if(classAttribute.getNodeName().equals("id")){
+					classAttribute = (Attr)classAttributes.item(0);
+					if(classAttribute.getNodeName().equals("id")){
+						
 						tempID = classAttribute.getNodeValue();
 					}		
-				}
+				//}
 				createClassesXMLEntry(tempPath,tempID);
 			}
+			outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
 			return true;
 
 		} catch(FileNotFoundException e){
@@ -289,9 +293,9 @@ public class GenerateXML {
     	}
     	createMutationsXMLRoot();
     	createClassesXMLEntry(classPath,"");
-    	if(!appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath)){
-    		return;
-    	}
+    	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath);
+ 
+
     	//String tempLevel, tempName, tempType, tempOld, tempNew;
     	String tempLevel, tempName, tempType, tempOld, tempNew;
     	
@@ -310,7 +314,7 @@ public class GenerateXML {
     	}
  
     	outputMutantsXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + idFileName+".xml");
-    	outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    	
     }
     
 }
