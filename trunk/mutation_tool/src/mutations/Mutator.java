@@ -351,8 +351,6 @@ public class Mutator {
 				il.dispose();
 			
 		}		
-		String idFileName = Long.toString(System.nanoTime());
-	//	System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");
 		if(writeToFile){
 			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", oClass.getClassName());
 		}
