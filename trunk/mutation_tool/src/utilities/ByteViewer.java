@@ -3,9 +3,9 @@ package utilities;
 import org.apache.bcel.classfile.*;  // The static component of the BCEL API 
 import utilities.ClassLoader;
 
-/* This class is used to get set create on object of a class to store
+/** This class is used to get set create on object of a class to store
  * bytecode of its class and methods.
-*/ 
+ */ 
 
 public class ByteViewer {
 	

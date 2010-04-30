@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 import org.apache.bcel.classfile.*;
 
 /**
- * This class displays the bytecode differences between two classes.  The two arguments for the
+ * This class displays the bytecode of two different classes.  The two arguments for the
  * constructor are the file paths of the two .class files.
  * @author teh_code
  *
@@ -23,6 +23,12 @@ public class ByteCodeViewer extends JFrame{
 	public String originalClassFile;
 	public String mutatedClasssFile;
 	
+	/**
+	 * Constructor for the ByteCodeViewer class
+	 * 
+	 * @param file1 unmodified class file (string)
+	 * @param file2 mutated class file (string)
+	 */
 	public ByteCodeViewer(String file1, String file2)
 	{
 		
@@ -96,6 +102,12 @@ public class ByteCodeViewer extends JFrame{
 	    this.setVisible(true);
 	}
 	
+	/**
+	 * Alternate constructor for the ByteCodeViewer class
+	 * 
+	 * @param oClass1 unmodified class file (JavaClass)
+	 * @param oClass2 mutated class file (JavaClass)
+	 */
 	public ByteCodeViewer(JavaClass oClass1, JavaClass oClass2)
 	{
 		
