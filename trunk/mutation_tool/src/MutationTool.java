@@ -12,13 +12,28 @@
 // Import Statements
 //------------------------------------------
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
 import interfaces.IMutableTreeListener;
-
-import mutations.*;
-
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
 
 import mutations.Mutator;
 
@@ -30,9 +45,6 @@ import controls.table.MutationTable;
 import controls.table.MutationTableFilter;
 import controls.table.PropertiesPanel;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.*;
 
 /**
  * MutationTool is the main class that is compiled and ran.  It is
@@ -58,12 +70,9 @@ public class MutationTool extends JFrame implements ActionListener
 	JMenuItem fileMenuExit;
 	JMenu optionsMenu;
 	JCheckBoxMenuItem optionsMenuPersist;
-	
-	
-	JButton oButton;
+
 	MutableTree oMutableTree;
 	MutationTable oMutationTable;
-	IMutableTreeListener oTreeListener = new MutableTreeListenerExample();
 	PropertiesPanel oPropertiesPanel;
 	
 	/**
@@ -94,7 +103,7 @@ public class MutationTool extends JFrame implements ActionListener
 		fileMenuExit = new JMenuItem("Exit");
 		
 		optionsMenu = new JMenu("Options");
-		optionsMenuPersist = new JCheckBoxMenuItem("Check For Persistant Mutations", false);
+		optionsMenuPersist = new JCheckBoxMenuItem("Check For Persistant Mutations", true);
 
 		//add action listeners
 		fileMenuOpen.addActionListener(this);
@@ -114,23 +123,20 @@ public class MutationTool extends JFrame implements ActionListener
 	}
 	
 	/**
-	 * createFrames creates the frames necissary for our mutation tool
+	 * createFrames creates the frames necessary for our mutation tool
 	 */
 	public void createFrames(){
 		oMutableTree = new MutableTree();		
 		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		//oMutableTree.setPreferredSize(new Dimension(250,800));
-		oMutableTree.addMutableNodeSelectionListener(oTreeListener);
 		
 		JScrollPane oScroll = new JScrollPane(oMutableTree);
 		oScroll.setPreferredSize(new Dimension(250,500));
 		
-		oPropertiesPanel = new PropertiesPanel();
-		
+		oPropertiesPanel = new PropertiesPanel();		
 		
 		MutationTableFilter oTableFilter = new MutationTableFilter();
 		MutationsSelected oMutationsSelected = new MutationsSelected();
-		//oMutationTable = new MutationTable(oPropertiesPanel, oMutationsSelected);
+
 		oMutationTable = new MutationTable(oTableFilter, oPropertiesPanel, oMutationsSelected, oMutationsSelected);
 		oTableFilter.addMutationFilterListener(oMutationTable);
 		
@@ -155,10 +161,8 @@ public class MutationTool extends JFrame implements ActionListener
 		
 		this.getContentPane().setLayout(borderLayout);	
 
-		//this.getContentPane().add(oMutableTree, BorderLayout.WEST);
 		this.getContentPane().add(oScroll, BorderLayout.WEST);
 		this.getContentPane().add(panel2, BorderLayout.CENTER);
-		
 		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
 	
@@ -178,33 +182,31 @@ public class MutationTool extends JFrame implements ActionListener
             	int option = chooser.showOpenDialog(null); 
             	// If user chose a file, open it
             	if (option == JFileChooser.APPROVE_OPTION) {
-            		//oClassToOpen = chooser.getSelectedFile();
             		File[] arFilesToOpen = chooser.getSelectedFiles();
+            		boolean bFilesNotOpened = false;
             		
             		for (int i=0; i<arFilesToOpen.length; i++) {
             			if (!ClassLoader.isClassFile(arFilesToOpen[i].getAbsolutePath())) {
-            				
+            				bFilesNotOpened = true;            				
             			} else if (ClassLoader.classIsAbstractOrInterface(ClassLoader.loadClassFromPath(arFilesToOpen[i].getAbsolutePath()))) {
-            				System.out.println("not loading, because is abstract or interface...");
+            				bFilesNotOpened = true;
             			} else {
             				oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(arFilesToOpen[i].getAbsolutePath()));
             			}
+            		}            		
+            		if (bFilesNotOpened) {
+            			JOptionPane.showMessageDialog(null, "One or more files did not load successfully, because they are not valid class files, or are interfaces / abstract classes, which are not supported.");            			
             		}
-            		
-            		// If there is a problem with the input file, tell the user
-//            		if (!ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {//if (oClassToOpen.canRead() == false || oClassToOpen.exists() == false || !ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {
-//            			JOptionPane.showMessageDialog(null, "File did not load successfully. Either the file\ndoes not exist, or it is not a valid class file.");
-//            			oClassToOpen = null;
-//            		} else {
-//            			oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(oClassToOpen.getAbsolutePath()));
-//            		}
             	}
             }
+			if (e.getSource().equals(optionsMenuPersist)) {
+				oMutationTable.setCheckForPersistentMutations(optionsMenuPersist.isSelected());
+			}
 			if (e.getSource().equals(fileMenuExit)) {
 				// The user wants to exit (quit)
 				System.exit(0);
 			}
-		}
+		} 
 	}
 	
 	/**
