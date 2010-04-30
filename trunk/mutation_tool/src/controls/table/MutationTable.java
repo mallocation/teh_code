@@ -7,7 +7,6 @@ import interfaces.IMutationRowActor;
 import interfaces.IMutationRowListener;
 import interfaces.IMutationTableListener;
 import mutations.MutantCollection;
-import mutations.MutationsSelected;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -18,13 +17,10 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import sun.misc.OSEnvironment;
-
 import mutations.MutationFactory;
-
+import controls.mutations.MutationsSelected;
 import controls.tree.MutableNode;
 
 public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener, IMutationFilterListener {
@@ -81,7 +77,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		if (this.alMutableRows.size() != 0) {
 			for (int i=0; i<alMutableRows.size(); i++) {
 				if (oMutationsSelectedPanel.getMutableObjectsForClass(alMutableRows.get(i).getMutableObject().getMutableClass()).containsMutableObject(alMutableRows.get(i).getMutableObject())) {
-					alMutableRows.get(i).setSelected(true);
+					alMutableRows.get(i).setSelected(true, false);
 				}
 				this.add(alMutableRows.get(i));
 			}
@@ -198,7 +194,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	public void selectAllVisible(boolean bSelectAll) {
 		for (int i=0; i<alMutableRows.size(); i++) {
 			if (alMutableRows.get(i).isVisible()) {
-				alMutableRows.get(i).setSelected(bSelectAll);
+				alMutableRows.get(i).setSelected(bSelectAll, true);
 			}
 		}		
 	}

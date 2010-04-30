@@ -79,7 +79,8 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		popupOptions.add(menuViewDiff);
 		oDiffViewer = null;
 		
-		this.oMutableObject = oObject;		
+		this.oMutableObject = oObject;
+		this.oPropertiesPanel = oPropertiesPanel;
 
 		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
 		chkCreateMutation = new JCheckBox();
@@ -152,9 +153,10 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		return this.chkCreateMutation.isSelected();
 	}
 	
-	public void setSelected(boolean bSelected) {
+	public void setSelected(boolean bSelected, boolean updateRowListeners) {
 		this.chkCreateMutation.setSelected(bSelected);
-		fireMutationRowListeners();
+		if (updateRowListeners)
+			fireMutationRowListeners();
 	}
 	
 	private void fireMutationRowListeners() {

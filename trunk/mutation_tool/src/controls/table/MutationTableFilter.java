@@ -108,7 +108,7 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 	
 	private void fireFilterListeners() {
 		String mutantSearch, mutationType, oldOp, newOp;
-		mutantSearch = txtSearch.getText().trim();
+		mutantSearch = txtSearch.getText();
 		mutationType = ddlMutationType.getSelectedItem() == null ? "" : ddlMutationType.getSelectedItem().toString();
 		oldOp = ddlMutatedOp.getSelectedItem() == null ? "" : ddlMutatedOp.getSelectedItem().toString();
 		newOp = ddlNewOp.getSelectedItem() == null ? "" : ddlNewOp.getSelectedItem().toString();
