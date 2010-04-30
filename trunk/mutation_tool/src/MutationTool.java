@@ -34,6 +34,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.*;
 
+/**
+ * MutationTool is the main class that is compiled and ran.  It is
+ * responsible for both the GUI and command line versions of our
+ * mutation tool.
+ * 
+ * @author teh code
+ *
+ */
 public class MutationTool extends JFrame implements ActionListener
 {
 	//------------------------------------------
@@ -58,6 +66,9 @@ public class MutationTool extends JFrame implements ActionListener
 	IMutableTreeListener oTreeListener = new MutableTreeListenerExample();
 	PropertiesPanel oPropertiesPanel;
 	
+	/**
+	 * Constructor for MutationTool
+	 */
 	public MutationTool(){
 		this.setTitle("Mutation Tool");
 		createMenu();
@@ -70,7 +81,9 @@ public class MutationTool extends JFrame implements ActionListener
 		this.setVisible(true);
 	}
 	
-	
+	/**
+	 * createMenu creates menu for the frame
+	 */
 	public void createMenu(){
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // Prevents the menu bar from being hidden
 	
@@ -100,6 +113,9 @@ public class MutationTool extends JFrame implements ActionListener
 		this.setJMenuBar(menuBar);
 	}
 	
+	/**
+	 * createFrames creates the frames necissary for our mutation tool
+	 */
 	public void createFrames(){
 		oMutableTree = new MutableTree();		
 		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
@@ -146,6 +162,9 @@ public class MutationTool extends JFrame implements ActionListener
 		this.getContentPane().add(panel3, BorderLayout.EAST);
 	}
 	
+	/**
+	 * actionPerformed deals with action events
+	 */
 	public void actionPerformed(ActionEvent e){
 		// Make sure the event was done through the menu
 		if (e.getSource() instanceof JMenuItem)
@@ -188,7 +207,10 @@ public class MutationTool extends JFrame implements ActionListener
 		}
 	}
 	
-	
+	/**
+	 * main function
+	 * @param args an xml file if the command line version is desired; null if GUI is desired
+	 */
 	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable() {			
 			public void run() {
