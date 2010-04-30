@@ -34,15 +34,9 @@ public class ParseXML {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-		ParseXML oXMLParse = new ParseXML();
+		ParseXML oXMLParse = new ParseXML();						
 	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
-//       oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\Average.class"),System.getProperty("user.dir") + "\\bin\\Average.class");
-//       //oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
-//       //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
-//        //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
-//        //oXMLParse.getMutantAttributes("/blah/blah");
-//        //GenerateXML oXML = new GenerateXML();
-//       // oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
+     //oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\utilities\\GenerateXML.class"),System.getProperty("user.dir") + "\\bin\\utilities\\GenerateXML.class");
 
 	}
 
@@ -128,6 +122,7 @@ public class ParseXML {
 		MutantCollection mutationsList = new MutantCollection();
 		IMutableObject tempMutant = new Mutant(); 
 		xmlDoc = getXMLFile(locationOfXML);
+
 		
         for(int i = 0; i < getNumberOfMutants(xmlDoc); i++){
         	Boolean valid = true;
@@ -171,7 +166,7 @@ public class ParseXML {
 					//System.exit(0);
 				}
 				//REMOVE
-				//System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
+				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
 				
 			}
 			if(valid){
@@ -237,7 +232,7 @@ public class ParseXML {
 	
 	public  MutantCollection getPersistentMutations(JavaClass classFile) {
 		String classesXMLPath = System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml";
-		String fileName  = getPersistentMutationsFileName(classesXMLPath, classFile.getSourceFileName());
+		String fileName  = getPersistentMutationsFileName(classesXMLPath, classFile.getSourceFileName()+classFile.getFileName());
 		
 		return getMutantAttributes(fileName, classesXMLPath);
 	}
