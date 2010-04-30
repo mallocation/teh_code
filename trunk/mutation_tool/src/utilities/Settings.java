@@ -1,74 +1,26 @@
 package utilities;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
-import java.util.Properties;
-
-import sun.misc.IOUtils;
+import java.net.URLDecoder;
 
 /**
  * This class will be used to represent specific settings within the program.
- * @author cjohnson
+ * @author teh_code
  *
  */
 public class Settings {
 	
-	private static Properties _oToolProperties;
-	
-
-	private FileOutputStream oSettingsOutput;
-	
-	public static Properties getToolProperties() {
-		if (_oToolProperties == null) {			
-			FileInputStream in = null;
-			try {
-				try {
-					URL oFile = new URL("../settings/");
-					in = new FileInputStream("toolprops.settings");
-					_oToolProperties = new Properties();
-					_oToolProperties.load(in);
-				} finally {
-					in.close();
-				}
-			} catch (Exception e) {
-				createDefaultPropsFile();
-			}
+	@SuppressWarnings("deprecation")
+	public String getMutationsFolderPath() {
+		URL oRelativeURL = this.getClass().getResource("Settings.class");
+		File oThisClass = new File(URLDecoder.decode(oRelativeURL.getPath()));
+		File oUtilsDir = new File(oThisClass.getParent());
+		File oMainDir = new File(oUtilsDir.getParent());
+		File oMutationsDir = new File(oMainDir, "generated_mutations");
+		if (!oMutationsDir.exists() || !oMutationsDir.isDirectory()) {
+			oMutationsDir.mkdirs();
 		}
-		return _oToolProperties;
+		return oMutationsDir.getAbsolutePath();		
 	}
-	
-	private static void createDefaultPropsFile() {
-		_oToolProperties = new Properties();
-		FileOutputStream out = null;
-		try {
-			try {
-				out = new FileOutputStream(System.getProperty("user.dir") + "/settings/toolprops.settings");
-				_oToolProperties.store(out, "");
-			} finally {
-				out.close();
-			}
-		} catch (Exception e) {
-			
-		}
-	}
-	
-	
-	
-	
-	
-	
-	private static final String sSettingsDirectory = "";
-	
-	private static final File oSettingsFile = new File(sSettingsDirectory + "../settings");
-	
-	public static void main(String args[]) {
-		System.out.println(Settings.getToolProperties().toString());
-	}
-	
-	
-	
-
-
 }
