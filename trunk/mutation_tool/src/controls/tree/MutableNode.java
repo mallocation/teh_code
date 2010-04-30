@@ -44,10 +44,18 @@ public class MutableNode extends DefaultMutableTreeNode {
 		oClassNode.add(this);
 	}
 	
+	/**
+	 * Returns teh mutable class
+	 * @return
+	 */
 	public JavaClass getMutableClass() {
 		return this.oMutableClass;
 	}
 	
+	/**
+	 * Returns the mutable method
+	 * @return
+	 */
 	public Method getMutableMethod() {
 		return this.oMutableMethod;
 	}
