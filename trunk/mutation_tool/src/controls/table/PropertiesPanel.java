@@ -25,6 +25,9 @@ public class PropertiesPanel extends JPanel implements IMutationRowActor{
 	public JTextArea propertiesTextArea;
 	public String mutationCountText;
 	
+	/**
+	 * Constructor for the PropertiesPanel class
+	 */
 	public PropertiesPanel(){
 		propertiesPanelDimension = new Dimension(554,120);
 		this.setPreferredSize(propertiesPanelDimension);

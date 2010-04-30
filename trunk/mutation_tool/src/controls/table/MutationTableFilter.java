@@ -102,20 +102,33 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 		this.alFilterListeners = new ArrayList<IMutationFilterListener>();		
 	}
 	
+	/**
+	 * Adds mutation filter listener
+	 * @param oListener mutation table listener
+	 */
 	public void addMutationFilterListener(IMutationFilterListener oListener) {
 		this.alFilterListeners.add(oListener);
 	}
 	
+	/**
+	 * Clears the select all check box
+	 */
 	private void clearSelectAll() {
 		this.chkSelectAll.setSelected(false);
 	}
 	
+	/**
+	 * Fires the select all listeners
+	 */
 	private void fireSelectAllListeners() {
 		for (int i=0; i<alFilterListeners.size(); i++) {
 			this.alFilterListeners.get(i).selectAllVisible(chkSelectAll.isSelected());
 		}
 	}
 	
+	/**
+	 * Fires the filter listeners
+	 */
 	private void fireFilterListeners() {
 		String mutantSearch, mutationType, oldOp, newOp;
 		mutantSearch = txtSearch.getText();
@@ -171,6 +184,9 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 		//fireFilterListeners();		
 	}
 	
+	/**
+	 * resets filters
+	 */
 	private void resetFilters() {
 		ddlMutationType.setSelectedIndex(0);
 		ddlMutatedOp.removeAllItems();

@@ -98,10 +98,17 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		return oSelectedColl;
 	}
 	
+	/**
+	 * Function to set check for persistent mutations to true or false
+	 * @param bCheck true if checking for persistant mutations
+	 */
 	public void setCheckForPersistentMutations(boolean bCheck) {
 		this.bCheckPersistantMutations = bCheck;
 	}
 	
+	/**
+	 * Function to show mutable rows
+	 */
 	private void showMutableRows() {
 		this.setVisible(false);
 		this.setVisible(true);
@@ -120,6 +127,9 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Returns selected mutation count
+	 */
 	public void getSelectedMutationCount() {
 		Component[] arComponents = this.getComponents();
 		int nSelected = 0;
@@ -154,6 +164,12 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		new TableLoader(oSelectedNode).execute();
 	}
 	
+	/**
+	 * TableLoader loads the mutation table
+	 * 
+	 * @author teh code
+	 *
+	 */
 	private class TableLoader extends SwingWorker<Void, Void> {
 		private MutableNode selectedNode;
 		
@@ -245,6 +261,10 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		}		
 	}
 	
+	/**
+	 * Adds a mutation table listener
+	 * @param oTableListener mutation table listener
+	 */
 	public void addMutationTableListener(IMutationTableListener oTableListener) {
 		if (!this.alTableListeners.contains(oTableListener)) {
 			this.alTableListeners.add(oTableListener);

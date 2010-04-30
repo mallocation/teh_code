@@ -29,7 +29,7 @@ import mutations.Mutator;
 import utilities.ByteCodeViewer;
 
 /**
- * MutationRow
+ * MutationRow creates a row of the mutation table
  * 
  * @author teh code
  *
@@ -74,10 +74,10 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	/**
 	 * Constructor for the class MutationRow
 	 * 
-	 * @param oObject
-	 * @param bAltRow
-	 * @param oPropertiesPanel
-	 * @param oGeneratePanel
+	 * @param oObject is the mutation object
+	 * @param bAltRow color of row
+	 * @param oPropertiesPanel used for interfacing with the properties panel
+	 * @param oGeneratePanel used for interfacing with the generate panel
 	 */
 	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
 		// Create arraylist of row listeners
@@ -159,21 +159,38 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		
 	}
 	
+	/**
+	 * Sets color of row
+	 * @param bAltRow
+	 */
 	public void setAltRow(boolean bAltRow) {
 		rowBgColor = bAltRow ? new Color(235,245,255) : new Color(255, 255, 255);
 		this.repaint();
 	}
 	
+	/**
+	 * Returns true if a row is selected
+	 * @return
+	 */
 	public boolean isSelected() {
 		return this.chkCreateMutation.isSelected();
 	}
 	
+	/**
+	 * Performs tasks for setting a row as selected
+	 * 
+	 * @param bSelected
+	 * @param updateRowListeners
+	 */
 	public void setSelected(boolean bSelected, boolean updateRowListeners) {
 		this.chkCreateMutation.setSelected(bSelected);
 		if (updateRowListeners)
 			fireMutationRowListeners();
 	}
 	
+	/**
+	 * Function to fire mutation row listeners
+	 */
 	private void fireMutationRowListeners() {
 		if (this.isSelected()) {
 			for(int i=0; i<alRowListeners.size(); i++) {
@@ -186,6 +203,10 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		}
 	}
 	
+	/**
+	 * Function to get the mutable object
+	 * @return
+	 */
 	public IMutableObject getMutableObject() {
 		return this.oMutableObject;
 	}

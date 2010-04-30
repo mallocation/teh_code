@@ -4,7 +4,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 /**
- * MutationTableModel
+ * MutationTableModel is a list model for the mutation table
  * 
  * @author teh code
  *
