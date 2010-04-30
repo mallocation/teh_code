@@ -21,6 +21,18 @@ public class Settings {
 		if (!oMutationsDir.exists() || !oMutationsDir.isDirectory()) {
 			oMutationsDir.mkdirs();
 		}
-		return oMutationsDir.getAbsolutePath();		
+		return oMutationsDir.getAbsolutePath();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public String getPersistentInformationPath() {
+		URL oRelativeURL = this.getClass().getResource("Settings.class");
+		File oThisClass = new File(URLDecoder.decode(oRelativeURL.getPath()));
+		File oUtilsDir = new File(oThisClass.getParent());
+		File oPersistDir = new File(oUtilsDir.getParent(), "persistXML");
+		if (!oPersistDir.exists() || !oPersistDir.isDirectory()) {
+			oPersistDir.mkdirs();
+		}
+		return oPersistDir.getAbsolutePath();		
 	}
 }
