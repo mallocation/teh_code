@@ -5,6 +5,12 @@ import org.apache.bcel.classfile.Method;
 
 import interfaces.IMutableObject;
 
+/**
+ * Mutant is used to create an individual mutant
+ * 
+ * @author teh code
+ *
+ */
 public class Mutant implements IMutableObject {
 	
 	private eMutantLevel mutantLevel;
@@ -108,6 +114,12 @@ public class Mutant implements IMutableObject {
 		
 	}
 	
+	/**
+	 * mutantLevelToString converts the mutant level to a string value
+	 * 
+	 * @param oMutantLevel mutant level
+	 * @return
+	 */
 	public static String mutantLevelToString(eMutantLevel oMutantLevel) {
 		if (oMutantLevel == eMutantLevel.PACKAGE)
 			return "PACKAGE";
@@ -119,6 +131,12 @@ public class Mutant implements IMutableObject {
 			return null;		
 	}
 	
+	/**
+	 * mutantTypeToString converts the mutant type to a string value
+	 * 
+	 * @param oMutantType mutant type
+	 * @return
+	 */
 	public static String mutantTypeToString(eMutantType oMutantType) {
 		if (oMutantType == eMutantType.ARITHMETIC)
 			return "ARITHMETIC";
@@ -130,6 +148,12 @@ public class Mutant implements IMutableObject {
 			return null;		
 	}
 	
+	/**
+	 * stringToMutantLevel converts a string to a mutant level
+	 * 
+	 * @param sMutantLevel mutant level
+	 * @return
+	 */
 	public static eMutantLevel stringToMutantLevel(String sMutantLevel) {
 		sMutantLevel = sMutantLevel.trim().toUpperCase();
 		
@@ -143,6 +167,12 @@ public class Mutant implements IMutableObject {
 			return null;
 	}
 	
+	/**
+	 * stringToMutantType converts a string to a mutant type
+	 * 
+	 * @param sMutantType mutant type
+	 * @return
+	 */
 	public static eMutantType stringToMutantType(String sMutantType) {
 		sMutantType = sMutantType.trim().toUpperCase();
 		
@@ -156,6 +186,11 @@ public class Mutant implements IMutableObject {
 			return null;
 	}
 	
+	/**
+	 * getAllMutantTypesAsString returns all mutant types in an array of strings
+	 * 
+	 * @return an array of strings containing all mutant types
+	 */
 	public static String[] getAllMutantTypesAsString() {
 		return new String[] {mutantTypeToString(eMutantType.ARITHMETIC), mutantTypeToString(eMutantType.LOGICAL), mutantTypeToString(eMutantType.RELATIONAL)};
 	}	
