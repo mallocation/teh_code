@@ -6,6 +6,8 @@ import mutations.MutantCollection;
 import mutations.Mutator;
 
 import java.io.*;
+
+import org.apache.bcel.classfile.JavaClass;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -115,7 +117,7 @@ public class ParseXML {
 	 * Gets the mutant attributes.
 	 *
 	 * @param locationOfXML location of xml file
-	 * @param classPathToSearch class path of file to mutate
+	 * @param classPath class path of file to mutate
 	 * @return the list of mutant attributes
 	 */
 	public MutantCollection getMutantAttributes(String locationOfXML, String classPath){
@@ -209,7 +211,7 @@ public class ParseXML {
 				}
 			}
 		}
-        
+       
 		return id;
 	}
 	
@@ -232,6 +234,11 @@ public class ParseXML {
 	
 	}
 	
-
+	public  MutantCollection getPersistentMutations(JavaClass classFile) {
+		String classesXMLPath = System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml";
+		String fileName  = getPersistentMutationsFileName(classesXMLPath, classFile.getSourceFileName());
+		
+		return getMutantAttributes(fileName, classesXMLPath);
+	}
 	
 }
