@@ -29,18 +29,6 @@ public class ParseXML {
 
 	
 	/**
-	 * The main method. Used to test functionality
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args) {
-		ParseXML oXMLParse = new ParseXML();						
-	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
-     //oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\utilities\\GenerateXML.class"),System.getProperty("user.dir") + "\\bin\\utilities\\GenerateXML.class");
-
-	}
-
-	/**
 	 * Instantiates a new ParseXML class.
 	 */
 	public ParseXML(){
@@ -129,6 +117,8 @@ public class ParseXML {
 			eMutant = (Element) listOfMutants.item(i);
 			NamedNodeMap mutantAttributes = eMutant.getAttributes();
         	numberOfAttributes = mutantAttributes.getLength();
+        	tempMutant = new Mutant();
+        	
     		if(ClassLoader.isClassFile(classPath))
     			tempMutant.setMutableClass(ClassLoader.loadClassFromPath(classPath));
     		else
@@ -166,7 +156,7 @@ public class ParseXML {
 					//System.exit(0);
 				}
 				//REMOVE
-				System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
+				//System.out.println(mutantAttribute.getNodeName() + ": " + mutantAttribute.getNodeValue());
 				
 			}
 			if(valid){
@@ -231,10 +221,15 @@ public class ParseXML {
 	}
 	
 	public  MutantCollection getPersistentMutations(JavaClass classFile) {
-		String classesXMLPath = System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml";
-		String fileName  = getPersistentMutationsFileName(classesXMLPath, classFile.getSourceFileName()+classFile.getFileName());
+		String classesXMLPath = System.getProperty("user.dir") + "\\persistentStorage\\generated_XML\\classes.xml";
+		File oClassesXML = new File(classesXMLPath);
 		
-		return getMutantAttributes(fileName, classesXMLPath);
+		if (!oClassesXML.canRead() || !oClassesXML.exists()) {
+			return new MutantCollection();
+		}
+		
+		String fileName  = getPersistentMutationsFileName(classesXMLPath, classFile.getFileName());		
+		return getMutantAttributes(fileName, classFile.getFileName());
 	}
 	
 }
