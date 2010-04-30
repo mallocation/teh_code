@@ -6,7 +6,7 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.*;
 import interfaces.IMutableObject;
 import utilities.GenerateXML;
-
+import utilities.Settings;
 /**
  * Mutator performs dynamic operator mutations on a specific
  * class package, class file, or method in a class.  Its purpose is to change
@@ -405,7 +405,10 @@ public class Mutator {
 	 * Assumption:   oMutantsToGenerate are all mutations on the same file.
 	 * @param <code>oMutantsToGenerate</code> The MutantCollenction containing all IMutableObjects that will be used for creating mutations.
 	 */
-	public static void generate(MutantCollection oMutantsToGenerate, String mutationsFolderPath){
+	public static void generate(MutantCollection oMutantsToGenerate){
+		Settings oSettings = new Settings();
+		String mutationsFolderPath = oSettings.getMutationsFolderPath();
+		String persistentFolderPath = oSettings.getPersistentInformationPath();
 		Iterator<IMutableObject> iterator = oMutantsToGenerate.getMutants().iterator();
 		MutantCollection generatedMutants = new MutantCollection();
 		while(iterator.hasNext()){
@@ -415,7 +418,7 @@ public class Mutator {
 		dumpClasses(generatedMutants, mutationsFolderPath);
 		GenerateXML xmlGenerator = new GenerateXML();
 		String classPath = oMutantsToGenerate.getMutants().iterator().next().getMutableClass().getFileName();
-		xmlGenerator.createMutationsXML(oMutantsToGenerate, classPath,  System.getProperty("user.dir") + "/persistentStorage/generated_XML/");
+		xmlGenerator.createMutationsXML(oMutantsToGenerate, classPath,  persistentFolderPath);
 	}
 }
 
