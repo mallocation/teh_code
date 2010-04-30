@@ -18,7 +18,6 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
 import utilities.ClassLoader;
-import utilities.JavaClassSort;
 
 /**
  * MutableTree is used in the Graphical User Interface portion of the mutation tool.
@@ -90,17 +89,6 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		
 		// This class will be a selection listener for itself, firing off all other IMutableTreeListeners
 		this.addTreeSelectionListener(this);
-		
-		// Draw the objects
-		//drawMutableObjects();
-		
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
-//		this.addMutableClassToTree(ClassLoader.loadClassFromPath("C:\\Documents and Settings\\curtis-johnson\\My Documents\\eclipse_workspace\\mutation_tool\\bin\\Average.class"));
 	}
 	
 	/**
@@ -121,13 +109,6 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 	}
 	
 	/**
-	 * Sort list of classes by name.
-	 */
-	private void sortMutableClasses() {
-		Collections.sort(alMutableClasses, new JavaClassSort());
-	}
-	
-	/**
 	 * Clear all nodes in the tree, leaving the root node intact.
 	 */
 	private void clearTree() {
@@ -143,13 +124,6 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 		
 		// Clear the tree
 		clearTree();
-		
-//		 If there are classes to show, then don't show the root node (stating that no classes are loaded.)
-//			Otherwise, show the root node
-//		if (alMutableClasses.size() == 0)
-//			this.setRootVisible(true);
-//		else
-//			this.setRootVisible(false);
 
 		// Traverse the list of mutable classes to show, and add them to the tree.
 		for (int i=0; i<alMutableClasses.size(); i++) {
@@ -158,7 +132,6 @@ public class MutableTree extends JTree implements TreeSelectionListener {
 			for (int j=0; j < arMethods.length; j++) {
 				new MutableNode(arMethods[j], mutableClassNode);
 			}
-			//oRootNode.add(mutableClassNode);
 		}
 		this.repaint();
 	}
