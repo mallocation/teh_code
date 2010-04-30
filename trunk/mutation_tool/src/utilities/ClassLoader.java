@@ -42,5 +42,9 @@ public class ClassLoader {
 		else
 			return false;
 	}
+	
+	public static boolean classIsAbstractOrInterface(JavaClass oClass) {
+		return oClass.isAbstract() || oClass.isInterface();	
+	}
 
 }
