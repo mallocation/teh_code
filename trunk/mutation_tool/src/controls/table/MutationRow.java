@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 
 import javax.swing.BorderFactory;
@@ -41,23 +42,36 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	JLabel lblMutationOps;
 	JLabel lblMutationLevel;
 	
+	// Fonts for row displaying
 	Font oMutationNameFont;
 	Font oPropertiesFont;
 	
+	// Dimensions for components
 	Dimension oMutationNameDim, oPropertiesDim, oRowDimension;
 	
+	// Background color of row
 	Color rowBgColor;
 	
 	boolean bRowIsSelected;
 	boolean bIsHighlighted;
 	
+	/**
+	 * This is the mutable object that the row represents.
+	 */
 	private IMutableObject oMutableObject;
+	
 	
 	private IMutationRowActor oPropertiesPanel;
 	
-	private IMutationRowListener oRowListener;
+	private ArrayList<IMutationRowListener> alRowListeners;
+	
+	//private IMutationRowListener oRowListener;
 	
 	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
+		// Create arraylist of row listeners
+		alRowListeners = new ArrayList<IMutationRowListener>();
+		alRowListeners.add(oGeneratePanel);
+		
 		// Create right-click properties
 		popupOptions = new JPopupMenu();
 		menuViewDiff = new JMenuItem("View Byte Code...");
@@ -65,10 +79,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		popupOptions.add(menuViewDiff);
 		oDiffViewer = null;
 		
-		this.oMutableObject = oObject;
-		this.oPropertiesPanel = oPropertiesPanel;
-		this.oRowListener = oGeneratePanel;
-		
+		this.oMutableObject = oObject;		
 
 		lblMutationName = new JLabel(oMutableObject.getMutableMethod() == null ? oMutableObject.getMutableClass().getClassName() : oMutableObject.getMethodName());
 		chkCreateMutation = new JCheckBox();
@@ -143,6 +154,19 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	
 	public void setSelected(boolean bSelected) {
 		this.chkCreateMutation.setSelected(bSelected);
+		fireMutationRowListeners();
+	}
+	
+	private void fireMutationRowListeners() {
+		if (this.isSelected()) {
+			for(int i=0; i<alRowListeners.size(); i++) {
+				alRowListeners.get(i).mutableObjectSelected(this.getMutableObject());
+			}
+		} else {
+			for (int i=0; i<alRowListeners.size(); i++) {
+				alRowListeners.get(i).mutableObjectUnSelected(this.getMutableObject());
+			}
+		}
 	}
 	
 	public IMutableObject getMutableObject() {
@@ -187,11 +211,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 				oDiffViewer = new ByteCodeViewer(this.getMutableObject().getMutableClass(), this.getMutableObject().getMutableClass());
 			}
 		} else if (oActionObject.equals(chkCreateMutation)) {
-			if (this.isSelected()) {
-				oRowListener.mutableObjectSelected(this.getMutableObject());
-			} else {
-				oRowListener.mutableObjectUnSelected(this.getMutableObject());
-			}
+			fireMutationRowListeners();
 		}
 		
 	}

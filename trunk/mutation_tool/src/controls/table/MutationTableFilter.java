@@ -20,8 +20,9 @@ import mutations.Mutant;
 import mutations.cInstructionHelper;
 import interfaces.IMutationFilterActor;
 import interfaces.IMutationFilterListener;
+import interfaces.IMutationTableListener;
 
-public class MutationTableFilter extends JPanel implements ActionListener, KeyListener, IMutationFilterActor {
+public class MutationTableFilter extends JPanel implements ActionListener, KeyListener, IMutationTableListener {
 	private JLabel lblMutationType, lblMutatedOp, lblNewOp, lblSearch;
 	private JComboBox ddlMutationType, ddlMutatedOp, ddlNewOp;
 	private JCheckBox chkSelectAll;
@@ -95,6 +96,10 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 		this.alFilterListeners.add(oListener);
 	}
 	
+	private void clearSelectAll() {
+		this.chkSelectAll.setSelected(false);
+	}
+	
 	private void fireSelectAllListeners() {
 		for (int i=0; i<alFilterListeners.size(); i++) {
 			this.alFilterListeners.get(i).selectAllVisible(chkSelectAll.isSelected());
@@ -148,26 +153,25 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 	@Override
 	public void keyReleased(KeyEvent e) {
 		fireFilterListeners();
+		clearSelectAll();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//fireFilterListeners();		
 	}
+	
+	private void resetFilters() {
+		ddlMutationType.setSelectedIndex(0);
+		ddlMutatedOp.removeAllItems();
+		ddlNewOp.removeAllItems();
+		txtSearch.setText("");
+		chkSelectAll.setSelected(false);	
+	}
 
 	@Override
-	public void resetMutationFilter() {
-		ddlMutationType.removeAllItems();
-		String[] arMutationTypes = Mutant.getAllMutantTypesAsString();
-		ddlMutationType.insertItemAt("", 0);
-		ddlMutationType.setSelectedIndex(0);
-		ddlMutatedOp = new JComboBox();
-		ddlNewOp = new JComboBox();
-		
-		txtSearch = new JTextField();
-	
-		chkSelectAll = new JCheckBox("Select All");
-		
+	public void mutationTableLoaded() {
+		this.resetFilters();		
 	}
 	
 	
