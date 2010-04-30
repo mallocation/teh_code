@@ -16,7 +16,8 @@ public class Settings {
 		URL oRelativeURL = this.getClass().getResource("Settings.class");
 		File oThisClass = new File(URLDecoder.decode(oRelativeURL.getPath()));
 		File oUtilsDir = new File(oThisClass.getParent());
-		File oMainDir = new File(oUtilsDir.getParent());
+		File oTehCodeDir = new File(oUtilsDir.getParent());
+		File oMainDir = new File(oTehCodeDir.getParent());
 		File oMutationsDir = new File(oMainDir, "generated_mutations");
 		if (!oMutationsDir.exists() || !oMutationsDir.isDirectory()) {
 			oMutationsDir.mkdirs();
