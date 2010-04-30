@@ -24,6 +24,7 @@ import mutations.Mutator;
 
 import utilities.ClassLoader;
 
+import controls.mutations.MutationsSelected;
 import controls.tree.MutableTree;
 import controls.table.MutationTable;
 import controls.table.MutationTableFilter;
@@ -140,18 +141,29 @@ public class MutationTool extends JFrame implements ActionListener
             	// Open the Open Dialog to allow user to select file
             	String current = System.getProperty("user.dir");
             	JFileChooser chooser = new JFileChooser(current);
+            	chooser.setMultiSelectionEnabled(true);
             	int option = chooser.showOpenDialog(null);
             	File oClassToOpen; 
             	// If user chose a file, open it
             	if (option == JFileChooser.APPROVE_OPTION) {
-            		oClassToOpen = chooser.getSelectedFile();
-            		// If there is a problem with the input file, tell the user
-            		if (!ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {//if (oClassToOpen.canRead() == false || oClassToOpen.exists() == false || !ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {
-            			JOptionPane.showMessageDialog(null, "File did not load successfully. Either the file\ndoes not exist, or it is not a valid class file.");
-            			oClassToOpen = null;
-            		} else {
-            			oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(oClassToOpen.getAbsolutePath()));
+            		//oClassToOpen = chooser.getSelectedFile();
+            		File[] arFilesToOpen = chooser.getSelectedFiles();
+            		
+            		for (int i=0; i<arFilesToOpen.length; i++) {
+            			if (!ClassLoader.isClassFile(arFilesToOpen[i].getAbsolutePath())) {
+            				
+            			} else {
+            				oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(arFilesToOpen[i].getAbsolutePath()));
+            			}
             		}
+            		
+            		// If there is a problem with the input file, tell the user
+//            		if (!ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {//if (oClassToOpen.canRead() == false || oClassToOpen.exists() == false || !ClassLoader.isClassFile(oClassToOpen.getAbsolutePath())) {
+//            			JOptionPane.showMessageDialog(null, "File did not load successfully. Either the file\ndoes not exist, or it is not a valid class file.");
+//            			oClassToOpen = null;
+//            		} else {
+//            			oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(oClassToOpen.getAbsolutePath()));
+//            		}
             	}
             }
             
