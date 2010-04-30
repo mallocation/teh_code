@@ -287,7 +287,7 @@ public class Mutator {
 	 * within a specific class file.
 	 */
 
-	public static void performMutation(IMutableObject oMutableObject, boolean writeToFile ) {
+	public static IMutableObject performMutation(IMutableObject oMutableObject, boolean writeToFile ) {
 		int nMutations = 0;
 		parseArguments(oMutableObject);
 		oInstHelper = new cInstructionHelper();
@@ -354,6 +354,8 @@ public class Mutator {
 		if(writeToFile){
 			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", oClass.getClassName());
 		}
+		oMutableObject.setMutableClass(oClassGen.getJavaClass());
+		return oMutableObject;
 	}
 
 	/**
