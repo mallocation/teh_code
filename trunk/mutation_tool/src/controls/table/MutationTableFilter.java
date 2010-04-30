@@ -81,7 +81,7 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 		ddlNewOp.setBounds(507, 25, 50, 22);
 		
 		this.add(chkSelectAll);
-		chkSelectAll.setBounds(480, 55, 80, 30);
+		chkSelectAll.setBounds(410, 55, 80, 30);
 		
 		this.add(lblSearch);
 		lblSearch.setBounds(45, 55, 70, 30);
