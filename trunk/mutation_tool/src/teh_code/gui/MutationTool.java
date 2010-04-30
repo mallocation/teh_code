@@ -34,17 +34,17 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import interfaces.IMutableTreeListener;
 
-import mutations.Mutator;
 
-import utilities.ClassLoader;
+import teh_code.controls.mutations.MutationsSelected;
+import teh_code.controls.table.MutationTable;
+import teh_code.controls.table.MutationTableFilter;
+import teh_code.controls.table.PropertiesPanel;
+import teh_code.controls.tree.MutableTree;
+import teh_code.interfaces.IMutableTreeListener;
+import teh_code.mutations.Mutator;
+import teh_code.utilities.ClassLoader;
 
-import controls.mutations.MutationsSelected;
-import controls.tree.MutableTree;
-import controls.table.MutationTable;
-import controls.table.MutationTableFilter;
-import controls.table.PropertiesPanel;
 
 
 /**
