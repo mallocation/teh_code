@@ -165,6 +165,8 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	 */
 	public void setAltRow(boolean bAltRow) {
 		rowBgColor = bAltRow ? new Color(235,245,255) : new Color(255, 255, 255);
+		this.setBackground(rowBgColor);
+		this.chkCreateMutation.setBackground(rowBgColor);
 		this.repaint();
 	}
 	
