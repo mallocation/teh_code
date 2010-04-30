@@ -18,14 +18,14 @@ public class MutationTool {
     	}	else {
     		ParseXML commandLineInterface = new ParseXML();
     		
-    		if (args.length == 0) {
+    		if (args.length != 0) {
     			for(int i=0; i < args.length; i++){
     				commandLineInterface.getMutationsFromCommandLine(args[i]);  			
     			}
     		} else {
     			//print usage
-    			System.out.println("Usage: MutationTool file1 file2 file3");
-    			System.out.println("where file1, file2, etc are compatible mutation scripting xml files");    			
+    			System.out.println("\n\nUsage: MutationTool file1 file2 file3");
+    			System.out.println("where file1, file2, etc are compatible mutation scripting xml files\nSee manual for details.");    			
     		}
     	}    	
     }
