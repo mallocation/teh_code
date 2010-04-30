@@ -34,7 +34,7 @@ import controls.tree.MutableNode;
  * @author teh code
  *
  */
-public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener, IMutationFilterListener {
+public class MutationTable extends JPanel implements IMutableTreeListener, IMutationFilterListener {
 
 	private ArrayList<MutationRow> alMutableRows;
 	
@@ -109,7 +109,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	/**
 	 * Function to show mutable rows
 	 */
-	private void showMutableRows() {
+	private void addMutableRowsToTable() {
 		this.setVisible(false);
 		this.setVisible(true);
 		if (this.alMutableRows.size() != 0) {
@@ -121,30 +121,9 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 			}
 		} else {
 			this.add(lblNoMutations);
-		}
-			
+		}			
 		this.setVisible(false);
 		this.setVisible(true);
-	}
-	
-	/**
-	 * Returns selected mutation count
-	 */
-	public void getSelectedMutationCount() {
-		Component[] arComponents = this.getComponents();
-		int nSelected = 0;
-		for (int i=0; i<arComponents.length; i++) {
-			MutationRow oRow = (MutationRow)arComponents[i];
-			if (oRow.isSelected()) {
-				nSelected++;
-			}			
-		}
-		System.out.println(nSelected + " selected mutations.");		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		getSelectedMutationCount();		
 	}
 	
 	/**
@@ -217,19 +196,17 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		
 		@Override
 		protected void done() {
-			if (!isCancelled())
-				
-				showMutableRows();
+			if (!isCancelled())				
+				addMutableRowsToTable();
 			super.done();
 		}
 	}
 
 	@Override
 	public void filterMutations(String mutantSearch, String mutantType, String oldOp, String newOp) {
-		boolean bMutantsVisible = false;
+		int nVisible = 0;
 		for (int i=0; i<alMutableRows.size(); i++) {
 			MutationRow oRow = alMutableRows.get(i);
-
 			String matchSearchTerm = oRow.getMutableObject().getMutableMethod() == null ? oRow.getMutableObject().getMutableClass().getClassName() : oRow.getMutableObject().getMutableMethod().getName();
 			String matchMutant = mutantType.equals("") ? oRow.getMutableObject().getMutantTypeAsString() : mutantType;
 			String matchOldOp = oldOp.equals("") ? oRow.getMutableObject().getOldOperator() : oldOp;
@@ -240,16 +217,18 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 					oRow.getMutableObject().getOldOperator().equals(matchOldOp) &&
 					oRow.getMutableObject().getNewOperator().equals(matchNewOp) &&
 					matchSearchTerm.toLowerCase().contains(mutantSearch.toLowerCase())) {
+				if (nVisible % 2 == 0) {
+					oRow.setAltRow(false);
+				} else {
+					oRow.setAltRow(true);
+				}
+				nVisible++;
 				oRow.setVisible(true);
-				bMutantsVisible = true;
 			} else {
 				oRow.setVisible(false);
 			}		
-		}
-		if (bMutantsVisible) {
-			
-		}
-		
+		}	
+		this.repaint();
 	}
 
 	@Override
