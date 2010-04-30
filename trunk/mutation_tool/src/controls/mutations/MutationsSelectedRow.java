@@ -18,14 +18,13 @@ import org.apache.bcel.classfile.JavaClass;
 public class MutationsSelectedRow extends JPanel {
 	private JavaClass oClass;
 	private boolean bExported;
-	private ImageIcon imgExported, imgNotExported, imgWorking;
+	private ImageIcon imgExported, imgNotExported;
 	private MutantCollection colClassMutants;
 	private JLabel lblClass, lblMutationCount;
 	private JProgressBar progGenerateBar;
 	
-	private final String pathImgExported = "../images/green_dot.png";
-	private final String pathImgNotExported = "../images/yellow_dot.png";
-	private final String pathImgWorking = "../images/TableLoader2.gif";
+	private final String pathImgExported = "../../images/green_dot.png";
+	private final String pathImgNotExported = "../../images/yellow_dot.png";
 	
 	public MutationsSelectedRow(JavaClass oClass, boolean isExported){
 		this.oClass = oClass;
@@ -35,7 +34,6 @@ public class MutationsSelectedRow extends JPanel {
 		
 		this.imgExported = new ImageIcon(getClass().getResource(pathImgExported));
 		this.imgNotExported = new ImageIcon(getClass().getResource(pathImgNotExported));
-		this.imgWorking = new ImageIcon(getClass().getResource(pathImgWorking));
 
 		this.colClassMutants = new MutantCollection();
 		
@@ -85,12 +83,6 @@ public class MutationsSelectedRow extends JPanel {
 	private void updateMutationCount() {
 		this.lblMutationCount.setText("Mutation Count: " + this.colClassMutants.getCollectionCount());
 		this.setExported(false);
-	}
-	
-	public void setWorking() {
-		lblClass.setIcon(imgWorking);
-		lblClass.repaint();
-		this.repaint();
 	}
 	
 	public void setExported(boolean bExported) {
