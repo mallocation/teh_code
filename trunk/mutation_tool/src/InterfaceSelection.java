@@ -16,7 +16,9 @@ public class InterfaceSelection {
     	
     	else {
     		ParseXML commandLineInterface = new ParseXML();
-    		commandLineInterface.getMutationsFromCommandLine(args[0]);
+    		for(int i=0; i < args.length; i++){
+    			commandLineInterface.getMutationsFromCommandLine(args[i]);
+    		}
     		
     	}
     	
