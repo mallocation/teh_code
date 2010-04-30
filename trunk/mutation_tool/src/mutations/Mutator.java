@@ -166,7 +166,7 @@ public class Mutator {
 	 *
 	 * @param args program execution command line arguments
 	 */
-	private static void parseArguments(IMutableObject oMutableObject) {
+	private static void parseArguments(IMutableObject oMutableObject ) {
 		//Get the class file
 	
 		oClass = oMutableObject.getMutableClass();
@@ -287,7 +287,7 @@ public class Mutator {
 	 * within a specific class file.
 	 */
 
-	public static IMutableObject performMutation(IMutableObject oMutableObject, boolean writeToFile ) {
+	public static IMutableObject performMutation(IMutableObject oMutableObject/*, boolean writeToFile, String mutationsFolderPath*/ ) {
 		int nMutations = 0;
 		parseArguments(oMutableObject);
 		oInstHelper = new cInstructionHelper();
@@ -351,9 +351,9 @@ public class Mutator {
 				il.dispose();
 			
 		}		
-		if(writeToFile){
-			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", oClass.getClassName());
-		}
+	/*	if(writeToFile){
+			dumpClass(mutationsFolderPath, oClass.getClassName());
+		}*/
 		oMutableObject.setMutableClass(oClassGen.getJavaClass());
 		return oMutableObject;
 	}
@@ -364,19 +364,36 @@ public class Mutator {
 	 * @param <code>path</code> The path to dump the class to
 	 * @param <code>idFileName</code> The file name to dump the class to.
 	 */
-	public static void dumpClass(String path, String fileName) {
-		boolean status;
+	public static void dumpClasses(MutantCollection oMutantsToWrite, String mutationsFolderPath) {
+		/*boolean status;
 		int numberOfFiles = 0;
-		status = new File(path + "/" + fileName).mkdirs();
-		File dir = new File(path + "/" + fileName);
+		status = new File(mutationsFolderPath + "/" + fileName).mkdirs();
+		File dir = new File(mutationsFolderPath + "/" + fileName);
 		String[] children = dir.list();
 		numberOfFiles = children.length;
 		try {
-			oClassGen.getJavaClass().dump(path + oClass.getClassName() + "/" + fileName + "_" + numberOfFiles + ".class");
+			oClassGen.getJavaClass().dump(mutationsFolderPath + oClass.getClassName() + "/" + fileName + "_" + numberOfFiles + ".class");
 		} catch (Exception e) {
 			System.out.println(e);
+		}*/
+		boolean status;
+		String teh_Path; 
+		int index = 0;
+		Iterator<IMutableObject> itr = oMutantsToWrite.getMutants().iterator();
+		while(itr.hasNext()){
+			index++;
+			String className = itr.next().getMutableClass().getClassName();
+			teh_Path = mutationsFolderPath + "/" + className + "/" + className + "_" + index + "/";	//Group Name == teh_Code.....
+			
+			status = new File(teh_Path).mkdirs();
+			try {
+				oClassGen.getJavaClass().dump(teh_Path +  className + ".class");
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 		}
-
+		
+		
 	}
 	
 	/**
@@ -388,12 +405,14 @@ public class Mutator {
 	 * Assumption:   oMutantsToGenerate are all mutations on the same file.
 	 * @param <code>oMutantsToGenerate</code> The MutantCollenction containing all IMutableObjects that will be used for creating mutations.
 	 */
-	public static void generate(MutantCollection oMutantsToGenerate){
+	public static void generate(MutantCollection oMutantsToGenerate, String mutationsFolderPath){
 		Iterator<IMutableObject> iterator = oMutantsToGenerate.getMutants().iterator();
+		MutantCollection generatedMutants = new MutantCollection();
 		while(iterator.hasNext()){
 			IMutableObject tmpMutableObject = iterator.next();
-			performMutation(tmpMutableObject, true);
+			generatedMutants.addMutant(performMutation(tmpMutableObject/*, false, null*/));
 		}
+		dumpClasses(generatedMutants, mutationsFolderPath);
 		GenerateXML xmlGenerator = new GenerateXML();
 		String classPath = oMutantsToGenerate.getMutants().iterator().next().getMutableClass().getFileName();
 		xmlGenerator.createMutationsXML(oMutantsToGenerate, classPath,  System.getProperty("user.dir") + "/persistentStorage/generated_XML/");
