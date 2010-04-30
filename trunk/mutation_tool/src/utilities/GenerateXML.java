@@ -3,6 +3,7 @@ import interfaces.IMutableObject;
 import java.io.*;
 import mutations.Mutant;
 import mutations.MutantCollection;
+import utilities.Settings;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -109,7 +110,9 @@ public class GenerateXML {
 
 				createClassesXMLEntry(tempPath,tempID);
 			}
-			outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+			Settings oSettings = new Settings();
+	    	String persistentPath = oSettings.getPersistentInformationPath();
+			outputClassesXML(persistentPath + "/classes.xml");
 			return true;
 
 		} catch(FileNotFoundException e){
@@ -281,18 +284,21 @@ public class GenerateXML {
      */
     public void createMutationsXML(MutantCollection listOfMutations, String classPath, String pathToSave){
     	boolean status;
-		status = new File(pathToSave).mkdirs();
-		status = new File(pathToSave + "/mutants/").mkdirs();
+    	Settings oSettings = new Settings();
+    	String persistentPath = oSettings.getPersistentInformationPath();
+		status = new File(persistentPath).mkdirs();
+		status = new File(persistentPath + "/mutants/").mkdirs();
     	IMutableObject tempMutant = new Mutant();
     	createClassesXMLRoot();
-    	File oClassToOpen = new File(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    	
+    	File oClassToOpen = new File(persistentPath + "/classes.xml");
     	if(!oClassToOpen.canRead()){	
-    		outputClassesXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml");
+    		outputClassesXML(persistentPath + "/classes.xml");
     	}
     	createMutationsXMLRoot();
    
     	createClassesXMLEntry(classPath,"");
-    	appendToClassXMLFile(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml", classPath);
+    	appendToClassXMLFile(persistentPath + "/classes.xml", classPath);
  
 
 
@@ -312,7 +318,7 @@ public class GenerateXML {
     		createMutationsXMLEntry(tempLevel, tempName, tempType, tempOld, tempNew);
     	}
  
-    	outputMutantsXML(System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/" + idFileName+".xml");
+    	outputMutantsXML(persistentPath + "/mutants/" + idFileName+ ".xml");
     	
     }
     
