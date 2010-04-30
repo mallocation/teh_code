@@ -354,21 +354,25 @@ public class Mutator {
 		String idFileName = Long.toString(System.nanoTime());
 	//	System.out.println("Mutation complete. " + nMutations + " mutation(s) were performed.");
 		if(writeToFile){
-			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", idFileName);
+			dumpClass(System.getProperty("user.dir") + "/persistentStorage/generated_mutatedClasses/", oClass.getClassName());
 		}
 	}
 
 	/**
-	 * Dumps the modified class to the directory 'path' + 'idFileName' + '.class'.
+	 * Dumps the modified class to the directory 'path' + '/fileName' + '_id' + '.class'.
+	 * The id is the 
 	 * @param <code>path</code> The path to dump the class to
 	 * @param <code>idFileName</code> The file name to dump the class to.
 	 */
-	public static void dumpClass(String path, String idFileName) {
+	public static void dumpClass(String path, String fileName) {
 		boolean status;
-		status = new File(path).mkdirs();
-		
+		int numberOfFiles = 0;
+		status = new File(path + "/" + fileName).mkdirs();
+		File dir = new File(path + "/" + fileName);
+		String[] children = dir.list();
+		numberOfFiles = children.length;
 		try {
-			oClassGen.getJavaClass().dump(path + oClass.getClassName() + "/" + idFileName + ".class");
+			oClassGen.getJavaClass().dump(path + oClass.getClassName() + "/" + fileName + "_" + numberOfFiles + ".class");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
