@@ -34,7 +34,7 @@ public class ByteCodeViewer extends JFrame{
 		//-----------------------------------------------
 		//setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setSize(800, 600);
+		this.setSize(900, 600);
 		this.setTitle     ("Byte Code Differences Viewer");
         this.setLocation  (100, 100);
         this.setResizable(false);
@@ -42,12 +42,12 @@ public class ByteCodeViewer extends JFrame{
 	    
 	    JPanel originalClassPanel = new JPanel();
 	    originalClassPanel.add(new Label("Original Class File"));
-	    originalClassPanel.setPreferredSize(new Dimension(400,600));
+	    originalClassPanel.setPreferredSize(new Dimension(450,600));
 	    originalClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 	    
 	    JPanel mutatedClassPanel = new JPanel();
 	    mutatedClassPanel.add(new Label("Mutated Class File"));
-	    mutatedClassPanel.setPreferredSize(new Dimension(400,600));
+	    mutatedClassPanel.setPreferredSize(new Dimension(450,600));
 	    mutatedClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 	    
 	    this.getContentPane().setLayout(new BorderLayout());
@@ -103,7 +103,7 @@ public class ByteCodeViewer extends JFrame{
 		//create GUI
 		//-----------------------------------------------
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);	
-		this.setSize(800, 600);
+		this.setSize(900, 600);
 		this.setTitle     ("Byte Code Differences Viewer");
         this.setLocation  (100, 100);
         this.setResizable(false);
@@ -111,12 +111,12 @@ public class ByteCodeViewer extends JFrame{
 	    
 	    JPanel originalClassPanel = new JPanel();
 	    originalClassPanel.add(new Label("Original Class File"));
-	    originalClassPanel.setPreferredSize(new Dimension(400,600));
+	    originalClassPanel.setPreferredSize(new Dimension(450,600));
 	    originalClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 	    
 	    JPanel mutatedClassPanel = new JPanel();
 	    mutatedClassPanel.add(new Label("Mutated Class File"));
-	    mutatedClassPanel.setPreferredSize(new Dimension(400,600));
+	    mutatedClassPanel.setPreferredSize(new Dimension(450,600));
 	    mutatedClassPanel.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
 	    
 	    this.getContentPane().setLayout(new BorderLayout());
