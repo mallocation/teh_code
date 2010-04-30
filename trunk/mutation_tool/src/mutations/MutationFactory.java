@@ -21,6 +21,7 @@ public class MutationFactory{
 	public static String jarName = "test.jar";
 	public MutationFactory(){}
 	
+	
 	public static void printNestedArrayListToSeeIfPavelIsDumbOrNot(ArrayList<ArrayList<IMutableObject>> myNestedList){
 		
 		Iterator<ArrayList<IMutableObject>> iterator = myNestedList.iterator();
@@ -33,7 +34,7 @@ public class MutationFactory{
 		}
 	}
 	
-	public static /*ArrayList<ArrayList<IMutableObject>>*/ void  arIMObjectsFromJar (){
+	public static void  arIMObjectsFromJar (){
 		
 		ArrayList<ArrayList<IMutableObject>>  arIMutObjects = new ArrayList<ArrayList<IMutableObject>>();
 		JarFile littleJar = null;
@@ -53,6 +54,12 @@ public class MutationFactory{
 		/*return arIMutObjects;*/
 	}
 	
+	/**
+	 * Loads a JavaClass
+	 * 
+	 * @param obj class object
+	 * @return JavaClass object
+	 */
 	public static JavaClass loadJavaClass(Object obj){
 		JavaClass oClass = null;
 		try{
@@ -69,7 +76,7 @@ public class MutationFactory{
 	}
 	/**
 	 * Creates permutations.
-	 * @return
+	 * @return collection of mutable objects
 	 */
 	public static /*ArrayList<IMutableObjects>*/MutantCollection createIMutableObjects(JavaClass oClass, Method oMethod){
 		String arithmeticOps[] = cInstructionHelper.getArithmeticInstructionsAsString();
