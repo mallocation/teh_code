@@ -1,9 +1,6 @@
 package utilities;
-
 import interfaces.IMutableObject;
 import java.io.*;
-
-
 import mutations.Mutant;
 import mutations.MutantCollection;
 
@@ -99,6 +96,8 @@ public class GenerateXML {
 						tempPath = classAttribute.getNodeValue();
 						if(classPath.equals(tempPath)){
 							idFileName=classAttributes.item(0).getNodeValue();
+							System.out.println("FALSE");
+							System.out.println(idFileName);
 							return false;
 						}
 					}
@@ -166,25 +165,31 @@ public class GenerateXML {
     public void outputToFile(String outputFile, Document outputDoc){
     	FileOutputStream oOutput;
     	PrintStream oStream;
-    	try {
-    	    TransformerFactory transfac = TransformerFactory.newInstance();
-    	    Transformer trans = transfac.newTransformer();
-    	    trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,"yes");
-    	    trans.setOutputProperty(OutputKeys.INDENT,"yes");
-    	    StringWriter sw = new StringWriter();
-    	    StreamResult result = new StreamResult(sw);
-    	    DOMSource source = new DOMSource(outputDoc);
-    	    trans.transform(source,result);
-    	    xmlOutput = sw.toString();
-    	    oOutput = new FileOutputStream(outputFile);
-    	    oStream = new PrintStream(oOutput);
-    	    oStream.println(xmlOutput);
-    	    oStream.close();
-    	    } catch (Exception e) {
-  	    	System.out.println(e);
-    	 }
- 
-   	    
+    	try{
+    		            
+            TransformerFactory transfac = TransformerFactory.newInstance();
+            Transformer trans = transfac.newTransformer();
+            
+            //remove the xml specifications from the top of the document
+            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            //pretty pretty white spaces
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            //create String from xml tree
+            StringWriter sw = new StringWriter();
+            StreamResult result = new StreamResult(sw);
+            DOMSource source = new DOMSource(outputDoc);
+            trans.transform(source, result);
+            xmlOutput = sw.toString();
+
+            //Output to file
+            oOutput = new FileOutputStream(outputFile);
+            oStream = new PrintStream(oOutput);
+            oStream.println(xmlOutput);
+            oStream.close();
+    	} catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
