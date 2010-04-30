@@ -15,6 +15,12 @@ import mutations.MutantCollection;
 
 import org.apache.bcel.classfile.JavaClass;
 
+/**
+ * MutationsSelectedRow 
+ * 
+ * @author Teh Code
+ *
+ */
 public class MutationsSelectedRow extends JPanel {
 	private JavaClass oClass;
 	private boolean bExported;
@@ -26,6 +32,12 @@ public class MutationsSelectedRow extends JPanel {
 	private final String pathImgExported = "../../images/green_dot.png";
 	private final String pathImgNotExported = "../../images/yellow_dot.png";
 	
+	/**
+	 * The constructor for the class MutationsSelectedRow
+	 * 
+	 * @param oClass
+	 * @param isExported
+	 */
 	public MutationsSelectedRow(JavaClass oClass, boolean isExported){
 		this.oClass = oClass;
 		this.bExported = isExported;

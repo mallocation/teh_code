@@ -3,6 +3,12 @@ package controls.table;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
+/**
+ * MutationTableModel
+ * 
+ * @author teh code
+ *
+ */
 public class MutationTableModel implements ListModel{
 
 	@Override

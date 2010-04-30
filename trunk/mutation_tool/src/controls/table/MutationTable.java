@@ -28,6 +28,12 @@ import mutations.MutationFactory;
 import controls.mutations.MutationsSelected;
 import controls.tree.MutableNode;
 
+/**
+ * MutationTable is responsible for displaying a table of possible mutations
+ * 
+ * @author teh code
+ *
+ */
 public class MutationTable extends JPanel implements ActionListener, IMutableTreeListener, IMutationFilterListener {
 
 	private ArrayList<MutationRow> alMutableRows;
@@ -48,6 +54,14 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	
 	private Hashtable<JavaClass, MutantCollection> htPersistantMutations;
 	
+	/**
+	 * Constructor for the MutationTable class
+	 * 
+	 * @param oTableFilterPanel
+	 * @param oPropertiesPanel
+	 * @param oGeneratePanel
+	 * @param oSelectedMutations
+	 */
 	public MutationTable(IMutationTableListener oTableFilterPanel, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel, MutationsSelected oSelectedMutations) {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -72,7 +86,7 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	/**
 	 * Get a collection returning all mutations that are selected to be created.
 	 * 
-	 * @return collection of IMutableObject
+	 * @return oSelectedColl a collection of IMutableObject
 	 */
 	public MutantCollection getSelectedMutants() {
 		MutantCollection oSelectedColl = new MutantCollection();

@@ -19,7 +19,14 @@ import mutations.Mutator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+/**
+ * MutationsSelected.java creates the mutations selected panel.
+ * This panel is used in the final step of generating mutant classes.
+ *
+ * @author teh_code
+ * @version 1.0
+ *
+ */
 
 public class MutationsSelected extends JPanel implements ActionListener, IMutationRowListener, PropertyChangeListener {
 	private DefaultListModel listModel;
@@ -27,6 +34,10 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 	private JButton button;
 	private JProgressBar progClassBar;
 	
+	/**
+	 * This is the constructor for the MutationsSelected class
+	 * 
+	 */
 	public MutationsSelected() {
 		listModel = new DefaultListModel();
 		
@@ -57,6 +68,11 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		this.setVisible(true);
 	}
 	
+	/**
+	 * addMutation adds a possible mutation to the mutations to be generated
+	 * 
+	 * @param mObject mutation object to be added
+	 */
 	public void addMutation(IMutableObject mObject){
 		for(int i=0;i<listModel.getSize();i++){
 			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);
@@ -72,6 +88,11 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		tempRow.addMutableObj(mObject);
 	}
 	
+	/**
+	 * removeMutation removes a mutation from the list of mutations to be generated
+	 * 
+	 * @param mObject
+	 */
 	public void removeMutation(IMutableObject mObject){
 		for(int i=0;i<listModel.getSize();i++){
 			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);
@@ -85,6 +106,9 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		}
 	}
 	
+	/**
+	 * action performed function to take deal with action events
+	 */
 	public void actionPerformed(ActionEvent e){
 		if (e.getSource().equals(button)) {
 			GenerateMutationsWorker oWorker = new GenerateMutationsWorker(this.listModel);
@@ -96,6 +120,10 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 		}
 	}
 	
+	/**
+	 * GenerateMutationsWorker 
+	 *
+	 */
 	private class GenerateMutationsWorker extends SwingWorker<Void, Void> {
 		private ListModel oListModel;
 		private MutationsSelectedRow rowToGenerate;
@@ -160,6 +188,12 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 //		
 //	}
 	
+	/**
+	 * getMutableObjectsForClass returns all mutable objects for a class
+	 * 
+	 * @param oClass a java class
+	 * @return MutantCollection a collection of mutants
+	 */
 	public MutantCollection getMutableObjectsForClass(JavaClass oClass) {
 		for(int i=0;i<listModel.getSize();i++){
 			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);

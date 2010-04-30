@@ -14,7 +14,12 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-
+/**
+ * MutableNodeRenderer renders a node of the loaded class tree
+ * 
+ * @author teh code
+ *
+ */
 public class MutableNodeRenderer extends JLabel implements TreeCellRenderer {
 	private static final String sImgClassTree = "../../images/ClassTree.png";
 	private static final String sImgMethodTree = "../../images/MethodTree.png";
@@ -22,7 +27,10 @@ public class MutableNodeRenderer extends JLabel implements TreeCellRenderer {
 	private static final Color colorNotSelected = Color.WHITE;
 	
 	private ImageIcon imgClass, imgMethod;
-
+	
+	/**
+	 * Constructor for MutableNodeRenderer class
+	 */
 	public MutableNodeRenderer () {
 		imgClass = new ImageIcon(getClass().getResource(sImgClassTree));
 		imgMethod = new ImageIcon(getClass().getResource(sImgMethodTree));

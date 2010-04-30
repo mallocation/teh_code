@@ -12,6 +12,13 @@ import javax.swing.JTextArea;
 
 import mutations.Mutator;
 
+/**
+ * PropertiesPanel displays properties about a row in the mutation table
+ * that is "clicked" in a properties panel.
+ * 
+ * @author teh code
+ *
+ */
 public class PropertiesPanel extends JPanel implements IMutationRowActor{
 	
 	public Dimension propertiesPanelDimension;

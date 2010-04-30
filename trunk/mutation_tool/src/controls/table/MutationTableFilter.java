@@ -22,6 +22,13 @@ import interfaces.IMutationFilterActor;
 import interfaces.IMutationFilterListener;
 import interfaces.IMutationTableListener;
 
+/**
+ * MutationTableFilter is used to filter mutations listed in
+ * the mutation table.
+ * 
+ * @author teh code
+ *
+ */
 public class MutationTableFilter extends JPanel implements ActionListener, KeyListener, IMutationTableListener {
 	private JLabel lblMutationType, lblMutatedOp, lblNewOp, lblSearch;
 	private JComboBox ddlMutationType, ddlMutatedOp, ddlNewOp;
@@ -30,6 +37,9 @@ public class MutationTableFilter extends JPanel implements ActionListener, KeyLi
 	private Dimension oTableDimension;
 	private ArrayList<IMutationFilterListener> alFilterListeners;
 	
+	/**
+	 * Constructor for the MutationFilter class
+	 */
 	public MutationTableFilter() {
 		this.setBorder(BorderFactory.createTitledBorder("Mutation Filter"));
 		lblMutationType = new JLabel("Mutation Type");

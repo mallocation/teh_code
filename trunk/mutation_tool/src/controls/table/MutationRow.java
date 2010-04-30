@@ -28,8 +28,12 @@ import mutations.Mutator;
 
 import utilities.ByteCodeViewer;
 
-
-
+/**
+ * MutationRow
+ * 
+ * @author teh code
+ *
+ */
 public class MutationRow extends JPanel implements ActionListener, MouseListener {
 	// Right-click options
 	JPopupMenu popupOptions;
@@ -67,6 +71,14 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 	
 	//private IMutationRowListener oRowListener;
 	
+	/**
+	 * Constructor for the class MutationRow
+	 * 
+	 * @param oObject
+	 * @param bAltRow
+	 * @param oPropertiesPanel
+	 * @param oGeneratePanel
+	 */
 	public MutationRow(IMutableObject oObject, boolean bAltRow, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel) {
 		// Create arraylist of row listeners
 		alRowListeners = new ArrayList<IMutationRowListener>();
@@ -108,6 +120,9 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		drawMutantRow();
 	}
 	
+	/**
+	 * drawMutantRow draws a row of the mutation table
+	 */
 	public void drawMutantRow() {
 		lblMutationName.setFont(oMutationNameFont);
 		lblMutationName.setPreferredSize(oMutationNameDim);

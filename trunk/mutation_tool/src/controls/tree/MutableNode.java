@@ -5,6 +5,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
+/**
+ * MutableNode is responsible for creating a node in the loaded class tree
+ * 
+ * @author teh code
+ *
+ */
 public class MutableNode extends DefaultMutableTreeNode {
 	
 	private JavaClass oMutableClass;
