@@ -84,18 +84,23 @@ public class MutationTool extends JFrame implements ActionListener
 	}
 	
 	public void createFrames(){
-		oMutableTree = new MutableTree();
+		oMutableTree = new MutableTree();		
 		oMutableTree.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.GRAY));
-		oMutableTree.setPreferredSize(new Dimension(250,800));
+		//oMutableTree.setPreferredSize(new Dimension(250,800));
 		oMutableTree.addMutableNodeSelectionListener(oTreeListener);
+		
+		JScrollPane oScroll = new JScrollPane(oMutableTree);
+		oScroll.setPreferredSize(new Dimension(250,500));
 		
 		oPropertiesPanel = new PropertiesPanel();
 		
 		
 		MutationTableFilter oTableFilter = new MutationTableFilter();
 		MutationsSelected oMutationsSelected = new MutationsSelected();
-		oMutationTable = new MutationTable(oPropertiesPanel, oMutationsSelected);
+		//oMutationTable = new MutationTable(oPropertiesPanel, oMutationsSelected);
+		oMutationTable = new MutationTable(oTableFilter, oPropertiesPanel, oMutationsSelected, oMutationsSelected);
 		oTableFilter.addMutationFilterListener(oMutationTable);
+		
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.PAGE_AXIS));
 		panel2.add(oTableFilter);
@@ -117,7 +122,8 @@ public class MutationTool extends JFrame implements ActionListener
 		
 		this.getContentPane().setLayout(borderLayout);	
 
-		this.getContentPane().add(oMutableTree, BorderLayout.WEST);
+		//this.getContentPane().add(oMutableTree, BorderLayout.WEST);
+		this.getContentPane().add(oScroll, BorderLayout.WEST);
 		this.getContentPane().add(panel2, BorderLayout.CENTER);
 		
 		this.getContentPane().add(panel3, BorderLayout.EAST);
