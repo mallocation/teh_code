@@ -12,12 +12,17 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
+
+import org.apache.bcel.classfile.JavaClass;
+
+import utilities.ParseXML;
 
 import mutations.MutationFactory;
 import controls.mutations.MutationsSelected;
@@ -39,6 +44,10 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 	
 	private MutationsSelected oMutationsSelectedPanel;
 	
+	private boolean bCheckPersistantMutations;
+	
+	private Hashtable<JavaClass, MutantCollection> htPersistantMutations;
+	
 	public MutationTable(IMutationTableListener oTableFilterPanel, IMutationRowActor oPropertiesPanel, IMutationRowListener oGeneratePanel, MutationsSelected oSelectedMutations) {
 		this.alMutableRows = new ArrayList<MutationRow>();
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -54,6 +63,10 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		this.addMutationTableListener(oTableFilterPanel);
 		
 		this.oMutationsSelectedPanel = oSelectedMutations;
+		
+		this.bCheckPersistantMutations = true;
+		
+		this.htPersistantMutations = new Hashtable<JavaClass, MutantCollection>();
 	}
 	
 	/**
@@ -69,6 +82,10 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 			}
 		}
 		return oSelectedColl;
+	}
+	
+	public void setCheckForPersistentMutations(boolean bCheck) {
+		this.bCheckPersistantMutations = bCheck;
 	}
 	
 	private void showMutableRows() {
@@ -133,6 +150,8 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 		@Override
 		protected Void doInBackground() throws Exception {
 			MutantCollection alMutableObjects = new MutantCollection();
+			ParseXML oXMLParser = new ParseXML();
+			
 			if (selectedNode.getMutableMethod() == null) {
 				//show both class level and method level!
 				alMutableObjects.appendToCollection(MutationFactory.createIMutableObjects(selectedNode.getMutableClass(), null));
@@ -151,12 +170,25 @@ public class MutationTable extends JPanel implements ActionListener, IMutableTre
 				boolean bAltRow = (i%2 == 0) ? false : true;	
 				alMutableRows.add(new MutationRow(oMutableObject, bAltRow, oPropertiesPanel, oRowListener));
 			}
+			
+			if (bCheckPersistantMutations && !htPersistantMutations.containsKey(selectedNode.getMutableClass())) {
+				htPersistantMutations.put(selectedNode.getMutableClass(), oXMLParser.getPersistentMutations(selectedNode.getMutableClass()));
+				MutantCollection mcPersistant = htPersistantMutations.get(selectedNode.getMutableClass());
+				for (int i=0; i<alMutableRows.size(); i++) {
+					if (mcPersistant.containsMutableObject(alMutableRows.get(i).getMutableObject())) {
+						alMutableRows.get(i).setSelected(true, true);
+					}
+				}
+			}
+			
+						
 			return null;
 		}
 		
 		@Override
 		protected void done() {
-			if (!isCancelled()) 
+			if (!isCancelled())
+				
 				showMutableRows();
 			super.done();
 		}

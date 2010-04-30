@@ -44,6 +44,14 @@ public class MutationTool extends JFrame implements ActionListener
 	//------------------------------------------
 	// GUI declarations
 	//------------------------------------------
+	JMenuBar menuBar;
+	JMenu fileMenu;
+	JMenuItem fileMenuOpen;
+	JMenuItem fileMenuExit;
+	JMenu optionsMenu;
+	JCheckBoxMenuItem optionsMenuPersist;
+	
+	
 	JButton oButton;
 	MutableTree oMutableTree;
 	MutationTable oMutationTable;
@@ -66,20 +74,28 @@ public class MutationTool extends JFrame implements ActionListener
 	public void createMenu(){
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // Prevents the menu bar from being hidden
 	
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		
-		JMenu fileMenu = new JMenu("File");
-		JMenuItem fileMenuOpen = new JMenuItem("Open");
-		JMenuItem fileMenuExit = new JMenuItem("Exit");
+		fileMenu = new JMenu("File");
+		fileMenuOpen = new JMenuItem("Open");
+		fileMenuExit = new JMenuItem("Exit");
+		
+		optionsMenu = new JMenu("Options");
+		optionsMenuPersist = new JCheckBoxMenuItem("Check For Persistant Mutations", false);
 
 		//add action listeners
 		fileMenuOpen.addActionListener(this);
 		fileMenuExit.addActionListener(this);
+		optionsMenuPersist.addActionListener(this);
 		
 		//add items to menu and menu bar
 		fileMenu.add(fileMenuOpen);
 		fileMenu.add(fileMenuExit);
+		
+		optionsMenu.add(optionsMenuPersist);
+		
 		menuBar.add(fileMenu);
+		menuBar.add(optionsMenu);
 
 		this.setJMenuBar(menuBar);
 	}
@@ -134,16 +150,13 @@ public class MutationTool extends JFrame implements ActionListener
 		// Make sure the event was done through the menu
 		if (e.getSource() instanceof JMenuItem)
 		{
-			// Set the string the event is handling
-			String eventName = ((JMenuItem) e.getSource()).getText();
 			// User Clicked Open
-            if (eventName.equals("Open")) {            
+			if (e.getSource().equals(fileMenuOpen)) {
             	// Open the Open Dialog to allow user to select file
             	String current = System.getProperty("user.dir");
             	JFileChooser chooser = new JFileChooser(current);
             	chooser.setMultiSelectionEnabled(true);
-            	int option = chooser.showOpenDialog(null);
-            	File oClassToOpen; 
+            	int option = chooser.showOpenDialog(null); 
             	// If user chose a file, open it
             	if (option == JFileChooser.APPROVE_OPTION) {
             		//oClassToOpen = chooser.getSelectedFile();
@@ -168,14 +181,13 @@ public class MutationTool extends JFrame implements ActionListener
 //            		}
             	}
             }
-            
-			if (eventName.equals("Exit"))
-			{
+			if (e.getSource().equals(fileMenuExit)) {
 				// The user wants to exit (quit)
 				System.exit(0);
-			}			
+			}
 		}
 	}
+	
 	
 	public static void main(String[] args){
 		SwingUtilities.invokeLater(new Runnable() {			
