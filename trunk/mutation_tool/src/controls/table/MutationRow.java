@@ -210,7 +210,7 @@ public class MutationRow extends JPanel implements ActionListener, MouseListener
 		if (oActionObject.equals(menuViewDiff)) {
 			// TODO only let them open the bytecodeviewer once
 			if (oDiffViewer == null) {
-				oDiffViewer = new ByteCodeViewer(this.getMutableObject().getMutableClass(), this.getMutableObject().getMutableClass());
+				oDiffViewer = new ByteCodeViewer(this.getMutableObject().getMutableClass(), Mutator.performMutation(this.getMutableObject(), false).getMutableClass());
 			}
 		} else if (oActionObject.equals(chkCreateMutation)) {
 			fireMutationRowListeners();
