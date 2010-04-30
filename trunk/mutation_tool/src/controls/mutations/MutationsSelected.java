@@ -91,7 +91,7 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 	/**
 	 * removeMutation removes a mutation from the list of mutations to be generated
 	 * 
-	 * @param mObject
+	 * @param mObject object to be removed
 	 */
 	public void removeMutation(IMutableObject mObject){
 		for(int i=0;i<listModel.getSize();i++){

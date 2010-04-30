@@ -16,7 +16,7 @@ import mutations.MutantCollection;
 import org.apache.bcel.classfile.JavaClass;
 
 /**
- * MutationsSelectedRow 
+ * MutationsSelectedRow performs tasks necessary in the selected mutations panel
  * 
  * @author Teh Code
  *
@@ -66,37 +66,64 @@ public class MutationsSelectedRow extends JPanel {
 		//this.add(progGenerateBar);
 	}
 	
+	/**
+	 * Returns JavaClass
+	 */
 	public JavaClass getJavaClass(){
 		return this.oClass;
 	}
 	
+	/**
+	 * Returns mutation count
+	 */
 	public int getMutationCount(){
 		return this.colClassMutants.getCollectionCount();
 	}
 	
+	/**
+	 * Returns mutation collection
+	 */
 	public MutantCollection getMutationCollection(){
 		return this.colClassMutants;
 	}
 	
+	/**
+	 * Returns true if exported
+	 */
 	public boolean isExported(){
 		return this.bExported;
 	}
 	
+	/**
+	 * adds a mutable object and updates the mutation count
+	 * @param mObject
+	 */
 	public void addMutableObj(IMutableObject mObject){
 		this.colClassMutants.addMutant(mObject);
 		this.updateMutationCount();		
 	}
 	
+	/**
+	 * removes a mutable object and updates the mutation count
+	 * @param mObject
+	 */
 	public void removeMutableObj(IMutableObject mObject){
 		this.colClassMutants.removeMutant(mObject);
 		this.updateMutationCount();
 	}
 	
+	/**
+	 * function to update the mutation count
+	 */
 	private void updateMutationCount() {
 		this.lblMutationCount.setText("Mutation Count: " + this.colClassMutants.getCollectionCount());
 		this.setExported(false);
 	}
 	
+	/**
+	 * Sets exported
+	 * @param bExported
+	 */
 	public void setExported(boolean bExported) {
 		this.bExported = bExported;
 		if (isExported()) {
