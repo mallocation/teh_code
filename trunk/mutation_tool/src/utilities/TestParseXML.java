@@ -1,8 +1,13 @@
 package utilities;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import mutations.MutantCollection;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import junit.framework.TestCase;
 
@@ -58,9 +63,14 @@ import junit.framework.TestCase;
 		}
 		@Test
 		public void testGetPersistentMutationsFileName(){
-			String id = System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/277405474709215.xml";
+			String id = System.getProperty("user.dir") + "/persistentStorage/generated_XML/mutants/23424074861190.xml";
 			String testid = testParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\Average.class");
 			assertEquals(id,testid);
+		}
+		
+		@Test
+		public void testGetXMLFile() {
+			testParse.getXMLFile("test.xml");
 		}
 }
 

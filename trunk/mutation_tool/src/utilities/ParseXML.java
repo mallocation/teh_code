@@ -36,13 +36,14 @@ public class ParseXML {
 	public static void main(String[] args) {
 		ParseXML oXMLParse = new ParseXML();
 	//Test parsing of xml document input classPath attribute for classes.xml, returning the Mutant Collection from the corresponding id xml file
-       oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\Average.class"),System.getProperty("user.dir") + "\\bin\\Average.class");
-       //oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
-       //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
-        //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
-        //oXMLParse.getMutantAttributes("/blah/blah");
-        //GenerateXML oXML = new GenerateXML();
-       // oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
+//       oXMLParse.getMutantAttributes(oXMLParse.getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\Average.class"),System.getProperty("user.dir") + "\\bin\\Average.class");
+//       //oXMLParse.getMutationsFromCommandLine((System.getProperty("user.dir")+"/persistentStorage/generated_XML/mutants/265633432655267.xml"));
+//       //getPersistentMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml" ,System.getProperty("user.dir") + "\\bin\\GenerateXML.class")
+//        //oXMLParse.getMutantAttributes(oXMLParse.getMutationsFileName(System.getProperty("user.dir") + "/persistentStorage/generated_XML/classes.xml"));
+//        //oXMLParse.getMutantAttributes("/blah/blah");
+//        //GenerateXML oXML = new GenerateXML();
+//       // oXML.createMutationsXML(oXMLParse.mutationsList, "/blah/blah");
+
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class ParseXML {
 			System.out.println(inputFileName+" is empty");
 			e.printStackTrace();
 		}
-		System.out.println("NULL");
+
 		return null;
 	}
 	
