@@ -152,6 +152,8 @@ public class MutationTool extends JFrame implements ActionListener
             		for (int i=0; i<arFilesToOpen.length; i++) {
             			if (!ClassLoader.isClassFile(arFilesToOpen[i].getAbsolutePath())) {
             				
+            			} else if (ClassLoader.classIsAbstractOrInterface(ClassLoader.loadClassFromPath(arFilesToOpen[i].getAbsolutePath()))) {
+            				System.out.println("not loading, because is abstract or interface...");
             			} else {
             				oMutableTree.addMutableClassToTree(ClassLoader.loadClassFromPath(arFilesToOpen[i].getAbsolutePath()));
             			}
