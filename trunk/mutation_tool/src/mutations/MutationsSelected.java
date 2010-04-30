@@ -6,6 +6,9 @@ import interfaces.IMutationRowListener;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.apache.bcel.classfile.JavaClass;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -105,6 +108,16 @@ public class MutationsSelected extends JPanel implements ActionListener, IMutati
 			this.rowToGenerate.setExported(true);
 		}
 		
+	}
+	
+	public MutantCollection getMutableObjectsForClass(JavaClass oClass) {
+		for(int i=0;i<listModel.getSize();i++){
+			MutationsSelectedRow mRow = (MutationsSelectedRow)listModel.getElementAt(i);
+			if(oClass.equals(mRow.getJavaClass())){
+				return mRow.getMutationCollection();
+			}
+		}		
+		return new MutantCollection();
 	}
 
 	@Override

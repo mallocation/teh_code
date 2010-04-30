@@ -73,4 +73,19 @@ public class MutantCollection {
 			this.addMutant(oCollection.getMutant(i));
 		}
 	}
+	
+	public boolean containsMutableObject(IMutableObject oMutableObject) {
+		for (int i=0; i<this.alMutants.size(); i++) {
+			IMutableObject oObject = this.alMutants.get(i);
+			if (oObject.getMutableClass() == oMutableObject.getMutableClass() &&
+					oObject.getMutableMethod() == oMutableObject.getMutableMethod() &&
+					oObject.getMutantLevel() == oMutableObject.getMutantLevel() &&
+					oObject.getMutantType() == oMutableObject.getMutantType() &&
+					oObject.getOldOperator() == oMutableObject.getOldOperator() &&
+					oObject.getNewOperator() == oMutableObject.getNewOperator()) {
+				return true;
+			}
+		}
+		return false;
+	}	
 }
